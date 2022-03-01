@@ -16,23 +16,53 @@
               class="img-fluid rounded-circle fs-6 shadow"
             />
           </div>
-          <form class="mt-5 w-100">
+          <form
+            class="mt-5 w-100"
+            [formGroup]="loginForm"
+            (ngSubmit)="onSubmit()"
+          >
             <div class="mb-4">
-              <app-input label="Nazwa użytkownika" type="text"></app-input>
-            </div>
-            <div class="mb-5">
-              <app-input label="Hasło" type="password"></app-input>
-            </div>
-            <div
-              class="button-holder w-75 mx-auto d-flex flex-column align-items-center justify-content-center"
-            >
-              <button type="submit" class="btn btn-success w-100">
-                Submit
-              </button>
-              <div id="passwordHelp" class="form-text mt-3">
-                Zapomniałeś hasła?
+              <input
+                placeholder="Nazwa użytkownika"
+                type="text"
+                formControlName="username"
+                class="form-control custom-form-control"
+              />
+              <div
+                class="form-text mt-3 error text-center"
+                *ngIf="username.invalid && username.touched"
+              >
+                Proszę wprowadź nazwę użytkownika
               </div>
             </div>
+            <div class="mb-5">
+              <input
+                placeholder="Hasło"
+                type="password"
+                formControlName="password"
+                class="form-control custom-form-control"
+              />
+              <div
+                class="form-text mt-3 error text-center"
+                *ngIf="passwordEmpty && password.touched"
+              >
+                Proszę wprowadź hasło
+              </div>
+              <div
+                class="form-text mt-3 error text-center"
+                *ngIf="passwordTooShort && password.touched"
+              >
+                Hasło musi mieć przynajmniej 6 znaków
+              </div>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-success w-100"
+              [disabled]="loginForm.invalid"
+            >
+              Zaloguj
+            </button>
+            <div class="form-text mt-3 text-center">Zapomniałeś hasła?</div>
           </form>
         </div>
       </div>
