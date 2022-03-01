@@ -1,0 +1,41 @@
+<div class="container" style="height: 100vh">
+  <div class="row h-100">
+    <div
+      class="col-xs-5 col-sm-10 col-md-8 col-lg-5 mx-auto mt-5 p-5 rounded"
+      style="background-color: #eee; height: 85%"
+    >
+      <div class="row w-75 mx-auto">
+        <div
+          class="col w-100 d-flex flex-column justify-content-center align-items-center"
+        >
+          <h1 class="fw-normal fs-4 mb-3">Logowanie</h1>
+          <div class="w-50">
+            <img
+              src="assets/horse.svg"
+              alt="horse image"
+              class="img-fluid rounded-circle fs-6 shadow"
+            />
+          </div>
+          <form class="mt-5 w-100">
+            <div class="mb-4">
+              <app-input label="Nazwa użytkownika" type="text"></app-input>
+            </div>
+            <div class="mb-5">
+              <app-input label="Hasło" type="password"></app-input>
+            </div>
+            <div
+              class="button-holder w-75 mx-auto d-flex flex-column align-items-center justify-content-center"
+            >
+              <button type="submit" class="btn btn-success w-100">
+                Submit
+              </button>
+              <div id="passwordHelp" class="form-text mt-3">
+                Zapomniałeś hasła?
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
