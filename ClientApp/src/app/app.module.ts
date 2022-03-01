@@ -8,10 +8,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ToastrModule } from 'ngx-toastr';
-import { NavbarComponent } from './components/layout/layout.component';
+import { LayoutComponent } from './components/layout/layout.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, HomeComponent, NavbarComponent],
+  declarations: [AppComponent, LoginComponent, HomeComponent, LayoutComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
