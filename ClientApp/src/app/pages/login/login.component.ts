@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastService } from 'src/app/shared/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,11 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private toast: ToastService
+  ) {}
 
   ngOnInit() {
     this.initializeForm();
@@ -44,6 +49,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    this.toast.success('Zalogowano pomyślnie!');
     this.router.navigate(['home']);
   }
 }
