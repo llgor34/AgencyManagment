@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg navbar-dark py-3 fw-bold">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Agencja</a>
+  </div>
+</nav>
+
+<div class="container mx-3 mt-3" style="min-width: 98vw; height: 85vh">
+  <div class="row w-100 h-100">
+    <nav
+      class="sidenav col-2 rounded-3 py-3 h-100 d-flex flex-column align-items-center"
+    >
+      <div class="logo w-100 mb-2 line-break">
+        <img
+          src="assets/horse.svg"
+          alt="horse logo"
+          class="img-fluid rounded-circle mb-2"
+          width="50%"
+        />
+        <h2 class="username mb-2">Patryk paziewski</h2>
+        <h3 class="roles mb-3">Admin,Super Admin</h3>
+      </div>
+
+      <ul class="flex-grow-1 d-flex flex-column justify-content-evenly w-100">
+        <li>🏠 Start</li>
+        <li>🐴 Twoje konie</li>
+        <li>✉ Wiadomośći</li>
+        <li>📅 Kalendarz</li>
+        <span class="line-break"></span>
+        <li>⚙ Administracja</li>
+        <li>✉ Chat - stajenni</li>
+        <li>✉ Chat - klienci</li>
+        <span class="line-break"></span>
+        <li>📖 Instrukcja</li>
+      </ul>
+    </nav>
+
+    <main class="shadow-lg col-10">
+      <ng-content></ng-content>
+    </main>
+  </div>
+</div>
