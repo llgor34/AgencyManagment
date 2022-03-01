@@ -31,6 +31,7 @@ export class InputComponent implements OnInit {
     | 'week';
   @Input() id: string;
   @Input() label: string;
+  @Input() name: string;
 
   constructor() {}
 
