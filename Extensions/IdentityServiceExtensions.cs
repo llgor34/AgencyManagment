@@ -1,4 +1,5 @@
 using System.Text;
+using System.Threading.Tasks;
 using AgencyManagement.Data;
 using AgencyManagement.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,43 +12,60 @@ namespace AgencyManagement.Extensions
 {
 	public static class IdentityServiceExtensions
 	{
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services,
-            IConfiguration config)
-        {
-            services.AddIdentityCore<AppUser>(opt =>
-            {
-                opt.Password.RequireDigit = false;
-                opt.Password.RequireLowercase = false;
-                opt.Password.RequireUppercase = false;
-                opt.Password.RequireNonAlphanumeric = false;
-                opt.Password.RequiredLength = 6;
-            })
-                .AddRoles<AppRole>()
-                .AddRoleManager<RoleManager<AppRole>>()
-                .AddSignInManager<SignInManager<AppUser>>()
-                .AddRoleValidator<RoleValidator<AppRole>>()
-                .AddEntityFrameworkStores<DataContext>()
-                .AddDefaultTokenProviders();
+		public static IServiceCollection AddIdentityServices(this IServiceCollection services,
+			IConfiguration config)
+		{
+			services.AddIdentityCore<AppUser>(opt =>
+			{
+				opt.Password.RequireDigit = false;
+				opt.Password.RequireLowercase = false;
+				opt.Password.RequireUppercase = false;
+				opt.Password.RequireNonAlphanumeric = false;
+				opt.Password.RequiredLength = 6;
+			})
+				.AddRoles<AppRole>()
+				.AddRoleManager<RoleManager<AppRole>>()
+				.AddSignInManager<SignInManager<AppUser>>()
+				.AddRoleValidator<RoleValidator<AppRole>>()
+				.AddEntityFrameworkStores<DataContext>()
+				.AddDefaultTokenProviders();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"])),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                    };
-                });
+			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer(options =>
+				{
+					options.TokenValidationParameters = new TokenValidationParameters
+					{
+						ValidateIssuerSigningKey = true,
+						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"])),
+						ValidateIssuer = false,
+						ValidateAudience = false,
+					};
 
-            services.AddAuthorization(opt =>
-            {
-                opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-                opt.AddPolicy("RequireModeratorOrAdminRole", policy => policy.RequireRole(new string[] { "Admin", "Moderator" }));
-            });
+					options.Events = new JwtBearerEvents
+					{
+						OnMessageReceived = context =>
+						{
+							var accessToken = context.Request.Query["access_token"];
 
-            return services;
-        }
-    }
+							var path = context.HttpContext.Request.Path;
+							if (!string.IsNullOrEmpty(accessToken) &&
+								path.StartsWithSegments("/hubs"))
+							{
+								context.Token = accessToken;
+							}
+
+							return Task.CompletedTask;
+						}
+					};
+				});
+
+			services.AddAuthorization(opt =>
+			{
+				opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+				opt.AddPolicy("RequireModeratorOrAdminRole", policy => policy.RequireRole(new string[] { "Admin", "Moderator" }));
+			});
+
+			return services;
+		}
+	}
 }

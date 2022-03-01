@@ -1,32 +1,31 @@
+using System;
 using System.Text.Json.Serialization;
 using AgencyManagement.Extensions;
-using DinkToPdf;
-using DinkToPdf.Contracts;
+using AgencyManagement.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace AgencyManagement
 {
-    public class Startup
+	public class Startup
 	{
 		private readonly IConfiguration _config;
 		private readonly IWebHostEnvironment _env;
-        public Startup(IConfiguration config, IWebHostEnvironment env)
+		private string allowedOrigin;
+
+		public Startup(IConfiguration config, IWebHostEnvironment env)
 		{
 			_config = config;
 			_env = env;
-        }
+			allowedOrigin = _config["AllowedOrigin"];
+		}
 
-        public IConfiguration Configuration { get; }
-
-        public void ConfigureServices(IServiceCollection services)
+		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddApplicationServices(_config, _env);
-			services.AddSingleton(typeof(IConverter),
-			new SynchronizedConverter(new PdfTools()));
 			services.AddControllers()
 				.AddJsonOptions(opts =>
 					{
@@ -34,24 +33,31 @@ namespace AgencyManagement
 					});
 			services.AddCors();
 			services.AddIdentityServices(_config);
-        }
+			services.AddSignalR();
+		}
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		{
+			app.UsePathBase("/");
+			var options = new ForwardedHeadersOptions
+			{
+				ForwardedHeaders = ForwardedHeaders.All
+			};
+			options.KnownNetworks.Clear();
+			options.KnownProxies.Clear();
+			app.UseForwardedHeaders(options);
 
-            app.UseHttpsRedirection();
+			app.UseMiddleware<ExceptionMiddleware>();
 
-            app.UseRouting();
+			app.UseHttpsRedirection();
+
+			app.UseRouting();
 
 			app.UseCors(x =>
 				x.AllowAnyHeader()
 				.AllowAnyMethod()
 				.AllowCredentials()
-				.WithOrigins("https://localhost:4200"));
+				.WithOrigins(new string[] { allowedOrigin }));
 
 			app.UseAuthentication();
 			app.UseAuthorization();
@@ -59,10 +65,10 @@ namespace AgencyManagement
 			app.UseDefaultFiles();
 			app.UseStaticFiles();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
-    }
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllers();
+			});
+		}
+	}
 }
