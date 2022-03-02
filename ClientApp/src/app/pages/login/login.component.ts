@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth/auth.service';
-import { UserCredential } from 'firebase/auth';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/shared/toast.service';
+import { authState } from 'rxfire/auth';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-login',
@@ -17,11 +18,19 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private auth: Auth
   ) {}
 
   ngOnInit() {
     this.initializeForm();
+
+    authState(this.auth).subscribe((user) => {
+      if (user) {
+        this.toastService.success(`Pomyślnie zalogowano!`);
+        this.router.navigate(['/home']);
+      }
+    });
   }
 
   private initializeForm() {
@@ -54,7 +63,6 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.authService
       .login(this.email.value, this.password.value)
-      .then(this.success)
       .catch((res) => {
         if (res.message == 'Firebase: Error (auth/user-not-found).') {
           this.toastService.error(
@@ -62,10 +70,5 @@ export class LoginComponent implements OnInit {
           );
         }
       });
-  }
-
-  private success(res: UserCredential) {
-    this.toastService.success(`Witaj ${res.user}`);
-    this.router.navigate(['/home']);
   }
 }
