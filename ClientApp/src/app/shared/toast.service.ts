@@ -8,7 +8,7 @@ export class ToastService {
   constructor(private toastr: ToastrService) {}
 
   success(message: string) {
-    this.toastr.success('Sukces!', message, {
+    this.toastr.success(message, 'Sukces!', {
       timeOut: 3000,
       progressBar: true,
       closeButton: true,
@@ -16,7 +16,7 @@ export class ToastService {
   }
 
   error(message: string) {
-    this.toastr.error('Błąd!', message, {
+    this.toastr.error(message, 'Błąd!', {
       timeOut: 3000,
       progressBar: true,
       closeButton: true,
