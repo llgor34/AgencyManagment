@@ -45,7 +45,14 @@ ul li {
   transition: 0.3s;
 }
 
-ul li:hover {
+ul li:hover,
+ul li.active {
   background-color: #6610f2;
   cursor: pointer;
+}
+
+a {
+  font-size: inherit;
+  color: inherit;
+  text-decoration: inherit;
 }
