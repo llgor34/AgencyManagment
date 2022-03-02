@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Auth, authState } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ToastService } from 'src/app/shared/toast.service';
 import { UserCredentials } from 'src/app/shared/UserCredientials.model';
@@ -10,7 +11,9 @@ import { UserCredentials } from 'src/app/shared/UserCredientials.model';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+  private authSub: Subscription;
+
   constructor(
     private auth: Auth,
     private toastService: ToastService,
@@ -19,12 +22,16 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    authState(this.auth).subscribe((user) => {
+    this.authSub = authState(this.auth).subscribe((user) => {
       if (user) {
         this.toastService.success(`Pomyślnie zalogowano!`);
         this.router.navigate(['/home']);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.authSub.unsubscribe();
   }
 
   onSubmit(data: UserCredentials) {

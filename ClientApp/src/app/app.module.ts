@@ -14,9 +14,10 @@ import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { FormComponent } from './components/form/form.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, HomeComponent, LayoutComponent, FormComponent],
+  declarations: [AppComponent, LoginComponent, HomeComponent, LayoutComponent, FormComponent, RegisterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

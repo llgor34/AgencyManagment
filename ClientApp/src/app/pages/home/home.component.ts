@@ -9,8 +9,6 @@ import { ToastService } from 'src/app/shared/toast.service';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  user: User;
-
   constructor(
     private auth: Auth,
     private router: Router,
@@ -19,8 +17,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  logout() {
-    this.auth.signOut();
+  async logout() {
+    await this.auth.signOut();
     this.toastService.success('Pomyślnie wylogowano');
     this.router.navigate(['/login']);
   }
