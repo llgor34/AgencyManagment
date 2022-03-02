@@ -7,3 +7,9 @@
   font-size: 0.9em;
   padding-bottom: 15px;
 }
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+  font-size: inherit;
+}

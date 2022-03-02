@@ -5,6 +5,7 @@ import { LoggedUserGuard } from './auth/loggedUser-guard.service';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,11 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+    canActivate: [LoggedUserGuard],
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
     canActivate: [LoggedUserGuard],
   },
   {

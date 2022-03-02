@@ -15,9 +15,10 @@ import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { FormComponent } from './components/form/form.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, HomeComponent, LayoutComponent, FormComponent, RegisterComponent],
+  declarations: [AppComponent, LoginComponent, HomeComponent, LayoutComponent, FormComponent, RegisterComponent, ResetPasswordComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

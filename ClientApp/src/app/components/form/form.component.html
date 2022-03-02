@@ -76,10 +76,17 @@
               {{ formLabel }}
             </button>
             <div
-              class="form-text mt-3 text-center cursor-pointer"
-              *ngIf="mode !== 'reset'"
+              class="form-text mt-3 text-center cursor-pointer d-flex justify-content-around"
             >
-              Zapomniałeś hasła?
+              <a routerLink="/reset-password" *ngIf="mode === 'login'"
+                >Zapomniałeś hasła?</a
+              >
+              <a routerLink="/login" *ngIf="mode !== 'login'"
+                >Masz już konto?</a
+              >
+              <a routerLink="/register" *ngIf="mode === 'login'"
+                >Nie posiadasz konta?</a
+              >
             </div>
           </form>
         </div>

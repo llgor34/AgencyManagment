@@ -95,10 +95,13 @@ export class FormComponent implements OnInit {
           email: this.email.value,
           password: this.password.value,
         });
+        this.resetForm();
         break;
 
       case 'reset':
         this.formSubmitted.next({ email: this.email.value });
+        this.resetForm();
+        break;
     }
   }
 }
