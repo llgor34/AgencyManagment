@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/auth/auth.service';
+import { UserCredential } from 'firebase/auth';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/shared/toast.service';
 
@@ -13,8 +15,9 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private authService: AuthService,
     private router: Router,
-    private toast: ToastService
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -23,13 +26,13 @@ export class LoginComponent implements OnInit {
 
   private initializeForm() {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
-  get username() {
-    return this.loginForm.controls['username'];
+  get email() {
+    return this.loginForm.controls['email'];
   }
 
   get password() {
@@ -49,7 +52,20 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.toast.success('Zalogowano pomyślnie!');
-    this.router.navigate(['home']);
+    this.authService
+      .login(this.email.value, this.password.value)
+      .then(this.success)
+      .catch((res) => {
+        if (res.message == 'Firebase: Error (auth/user-not-found).') {
+          this.toastService.error(
+            'Konto o podanym adresie email, nie istnieje!'
+          );
+        }
+      });
+  }
+
+  private success(res: UserCredential) {
+    this.toastService.success(`Witaj ${res.user}`);
+    this.router.navigate(['/home']);
   }
 }

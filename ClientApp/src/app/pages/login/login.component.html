@@ -23,16 +23,16 @@
           >
             <div class="mb-4">
               <input
-                placeholder="Nazwa użytkownika"
+                placeholder="Adres email"
                 type="text"
-                formControlName="username"
+                formControlName="email"
                 class="form-control custom-form-control"
               />
               <div
                 class="form-text mt-3 error text-center"
-                *ngIf="username.invalid && username.touched"
+                *ngIf="email.invalid && email.touched"
               >
-                Proszę wprowadź nazwę użytkownika
+                Proszę wprowadź poprawny adres email
               </div>
             </div>
             <div class="mb-5">
