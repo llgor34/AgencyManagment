@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/auth/auth.service';
+import { Auth, authState } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
 import { ToastService } from 'src/app/shared/toast.service';
-import { authState } from 'rxfire/auth';
-import { Auth } from '@angular/fire/auth';
+import { UserCredentials } from 'src/app/shared/UserCredientials.model';
 
 @Component({
   selector: 'app-login',
@@ -12,19 +11,14 @@ import { Auth } from '@angular/fire/auth';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
-
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
+    private auth: Auth,
     private toastService: ToastService,
-    private auth: Auth
+    private router: Router,
+    private authService: AuthService
   ) {}
 
-  ngOnInit() {
-    this.initializeForm();
-
+  ngOnInit(): void {
     authState(this.auth).subscribe((user) => {
       if (user) {
         this.toastService.success(`Pomyślnie zalogowano!`);
@@ -33,42 +27,13 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  private initializeForm() {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+  onSubmit(data: UserCredentials) {
+    this.authService.login(data.email, data.password!).catch((res) => {
+      if (res.message == 'Firebase: Error (auth/user-not-found).') {
+        this.toastService.error('Konto o podanym adresie email, nie istnieje!');
+      } else {
+        this.toastService.error('Niepoprawne hasło!');
+      }
     });
-  }
-
-  get email() {
-    return this.loginForm.controls['email'];
-  }
-
-  get password() {
-    return this.loginForm.controls['password'];
-  }
-
-  get passwordTooShort() {
-    return !!this.loginForm.controls['password'].getError('minlength');
-  }
-
-  get passwordEmpty() {
-    return !!this.loginForm.controls['password'].getError('required');
-  }
-
-  resetForm() {
-    this.loginForm.reset();
-  }
-
-  onSubmit() {
-    this.authService
-      .login(this.email.value, this.password.value)
-      .catch((res) => {
-        if (res.message == 'Firebase: Error (auth/user-not-found).') {
-          this.toastService.error(
-            'Konto o podanym adresie email, nie istnieje!'
-          );
-        }
-      });
   }
 }

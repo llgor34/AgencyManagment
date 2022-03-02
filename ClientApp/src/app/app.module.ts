@@ -13,9 +13,10 @@ import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { FormComponent } from './components/form/form.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, HomeComponent, LayoutComponent],
+  declarations: [AppComponent, LoginComponent, HomeComponent, LayoutComponent, FormComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
