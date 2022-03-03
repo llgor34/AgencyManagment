@@ -17,13 +17,17 @@
           width="50%"
         />
         <h2 class="username mb-2">{{ user.email }}</h2>
-        <h3 class="roles mb-3">Admin,Super Admin</h3>
+        <h3 class="roles mb-3">{{ userDoc ? roles : "" }}</h3>
       </div>
 
       <ul class="flex-grow-1 d-flex flex-column justify-content-evenly w-100">
-        <li routerLinkActive="active"><a routerLink="/home">🏠 Start</a></li>
-        <li>🐴 Twoje konie</li>
-        <li>✉ Wiadomośći</li>
+        <li routerLinkActive="active">
+          <a routerLink="/home">🏠 Start</a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/manage-employees"></a>👨‍💼 Zarządzanie pracownikami
+        </li>
+        <li>✉ Wiadomości</li>
         <li>📅 Kalendarz</li>
         <span class="line-break"></span>
         <li>⚙ Administracja</li>

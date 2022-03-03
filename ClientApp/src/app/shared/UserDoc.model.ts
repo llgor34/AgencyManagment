@@ -3,8 +3,7 @@ export interface UserDoc {
   data: {
     email: string;
     roles: {
-      admin: boolean;
-      employee: boolean;
+      [role: string]: boolean;
     };
   };
 }
