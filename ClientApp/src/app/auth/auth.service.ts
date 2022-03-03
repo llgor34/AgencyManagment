@@ -27,6 +27,7 @@ export class AuthService {
       email: user.email,
       displayName: '',
       phoneNumber: '',
+      newUser: true,
       roles: {
         admin: false,
         employee: true,
