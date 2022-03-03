@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth-guard.service';
 import { LoggedUserGuard } from './auth/loggedUser-guard.service';
 import { NewEmployeeGuard } from './auth/new-employee.service';
+import { OnlyNewEmployeeGuard } from './auth/only-new-employee-guard.service';
 import { LayoutComponent } from './components/layout/layout.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -39,6 +40,7 @@ const routes: Routes = [
       {
         path: 'new-employee',
         component: NewEmployeeComponent,
+        canActivate: [OnlyNewEmployeeGuard],
       },
     ],
   },
