@@ -6,6 +6,7 @@ import {
   sendPasswordResetEmail,
 } from '@angular/fire/auth';
 import { FirestoreService } from '../shared/firestore.service';
+import { UserDoc } from '../shared/UserDoc.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -24,6 +25,8 @@ export class AuthService {
 
     await this.firestoreService.setDocument('users', user.uid, {
       email: user.email,
+      displayName: '',
+      phoneNumber: '',
       roles: {
         admin: false,
         employee: true,
@@ -35,5 +38,12 @@ export class AuthService {
 
   resetPassword(email: string) {
     return sendPasswordResetEmail(this.auth, email);
+  }
+
+  getRoles(userDoc: UserDoc) {
+    const allRoles = userDoc.data.roles;
+    const ownedRoles = Object.keys(allRoles).filter((key) => allRoles[key]);
+
+    return ownedRoles.toString();
   }
 }

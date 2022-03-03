@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
+import { AuthService } from 'src/app/auth/auth.service';
 import { FirestoreService } from 'src/app/shared/firestore.service';
 import { UserDoc } from 'src/app/shared/UserDoc.model';
 
@@ -12,7 +13,11 @@ export class LayoutComponent implements OnInit {
   user: User;
   userDoc: UserDoc;
 
-  constructor(private auth: Auth, private firestoreService: FirestoreService) {}
+  constructor(
+    private auth: Auth,
+    private firestoreService: FirestoreService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     // At this moment, there always will be user
@@ -23,9 +28,6 @@ export class LayoutComponent implements OnInit {
   }
 
   get roles() {
-    const allRoles = this.userDoc.data.roles;
-    const ownedRoles = Object.keys(allRoles).filter((key) => allRoles[key]);
-
-    return ownedRoles.toString();
+    return this.authService.getRoles(this.userDoc);
   }
 }
