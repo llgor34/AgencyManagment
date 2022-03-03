@@ -1,1 +1,32 @@
-<p>manage-employees works!</p>
+<table class="table table-hover cursor-pointer">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Imie i Nazwisko</th>
+      <th scope="col">Email</th>
+      <th scope="col">Telefon</th>
+      <th scope="col">Role</th>
+      <th scope="col"><!-- Reset password --></th>
+      <th scope="col"><!-- Delete employee --></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let employee of employees; let i = index">
+      <td scope="col">{{ i }}</td>
+      <td scope="col">Jan Kowalski</td>
+      <td scope="col">JanKowalski@gmail.com</td>
+      <td scope="col">+48 000111222</td>
+      <td scope="col">Admin, pracownik</td>
+      <td scope="col">
+        <button type="button" class="btn btn-outline-primary btn-sm">
+          Resetuj hasło
+        </button>
+      </td>
+      <td scope="col">
+        <button type="button" class="btn btn-outline-danger btn-sm">
+          Usuń
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
