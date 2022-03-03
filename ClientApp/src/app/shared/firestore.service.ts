@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, setDoc, collection, doc } from '@angular/fire/firestore';
+import { Firestore, setDoc, doc, getDoc } from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
@@ -8,5 +8,10 @@ export class FirestoreService {
   async setDocument(col: string, docName: string, data: any) {
     const docRef = doc(this.firestore, col, docName);
     return setDoc(docRef, data);
+  }
+
+  async getDocument(col: string, docName: string) {
+    const docRef = doc(this.firestore, col, docName);
+    return await getDoc(docRef);
   }
 }

@@ -3,7 +3,6 @@ import { Auth, authState } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { FirestoreService } from 'src/app/shared/firestore.service';
 import { ToastService } from 'src/app/shared/toast.service';
 import { UserCredentials } from 'src/app/shared/UserCredientials.model';
 
@@ -19,8 +18,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     private authService: AuthService,
     private router: Router,
-    private auth: Auth,
-    private firestoreService: FirestoreService
+    private auth: Auth
   ) {}
 
   ngOnInit(): void {
@@ -38,14 +36,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   async onSubmit(data: UserCredentials) {
     try {
-      const res = await this.authService.register(data.email, data.password!);
-      await this.firestoreService.setDocument('users', res.user.uid, {
-        email: res.user.email,
-        roles: {
-          admin: false,
-          user: true,
-        },
-      });
+      await this.authService.register(data.email, data.password!);
     } catch (error: any) {
       if (error.message === 'Firebase: Error (auth/email-already-in-use).') {
         this.toastService.error('Ten adres email jest już zajęty!');
