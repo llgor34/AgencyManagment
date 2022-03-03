@@ -23,13 +23,12 @@
     </div>
     <div class="mb-4">
       <input
-        placeholder="Nazwa użytkownika"
+        placeholder="Imie i Nazwisko"
         type="text"
         class="form-control custom-form-control"
         ngModel
         required
         name="displayName"
-        minlength="5"
       />
       <div
         class="form-text mt-3 error text-center"
@@ -38,7 +37,7 @@
           form.form.controls['displayName']?.touched
         "
       >
-        Nazwa powinna mieć przynajmniej 5 znaków
+        Podaj swoje Imie i Nazwisko
       </div>
     </div>
     <button

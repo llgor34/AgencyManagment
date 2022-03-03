@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Employee } from 'src/app/shared/Employee.model';
 import { FirestoreService } from 'src/app/shared/firestore.service';
+import { ToastService } from 'src/app/shared/toast.service';
 
 @Component({
   selector: 'app-manage-employees',
@@ -15,7 +16,8 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
 
   constructor(
     private firestoreService: FirestoreService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastService: ToastService
   ) {}
 
   private empty(text: string) {
@@ -45,5 +47,16 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.collectionSub.unsubscribe();
+  }
+
+  async onPasswordReset(email: string) {
+    try {
+      await this.authService.resetPassword(email);
+      this.toastService.success(
+        `Wysłano wiadomość z instrukcją resetu hasła na adres: ${email}`
+      );
+    } catch (error: any) {
+      this.toastService.error(`Wystąpił nieoczekiwany błąd: ${error.message}`);
+    }
   }
 }
