@@ -1,1 +1,52 @@
-<p>new-employee works!</p>
+<div class="container w-100 h-100 d-flex flex-column justify-content-center">
+  <form class="w-50 mx-auto" #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <h1 class="text-center mb-5">Wprowadź swoje dane</h1>
+    <div class="mb-4">
+      <input
+        placeholder="Numer telefonu"
+        type="text"
+        class="form-control custom-form-control"
+        ngModel
+        required
+        name="phoneNumber"
+        pattern="^\d{9}$"
+      />
+      <div
+        class="form-text mt-3 error text-center"
+        *ngIf="
+          form.form.controls['phoneNumber']?.invalid &&
+          form.form.controls['phoneNumber']?.touched
+        "
+      >
+        Proszę wprowadź poprawny numer telefonu
+      </div>
+    </div>
+    <div class="mb-4">
+      <input
+        placeholder="Nazwa użytkownika"
+        type="text"
+        class="form-control custom-form-control"
+        ngModel
+        required
+        name="displayName"
+        minlength="5"
+      />
+      <div
+        class="form-text mt-3 error text-center"
+        *ngIf="
+          form.form.controls['displayName']?.invalid &&
+          form.form.controls['displayName']?.touched
+        "
+      >
+        Nazwa powinna mieć przynajmniej 5 znaków
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="btn btn-success w-100"
+      [disabled]="form?.invalid"
+    >
+      Potwierdź
+    </button>
+  </form>
+</div>

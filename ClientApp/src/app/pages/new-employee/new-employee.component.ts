@@ -1,15 +1,36 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
+import { ToastService } from 'src/app/shared/toast.service';
 
 @Component({
   selector: 'app-new-employee',
   templateUrl: './new-employee.component.html',
-  styleUrls: ['./new-employee.component.css']
+  styleUrls: ['./new-employee.component.css'],
 })
 export class NewEmployeeComponent implements OnInit {
+  constructor(
+    private authService: AuthService,
+    private toastService: ToastService,
+    private router: Router
+  ) {}
 
-  constructor() { }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
+  async onSubmit(form: NgForm) {
+    const { phoneNumber, displayName } = form.form.controls;
+
+    try {
+      await this.authService.updateNewUser(
+        phoneNumber.value,
+        displayName.value
+      );
+
+      this.toastService.success('Dane zostały zaktualizowane!');
+      this.router.navigate(['/home']);
+    } catch (error: any) {
+      this.toastService.error(error.message);
+    }
   }
-
 }

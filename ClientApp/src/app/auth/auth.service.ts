@@ -4,7 +4,9 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
+  updateProfile,
 } from '@angular/fire/auth';
+import { PhoneAuthProvider } from 'firebase/auth';
 import { FirestoreService } from '../shared/firestore.service';
 import { UserDoc } from '../shared/UserDoc.model';
 
@@ -46,5 +48,17 @@ export class AuthService {
     const ownedRoles = Object.keys(allRoles).filter((key) => allRoles[key]);
 
     return ownedRoles.toString();
+  }
+
+  async updateNewUser(phoneNumber: string, displayName: string) {
+    await updateProfile(this.auth.currentUser!, {
+      displayName,
+    });
+
+    await this.firestoreService.updateDocument(
+      'users',
+      this.auth.currentUser!.uid,
+      { displayName, phoneNumber, newUser: false }
+    );
   }
 }

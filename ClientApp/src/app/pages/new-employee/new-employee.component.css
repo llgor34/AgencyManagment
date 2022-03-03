@@ -1,0 +1,15 @@
+.custom-form-control {
+  font-weight: lighter;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0;
+  background-color: transparent;
+  font-size: 0.9em;
+  padding-bottom: 15px;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+  font-size: inherit;
+}
