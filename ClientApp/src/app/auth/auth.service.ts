@@ -5,10 +5,9 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   updateProfile,
+  deleteUser,
 } from '@angular/fire/auth';
-import { PhoneAuthProvider } from 'firebase/auth';
 import { FirestoreService } from '../shared/firestore.service';
-import { UserDoc } from '../shared/UserDoc.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

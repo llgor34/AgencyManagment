@@ -1,12 +1,18 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-button',
   template: `
     <button
       type="button"
-      class="btn btn-outline-primary btn-sm"
-      [ngClass]="submit ? 'mb-2' : ''"
+      class="btn btn-sm"
+      [ngClass]="{
+        'mb-2': submit,
+        'btn-outline-primary': color === 'primary' && !submit,
+        'btn-primary': color === 'primary' && submit,
+        'btn-outline-danger': color === 'secondary' && !submit,
+        'btn-danger': color === 'secondary' && submit
+      }"
       (click)="onSubmit()"
     >
       <ng-content *ngIf="!submit; else confirm"></ng-content>
@@ -25,6 +31,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 })
 export class ButtonComponent {
   @Output() submitted = new EventEmitter<void>();
+  @Input() color: 'primary' | 'secondary' = 'primary';
   submit = false;
 
   onSubmit() {

@@ -18,12 +18,16 @@
       <td scope="col">{{ employee.phoneNumber }}</td>
       <td scope="col">{{ employee.roles }}</td>
       <td scope="col">
-        <app-button>Resetuj hasło</app-button>
+        <app-button (submitted)="onPasswordReset(employee.email)"
+          >Resetuj hasło</app-button
+        >
       </td>
       <td scope="col">
-        <button type="button" class="btn btn-outline-danger btn-sm">
-          Usuń
-        </button>
+        <app-button
+          color="secondary"
+          (submitted)="onEmployeeDelete(employee.id)"
+          >Usuń</app-button
+        >
       </td>
     </tr>
   </tbody>

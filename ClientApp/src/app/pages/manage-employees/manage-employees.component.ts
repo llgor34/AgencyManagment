@@ -59,4 +59,12 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
       this.toastService.error(`Wystąpił nieoczekiwany błąd: ${error.message}`);
     }
   }
+
+  async onEmployeeDelete(userId: string) {
+    try {
+      this.toastService.error(`Funkcja niezaimplementowana`);
+    } catch (error: any) {
+      this.toastService.error(`Wystąpił nieoczekiwany błąd: ${error.message}`);
+    }
+  }
 }
