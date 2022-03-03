@@ -13,10 +13,10 @@
   <tbody>
     <tr *ngFor="let employee of employees; let i = index">
       <td scope="col">{{ i }}</td>
-      <td scope="col">Jan Kowalski</td>
-      <td scope="col">JanKowalski@gmail.com</td>
-      <td scope="col">+48 000111222</td>
-      <td scope="col">Admin, pracownik</td>
+      <td scope="col">{{ employee.name }}</td>
+      <td scope="col">{{ employee.email }}</td>
+      <td scope="col">{{ employee.phoneNumber }}</td>
+      <td scope="col">{{ employee.roles }}</td>
       <td scope="col">
         <button type="button" class="btn btn-outline-primary btn-sm">
           Resetuj hasło

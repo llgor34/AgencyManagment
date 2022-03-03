@@ -5,6 +5,9 @@ import {
   doc,
   getDoc,
   updateDoc,
+  collectionData,
+  query,
+  collection,
 } from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
@@ -26,5 +29,12 @@ export class FirestoreService {
   async updateDocument(col: string, docName: string, data: any) {
     const docRef = doc(this.firestore, col, docName);
     await updateDoc(docRef, data);
+  }
+
+  collectionSnapshot$(col: string) {
+    const colRef = collection(this.firestore, col);
+    const q = query(colRef);
+
+    return collectionData(q, { idField: 'id' });
   }
 }

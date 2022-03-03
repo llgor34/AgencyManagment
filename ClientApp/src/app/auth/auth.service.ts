@@ -43,11 +43,10 @@ export class AuthService {
     return sendPasswordResetEmail(this.auth, email);
   }
 
-  getRoles(userDoc: UserDoc) {
-    const allRoles = userDoc.data.roles;
-    const ownedRoles = Object.keys(allRoles).filter((key) => allRoles[key]);
+  getRoles(roles: { [key: string]: boolean }) {
+    const ownedRoles = Object.keys(roles).filter((key) => roles[key]);
 
-    return ownedRoles.toString();
+    return ownedRoles;
   }
 
   async updateNewUser(phoneNumber: string, displayName: string) {
