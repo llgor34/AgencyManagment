@@ -12,6 +12,8 @@ export class FirestoreService {
 
   async getDocument(col: string, docName: string) {
     const docRef = doc(this.firestore, col, docName);
-    return await getDoc(docRef);
+    const fetchedDoc = await getDoc(docRef);
+
+    return { uid: fetchedDoc.id, data: fetchedDoc.data() as any };
   }
 }
