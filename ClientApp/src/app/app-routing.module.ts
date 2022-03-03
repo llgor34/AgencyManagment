@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth-guard.service';
 import { LoggedUserGuard } from './auth/loggedUser-guard.service';
+import { NewEmployeeGuard } from './auth/new-employee.service';
 import { LayoutComponent } from './components/layout/layout.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ManageEmployeesComponent } from './pages/manage-employees/manage-employees.component';
+import { NewEmployeeComponent } from './pages/new-employee/new-employee.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
@@ -21,16 +23,22 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [AuthGuard],
+
     children: [
       {
         path: 'home',
         component: HomeComponent,
-        canActivate: [AuthGuard],
+        canActivate: [NewEmployeeGuard],
       },
       {
         path: 'manage-employees',
         component: ManageEmployeesComponent,
-        canActivate: [AuthGuard],
+        canActivate: [NewEmployeeGuard],
+      },
+      {
+        path: 'new-employee',
+        component: NewEmployeeComponent,
       },
     ],
   },

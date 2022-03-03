@@ -17,6 +17,7 @@ import { FormComponent } from './components/form/form.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { ManageEmployeesComponent } from './pages/manage-employees/manage-employees.component';
+import { NewEmployeeComponent } from './pages/new-employee/new-employee.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ManageEmployeesComponent } from './pages/manage-employees/manage-employ
     RegisterComponent,
     ResetPasswordComponent,
     ManageEmployeesComponent,
+    NewEmployeeComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FirestoreService } from 'src/app/shared/firestore.service';
 import { UserDoc } from 'src/app/shared/UserDoc.model';
@@ -16,7 +17,8 @@ export class LayoutComponent implements OnInit {
   constructor(
     private auth: Auth,
     private firestoreService: FirestoreService,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -24,7 +26,9 @@ export class LayoutComponent implements OnInit {
     this.user = this.auth.currentUser!;
     this.firestoreService
       .getDocument('users', this.user.uid)
-      .then((doc: UserDoc) => (this.userDoc = doc));
+      .then((doc: UserDoc) => {
+        this.userDoc = doc;
+      });
   }
 
   get roles() {

@@ -19,21 +19,16 @@ export class AuthGuard implements CanActivate {
     private toast: ToastService
   ) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return authState(this.auth).pipe(
       map((user) => {
-        return !!user;
-      }),
-      tap((user) => {
         if (!user) {
           this.toast.error(
             'Aby uzyskać dostęp do tej strony, musisz się zalogować!'
           );
-          this.router.navigate(['/login']);
+          return this.router.createUrlTree(['/login']);
         }
+        return true;
       })
     );
   }

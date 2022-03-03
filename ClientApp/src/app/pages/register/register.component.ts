@@ -25,7 +25,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.authSub = authState(this.auth).subscribe((user) => {
       if (user) {
         this.toastService.success(`Pomyślnie zarejestrowano!`);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/new-employee']);
       }
     });
   }
