@@ -5,6 +5,7 @@ import { Employee } from 'src/app/shared/Employee.model';
 import { FirestoreService } from 'src/app/shared/firestore.service';
 import { ToastService } from 'src/app/shared/toast.service';
 import { Auth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-employees',
@@ -20,7 +21,8 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
     private firestoreService: FirestoreService,
     private authService: AuthService,
     private toastService: ToastService,
-    private auth: Auth
+    private auth: Auth,
+    private router: Router
   ) {}
 
   private empty(text: string) {
@@ -78,14 +80,16 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
     }
 
     try {
-      const res: any = await this.authService.deleteUser(userUid);
-      if (res.data.data == 'Not enough permissions!') {
-        this.toastService.error('Nie posiadasz uprawnień!');
-      } else {
-        this.toastService.success('Usunięto użytkownika!');
-      }
+      const res = await this.authService.deleteUser(userUid);
+      console.log(res);
+      // if (res.data === 'Not enough permissions!') {
+      //   this.toastService.error('Nie posiadasz uprawnień!');
+      // } else {
+      //   this.toastService.success('Usunięto użytkownika!');
+      // }
     } catch (error: any) {
-      this.toastService.error(error.message);
+      // this.toastService.error(error.message);
+      console.log(error);
     }
 
     this.loading = false;
@@ -94,6 +98,6 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
   onClick(event: any, userUid: string) {
     if (event.target.nodeName !== 'TD') return;
 
-    
+    this.router.navigate(['/manage-employee', userUid]);
   }
 }

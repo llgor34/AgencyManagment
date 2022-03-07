@@ -1,6 +1,6 @@
 const functions = require("firebase-functions");
 const firebaseAdmin = require("firebase-admin");
-const serviceAccount = require("./agency-managment-firebase-adminsdk-2svc5-7557c988cb.json");
+const serviceAccount = require("./agency-managment-firebase-adminsdk-2svc5-bbb3a1aeef.json");
 
 // initialize firebase
 firebaseAdmin.initializeApp({
