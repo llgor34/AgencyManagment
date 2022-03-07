@@ -60,6 +60,6 @@ export class AuthService {
 
   async deleteUser(userUid: string) {
     const deleteUser = httpsCallable(this.functions, 'deleteUser');
-    return await deleteUser({ userUid });
+    await deleteUser({ userUid });
   }
 }
