@@ -9,6 +9,7 @@ import { UserCredentials } from 'src/app/shared/UserCredientials.model';
 })
 export class FormComponent implements OnInit {
   @Input() mode: 'login' | 'register' | 'reset';
+  @Input() loading: boolean;
   @Output() formSubmitted = new EventEmitter<UserCredentials>();
   form: FormGroup;
 

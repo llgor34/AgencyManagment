@@ -10,6 +10,8 @@ import { ToastService } from 'src/app/shared/toast.service';
   styleUrls: ['./new-employee.component.css'],
 })
 export class NewEmployeeComponent implements OnInit {
+  loading = false;
+
   constructor(
     private authService: AuthService,
     private toastService: ToastService,
@@ -19,6 +21,7 @@ export class NewEmployeeComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit(form: NgForm) {
+    this.loading = true;
     const { phoneNumber, displayName } = form.form.controls;
 
     try {
@@ -32,5 +35,6 @@ export class NewEmployeeComponent implements OnInit {
     } catch (error: any) {
       this.toastService.error(error.message);
     }
+    this.loading = false;
   }
 }

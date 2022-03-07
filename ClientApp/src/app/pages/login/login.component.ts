@@ -13,6 +13,7 @@ import { UserCredentials } from 'src/app/shared/UserCredientials.model';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private authSub: Subscription;
+  loading = false;
 
   constructor(
     private auth: Auth,
@@ -35,6 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(data: UserCredentials) {
+    this.loading = true;
     this.authService.login(data.email, data.password!).catch((res) => {
       if (res.message == 'Firebase: Error (auth/user-not-found).') {
         this.toastService.error('Konto o podanym adresie email, nie istnieje!');
@@ -42,5 +44,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.toastService.error('Niepoprawne hasło!');
       }
     });
+    this.loading = false;
   }
 }

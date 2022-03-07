@@ -12,7 +12,8 @@ import { UserCredentials } from 'src/app/shared/UserCredientials.model';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  authSub: Subscription;
+  private authSub: Subscription;
+  loading = false;
 
   constructor(
     private toastService: ToastService,
@@ -35,6 +36,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   async onSubmit(data: UserCredentials) {
+    this.loading = true;
     try {
       await this.authService.register(data.email, data.password!);
     } catch (error: any) {
@@ -44,5 +46,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.toastService.error(error.message);
       }
     }
+    this.loading = false;
   }
 }

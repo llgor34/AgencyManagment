@@ -9,6 +9,8 @@ import { UserCredentials } from 'src/app/shared/UserCredientials.model';
   styleUrls: ['./reset-password.component.css'],
 })
 export class ResetPasswordComponent implements OnInit {
+  loading = false;
+
   constructor(
     private authService: AuthService,
     private toastService: ToastService
@@ -17,6 +19,7 @@ export class ResetPasswordComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit(data: UserCredentials) {
+    this.loading = true;
     try {
       await this.authService.resetPassword(data.email);
       this.toastService.success('Wiadomość z instrukcją została wysłana!');
@@ -27,5 +30,6 @@ export class ResetPasswordComponent implements OnInit {
         this.toastService.error(error.message);
       }
     }
+    this.loading = false;
   }
 }
