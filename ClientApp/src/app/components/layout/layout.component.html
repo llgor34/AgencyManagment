@@ -17,7 +17,9 @@
           width="50%"
         />
         <h2 class="username mb-2">{{ user.email }}</h2>
-        <h3 class="roles mb-3">{{ userDoc ? roles : "" }}</h3>
+        <h3 class="roles mb-3" *ngIf="userDoc">
+          {{ userDoc.data.roles | getRoles }}
+        </h3>
       </div>
 
       <ul class="flex-grow-1 d-flex flex-column justify-content-evenly w-100">

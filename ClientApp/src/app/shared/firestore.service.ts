@@ -35,6 +35,6 @@ export class FirestoreService {
     const colRef = collection(this.firestore, col);
     const q = query(colRef);
 
-    return collectionData(q, { idField: 'id' });
+    return collectionData(q, { idField: 'uid' });
   }
 }

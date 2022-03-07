@@ -38,7 +38,7 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
               this.empty(document['phoneNumber'])
                 ? 'Nie ustawiono'
                 : `+48${document['phoneNumber']}`,
-              [...this.authService.getRoles(document['roles'])],
+              document['roles'],
               document['id']
             )
         );

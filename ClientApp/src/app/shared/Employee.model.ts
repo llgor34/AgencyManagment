@@ -3,7 +3,7 @@ export class Employee {
     public name: string,
     public email: string,
     public phoneNumber: string,
-    public roles: string[],
+    public roles: { [key: string]: boolean },
     public id: string
   ) {}
 }

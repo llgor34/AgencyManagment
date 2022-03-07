@@ -42,12 +42,6 @@ export class AuthService {
     return sendPasswordResetEmail(this.auth, email);
   }
 
-  getRoles(roles: { [key: string]: boolean }) {
-    const ownedRoles = Object.keys(roles).filter((key) => roles[key]);
-
-    return ownedRoles;
-  }
-
   async updateNewUser(phoneNumber: string, displayName: string) {
     await updateProfile(this.auth.currentUser!, {
       displayName,

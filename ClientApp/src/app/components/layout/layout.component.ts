@@ -30,8 +30,4 @@ export class LayoutComponent implements OnInit {
         this.userDoc = doc;
       });
   }
-
-  get roles() {
-    return this.authService.getRoles(this.userDoc.data.roles);
-  }
 }

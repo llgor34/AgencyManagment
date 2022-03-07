@@ -16,7 +16,7 @@
       <td scope="col">{{ employee.name }}</td>
       <td scope="col">{{ employee.email }}</td>
       <td scope="col">{{ employee.phoneNumber }}</td>
-      <td scope="col">{{ employee.roles }}</td>
+      <td scope="col">{{ employee.roles | getRoles }}</td>
       <td scope="col">
         <app-button (submitted)="onPasswordReset(employee.email)"
           >Resetuj hasło</app-button

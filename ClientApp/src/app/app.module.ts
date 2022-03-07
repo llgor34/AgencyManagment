@@ -20,6 +20,7 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { ManageEmployeesComponent } from './pages/manage-employees/manage-employees.component';
 import { NewEmployeeComponent } from './pages/new-employee/new-employee.component';
 import { ButtonComponent } from './components/button/button.component';
+import { GetRolesPipe } from './pipes/get-roles.pipe';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ButtonComponent } from './components/button/button.component';
     ManageEmployeesComponent,
     NewEmployeeComponent,
     ButtonComponent,
+    GetRolesPipe,
   ],
   imports: [
     BrowserModule,
