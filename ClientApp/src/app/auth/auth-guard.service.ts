@@ -6,7 +6,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { map, Observable, tap } from 'rxjs';
+import { map } from 'rxjs';
 import { ToastService } from '../shared/toast.service';
 
 @Injectable({
