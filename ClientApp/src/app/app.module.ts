@@ -22,7 +22,7 @@ import { ManageEmployeesComponent } from './pages/manage-employees/manage-employ
 import { NewEmployeeComponent } from './pages/new-employee/new-employee.component';
 import { ButtonComponent } from './components/button/button.component';
 import { GetRolesPipe } from './pipes/get-roles.pipe';
-import { ManageEmployeeComponent } from './components/manage-employee/manage-employee.component';
+import { ManageEmployeeComponent } from './pages/manage-employee/manage-employee.component';
 
 @NgModule({
   declarations: [
