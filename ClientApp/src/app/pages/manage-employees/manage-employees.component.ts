@@ -90,4 +90,10 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
 
     this.loading = false;
   }
+
+  onClick(event: any, userUid: string) {
+    if (event.target.nodeName !== 'TD') return;
+
+    
+  }
 }

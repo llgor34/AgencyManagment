@@ -20,7 +20,10 @@
   </thead>
 
   <tbody>
-    <tr *ngFor="let employee of employees; let i = index">
+    <tr
+      (click)="onClick($event, employee.uid)"
+      *ngFor="let employee of employees; let i = index"
+    >
       <td scope="col">{{ i }}</td>
       <td scope="col">{{ employee.name }}</td>
       <td scope="col">{{ employee.email }}</td>

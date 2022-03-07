@@ -27,7 +27,6 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     canActivate: [AuthGuard],
-
     children: [
       {
         path: 'home',
@@ -40,9 +39,9 @@ const routes: Routes = [
         canActivate: [NewEmployeeGuard],
       },
       {
-        path: 'manage-employee',
+        path: 'manage-employee/:uid',
         component: ManageEmployeeComponent,
-        canActivate: [NewEmployeeGuard, ManageEmployeeGuard],
+        canActivate: [ManageEmployeeGuard, NewEmployeeGuard],
       },
       {
         path: 'new-employee',
