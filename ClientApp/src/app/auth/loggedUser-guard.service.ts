@@ -5,8 +5,9 @@ import {
   CanActivate,
   Router,
   RouterStateSnapshot,
+  UrlTree,
 } from '@angular/router';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ToastService } from '../shared/toast.service';
 
 @Injectable({
@@ -22,16 +23,14 @@ export class LoggedUserGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<boolean> {
+  ): Observable<boolean | UrlTree> {
     return authState(this.auth).pipe(
       map((user) => {
-        return !user;
-      }),
-      tap((user) => {
-        if (!user) {
+        if (user) {
           this.toast.error('Jesteś już zalogowany!');
-          this.router.navigate(['/home']);
+          return this.router.createUrlTree(['/home']);
         }
+        return true;
       })
     );
   }
