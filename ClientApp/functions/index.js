@@ -15,10 +15,18 @@ const projectAuth = firebaseAdmin.auth();
 exports.deleteUser = functions.https.onCall(async (data, context) => {
   const { userUid } = data;
 
-  // validate data ...
-
-  // Delete provided user
   try {
+    // validate data ...
+    const orderingUser = context.auth.uid;
+    const orderingUserDoc = await projectFirestore
+      .collection("users")
+      .doc(orderingUser)
+      .get();
+
+    if (!orderingUserDoc.data().roles.admin) {
+      return { status: "error", data: "Not enough permissions!" };
+    }
+    // Delete provided user
     await projectAuth.deleteUser(userUid);
     await projectFirestore.collection("users").doc(userUid).delete();
     return { status: "success", data: "User successfully deleted!" };
