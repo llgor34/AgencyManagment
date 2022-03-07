@@ -5,6 +5,7 @@ import { LoggedUserGuard } from './auth/loggedUser-guard.service';
 import { NewEmployeeGuard } from './auth/new-employee.service';
 import { OnlyNewEmployeeGuard } from './auth/only-new-employee-guard.service';
 import { LayoutComponent } from './components/layout/layout.component';
+import { ManageEmployeeComponent } from './components/manage-employee/manage-employee.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ManageEmployeesComponent } from './pages/manage-employees/manage-employees.component';
@@ -35,6 +36,11 @@ const routes: Routes = [
       {
         path: 'manage-employees',
         component: ManageEmployeesComponent,
+        canActivate: [NewEmployeeGuard],
+      },
+      {
+        path: 'manage-employee',
+        component: ManageEmployeeComponent,
         canActivate: [NewEmployeeGuard],
       },
       {

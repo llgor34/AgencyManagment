@@ -28,6 +28,7 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loading = true;
     this.collectionSub = this.firestoreService
       .collectionSnapshot$('users')
       .subscribe((documents) => {
@@ -46,6 +47,8 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
             )
         );
       });
+
+    this.loading = false;
   }
 
   ngOnDestroy(): void {
