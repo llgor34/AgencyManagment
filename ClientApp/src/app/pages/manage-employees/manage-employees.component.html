@@ -1,3 +1,12 @@
+<div class="d-flex justify-content-center w-100 my-2">
+  <div
+    class="spinner-border text-primary"
+    role="status"
+    style="width: 3rem; height: 3rem"
+    *ngIf="loading"
+  ></div>
+</div>
+
 <table class="table table-hover cursor-pointer">
   <thead>
     <tr>
@@ -10,6 +19,7 @@
       <th scope="col"><!-- Delete employee --></th>
     </tr>
   </thead>
+
   <tbody>
     <tr *ngFor="let employee of employees; let i = index">
       <td scope="col">{{ i }}</td>
@@ -18,14 +28,17 @@
       <td scope="col">{{ employee.phoneNumber }}</td>
       <td scope="col">{{ employee.roles | getRoles }}</td>
       <td scope="col">
-        <app-button (submitted)="onPasswordReset(employee.email)"
+        <app-button
+          (submitted)="onPasswordReset(employee.email)"
+          [disabled]="loading"
           >Resetuj hasło</app-button
         >
       </td>
       <td scope="col">
         <app-button
           color="secondary"
-          (submitted)="onEmployeeDelete(employee.id)"
+          (submitted)="onEmployeeDelete(employee.uid)"
+          [disabled]="loading"
           >Usuń</app-button
         >
       </td>

@@ -6,6 +6,7 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
     <button
       type="button"
       class="btn btn-sm"
+      [disabled]="disabled"
       [ngClass]="{
         'mb-2': submit,
         'btn-outline-primary': color === 'primary' && !submit,
@@ -21,6 +22,7 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
     <button
       type="button"
       class="btn btn-outline-danger btn-sm"
+      [disabled]="disabled"
       (click)="onCancel()"
       *ngIf="submit"
     >
@@ -32,6 +34,7 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 export class ButtonComponent {
   @Output() submitted = new EventEmitter<void>();
   @Input() color: 'primary' | 'secondary' = 'primary';
+  @Input() disabled = false;
   submit = false;
 
   onSubmit() {

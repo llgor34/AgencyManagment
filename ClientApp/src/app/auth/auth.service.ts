@@ -5,13 +5,17 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   updateProfile,
-  deleteUser,
 } from '@angular/fire/auth';
 import { FirestoreService } from '../shared/firestore.service';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private auth: Auth, private firestoreService: FirestoreService) {}
+  constructor(
+    private auth: Auth,
+    private firestoreService: FirestoreService,
+    private functions: Functions
+  ) {}
 
   login(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password);
@@ -52,5 +56,10 @@ export class AuthService {
       this.auth.currentUser!.uid,
       { displayName, phoneNumber, newUser: false }
     );
+  }
+
+  async deleteUser(userUid: string) {
+    const deleteUser = httpsCallable(this.functions, 'deleteUser');
+    return await deleteUser({ userUid });
   }
 }

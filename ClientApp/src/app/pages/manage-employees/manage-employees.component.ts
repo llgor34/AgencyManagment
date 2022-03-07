@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Employee } from 'src/app/shared/Employee.model';
 import { FirestoreService } from 'src/app/shared/firestore.service';
 import { ToastService } from 'src/app/shared/toast.service';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-manage-employees',
@@ -13,11 +14,13 @@ import { ToastService } from 'src/app/shared/toast.service';
 export class ManageEmployeesComponent implements OnInit, OnDestroy {
   collectionSub: Subscription;
   employees: Employee[];
+  loading = false;
 
   constructor(
     private firestoreService: FirestoreService,
     private authService: AuthService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private auth: Auth
   ) {}
 
   private empty(text: string) {
@@ -39,7 +42,7 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
                 ? 'Nie ustawiono'
                 : `+48${document['phoneNumber']}`,
               document['roles'],
-              document['id']
+              document['uid']
             )
         );
       });
@@ -50,6 +53,7 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
   }
 
   async onPasswordReset(email: string) {
+    this.loading = true;
     try {
       await this.authService.resetPassword(email);
       this.toastService.success(
@@ -58,13 +62,25 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
     } catch (error: any) {
       this.toastService.error(`Wystąpił nieoczekiwany błąd: ${error.message}`);
     }
+    this.loading = false;
   }
 
-  async onEmployeeDelete(userId: string) {
-    try {
-      this.toastService.error(`Funkcja niezaimplementowana`);
-    } catch (error: any) {
-      this.toastService.error(`Wystąpił nieoczekiwany błąd: ${error.message}`);
+  async onEmployeeDelete(userUid: string) {
+    this.loading = true;
+
+    if (userUid === this.auth.currentUser?.uid) {
+      this.toastService.error('Nie możesz usunąć swojego konta!');
+      this.loading = false;
+      return;
     }
+
+    try {
+      await this.authService.deleteUser(userUid);
+      this.toastService.success('Usunięto użytkownika!');
+    } catch (error: any) {
+      this.toastService.error(error.message);
+    }
+
+    this.loading = false;
   }
 }
