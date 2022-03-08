@@ -1,6 +1,6 @@
 const functions = require("firebase-functions");
 const firebaseAdmin = require("firebase-admin");
-const serviceAccount = require("./agency-managment-firebase-adminsdk-2svc5-bbb3a1aeef.json");
+const serviceAccount = require("./agency-managment-firebase-adminsdk-2svc5-7557c988cb.json");
 
 // initialize firebase
 firebaseAdmin.initializeApp({
@@ -23,13 +23,14 @@ exports.deleteUser = functions.https.onCall(async (data, context) => {
       .doc(orderingUser)
       .get();
 
-    if (!orderingUserDoc.data().roles.admin) {
+    if (orderingUserDoc.data().roles["admin"] == false) {
       return { status: "error", data: "Not enough permissions!" };
+    } else {
+      // Delete provided user
+      await projectAuth.deleteUser(userUid);
+      await projectFirestore.collection("users").doc(userUid).delete();
+      return { status: "success", data: "User successfully deleted!" };
     }
-    // Delete provided user
-    await projectAuth.deleteUser(userUid);
-    await projectFirestore.collection("users").doc(userUid).delete();
-    return { status: "success", data: "User successfully deleted!" };
   } catch (error) {
     return { status: "error", data: error };
   }

@@ -80,16 +80,15 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
     }
 
     try {
-      const res = await this.authService.deleteUser(userUid);
-      console.log(res);
-      // if (res.data === 'Not enough permissions!') {
-      //   this.toastService.error('Nie posiadasz uprawnień!');
-      // } else {
-      //   this.toastService.success('Usunięto użytkownika!');
-      // }
+      const res: any = await this.authService.deleteUser(userUid);
+      if (res.data.data === 'Not enough permissions!') {
+        this.toastService.error('Nie posiadasz uprawnień!');
+      }
+      if (res.data.data === 'User successfully deleted!') {
+        this.toastService.success('Usunięto użytkownika!');
+      }
     } catch (error: any) {
-      // this.toastService.error(error.message);
-      console.log(error);
+      this.toastService.error(error.message);
     }
 
     this.loading = false;
