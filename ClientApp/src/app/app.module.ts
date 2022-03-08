@@ -17,13 +17,13 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideFunctions, getFunctions } from '@angular/fire/functions';
 import { FormComponent } from './components/form/form.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
-import { ManageEmployeesComponent } from './pages/manage-employees/manage-employees.component';
-import { NewEmployeeComponent } from './pages/new-employee/new-employee.component';
+import { ManageEmployeesComponent } from './pages/Employees/manage-employees/manage-employees.component';
+import { NewEmployeeComponent } from './pages/Employees/new-employee/new-employee.component';
 import { ButtonComponent } from './components/button/button.component';
 import { GetRolesPipe } from './pipes/get-roles.pipe';
-import { ManageEmployeeComponent } from './pages/manage-employee/manage-employee.component';
+import { ManageEmployeeComponent } from './pages/Employees/manage-employee/manage-employee.component';
 import { PlusIconComponent } from './components/plus-icon/plus-icon.component';
-import { CreateEmployeeComponent } from './pages/create-employee/create-employee.component';
+import { CreateEmployeeComponent } from './pages/Employees/create-employee/create-employee.component';
 
 @NgModule({
   declarations: [

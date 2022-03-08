@@ -5,14 +5,14 @@ import { LoggedUserGuard } from './auth/loggedUser-guard.service';
 import { NewEmployeeGuard } from './auth/new-employee.service';
 import { OnlyNewEmployeeGuard } from './auth/only-new-employee-guard.service';
 import { LayoutComponent } from './components/layout/layout.component';
-import { ManageEmployeeComponent } from './pages/manage-employee/manage-employee.component';
+import { ManageEmployeeComponent } from './pages/Employees/manage-employee/manage-employee.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
-import { ManageEmployeesComponent } from './pages/manage-employees/manage-employees.component';
-import { NewEmployeeComponent } from './pages/new-employee/new-employee.component';
+import { ManageEmployeesComponent } from './pages/Employees/manage-employees/manage-employees.component';
+import { NewEmployeeComponent } from './pages/Employees/new-employee/new-employee.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { ManageEmployeeGuard } from './auth/manage-employee-guard.service';
-import { CreateEmployeeComponent } from './pages/create-employee/create-employee.component';
+import { CreateEmployeeComponent } from './pages/Employees/create-employee/create-employee.component';
 import { AdminGuard } from './auth/admin-guard.service';
 
 const routes: Routes = [
