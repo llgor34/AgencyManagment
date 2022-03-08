@@ -13,6 +13,7 @@ import { NewEmployeeComponent } from './pages/new-employee/new-employee.componen
 import { RegisterComponent } from './pages/register/register.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { ManageEmployeeGuard } from './auth/manage-employee-guard.service';
+import { CreateEmployeeComponent } from './pages/create-employee/create-employee.component';
 
 const routes: Routes = [
   // redirect routes
@@ -42,6 +43,11 @@ const routes: Routes = [
         path: 'manage-employee/:uid',
         component: ManageEmployeeComponent,
         canActivate: [ManageEmployeeGuard, NewEmployeeGuard],
+      },
+      {
+        path: 'create-employee',
+        component: CreateEmployeeComponent,
+        canActivate: [NewEmployeeGuard],
       },
       {
         path: 'new-employee',

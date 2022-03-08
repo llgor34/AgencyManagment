@@ -35,3 +35,37 @@ exports.deleteUser = functions.https.onCall(async (data, context) => {
     return { status: "error", data: error };
   }
 });
+
+exports.createUser = functions.https.onCall(async (data, context) => {
+  const { email, password } = data;
+  const orderingUser = context.auth.uid;
+
+  const orderingUserDoc = await projectFirestore
+    .collection("users")
+    .doc(orderingUser)
+    .get();
+
+  if (orderingUserDoc.data().roles["admin"] == false) {
+    return { status: "error", data: "Not enough permissions!" };
+  }
+
+  const user = await projectAuth.createUser({
+    email,
+    password,
+  });
+
+  await projectFirestore
+    .collection("users")
+    .doc(user.uid)
+    .set({
+      displayName: "",
+      email,
+      newUser: true,
+      roles: {
+        admin: false,
+        employee: true,
+      },
+    });
+
+  return { status: "success", data: "User successfully created!" };
+});

@@ -42,6 +42,11 @@ export class AuthService {
     return user;
   }
 
+  async createUser(email: string, password: string) {
+    const createUsr = httpsCallable(this.functions, 'createUser');
+    return await createUsr({ email, password });
+  }
+
   resetPassword(email: string) {
     return sendPasswordResetEmail(this.auth, email);
   }
@@ -59,7 +64,7 @@ export class AuthService {
   }
 
   async deleteUser(userUid: string) {
-    const deleteUser = httpsCallable(this.functions, 'deleteUser');
-    return await deleteUser({ userUid });
+    const delUser = httpsCallable(this.functions, 'deleteUser');
+    return await delUser({ userUid });
   }
 }
