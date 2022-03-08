@@ -10,7 +10,6 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ManageEmployeesComponent } from './pages/manage-employees/manage-employees.component';
 import { NewEmployeeComponent } from './pages/new-employee/new-employee.component';
-import { RegisterComponent } from './pages/register/register.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { ManageEmployeeGuard } from './auth/manage-employee-guard.service';
 import { CreateEmployeeComponent } from './pages/create-employee/create-employee.component';
@@ -61,11 +60,6 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [LoggedUserGuard],
-  },
-  {
-    path: 'register',
-    component: RegisterComponent,
     canActivate: [LoggedUserGuard],
   },
   {

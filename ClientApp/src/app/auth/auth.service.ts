@@ -21,27 +21,6 @@ export class AuthService {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  async register(email: string, password: string) {
-    const { user } = await createUserWithEmailAndPassword(
-      this.auth,
-      email,
-      password
-    );
-
-    await this.firestoreService.setDocument('users', user.uid, {
-      email: user.email,
-      displayName: '',
-      phoneNumber: '',
-      newUser: true,
-      roles: {
-        admin: false,
-        employee: true,
-      },
-    });
-
-    return user;
-  }
-
   async createUser(email: string, password: string) {
     const createUsr = httpsCallable(this.functions, 'createUser');
     return await createUsr({ email, password });

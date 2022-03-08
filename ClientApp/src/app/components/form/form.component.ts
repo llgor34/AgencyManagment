@@ -8,7 +8,7 @@ import { UserCredentials } from 'src/app/shared/UserCredientials.model';
   styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit {
-  @Input() mode: 'login' | 'register' | 'reset';
+  @Input() mode: 'login' | 'reset';
   @Input() loading: boolean;
   @Output() formSubmitted = new EventEmitter<UserCredentials>();
   form: FormGroup;
@@ -23,11 +23,7 @@ export class FormComponent implements OnInit {
     const passwordValidators = [];
     const passwordConfirmValidators = [];
 
-    if (this.mode === 'register') {
-      passwordConfirmValidators.push(Validators.required);
-    }
-
-    if (this.mode === 'login' || this.mode === 'register') {
+    if (this.mode === 'login') {
       passwordValidators.push(Validators.required);
       passwordValidators.push(Validators.minLength(6));
     }
@@ -35,7 +31,6 @@ export class FormComponent implements OnInit {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', passwordValidators],
-      passwordConfirm: ['', passwordConfirmValidators],
     });
   }
 
@@ -47,10 +42,6 @@ export class FormComponent implements OnInit {
     return this.form.controls['password'];
   }
 
-  get passwordConfirm() {
-    return this.form.controls['passwordConfirm'];
-  }
-
   get passwordTooShort() {
     return !!this.form.controls['password'].getError('minlength');
   }
@@ -59,26 +50,10 @@ export class FormComponent implements OnInit {
     return !!this.form.controls['password'].getError('required');
   }
 
-  get passwordMatches() {
-    return this.password.value === this.passwordConfirm.value;
-  }
-
-  checkPasswordsValidity() {
-    if (this.password.value !== this.passwordConfirm.value) {
-      this.passwordConfirm.setErrors({ passwordsNotMatch: true });
-    } else {
-      if (this.passwordConfirm.errors) {
-        delete this.passwordConfirm.errors['passwordNotMatch'];
-      }
-    }
-  }
-
   get formLabel() {
     switch (this.mode) {
       case 'login':
         return 'Zaloguj się';
-      case 'register':
-        return 'Zarejestruj się';
       case 'reset':
         return 'Resetowanie hasła';
     }
@@ -91,7 +66,6 @@ export class FormComponent implements OnInit {
   onSubmit() {
     switch (this.mode) {
       case 'login':
-      case 'register':
         this.formSubmitted.next({
           email: this.email.value,
           password: this.password.value,

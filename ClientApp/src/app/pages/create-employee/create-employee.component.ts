@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
+import { ToastService } from 'src/app/shared/toast.service';
 
 @Component({
   selector: 'app-create-employee',
@@ -11,7 +13,12 @@ export class CreateEmployeeComponent implements OnInit {
   form: FormGroup;
   loading = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private toastService: ToastService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loading = true;
@@ -54,10 +61,26 @@ export class CreateEmployeeComponent implements OnInit {
   };
 
   async onSubmit() {
-    const response = await this.authService.createUser(
-      this.email.value,
-      this.password.value
-    );
-    console.log(response);
+    this.loading = true;
+    try {
+      const res: any = await this.authService.createUser(
+        this.email.value,
+        this.password.value
+      );
+
+      if (res.data.data === 'User successfully created!') {
+        this.form.reset();
+        this.toastService.success('Utworzono nowego użytkownika!');
+        this.router.navigate(['/manage-employees']);
+      }
+
+      if (res.data.data === 'Not enough permissions!') {
+        this.toastService.error('Nie posiadasz wystarczających uprawnień!');
+        this.form.reset();
+      }
+    } catch (error: any) {
+      this.toastService.error(error);
+    }
+    this.loading = false;
   }
 }

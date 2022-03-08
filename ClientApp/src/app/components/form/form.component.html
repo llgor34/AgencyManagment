@@ -60,21 +60,6 @@
                 Hasło musi mieć przynajmniej 6 znaków
               </div>
             </div>
-            <div class="mb-5" *ngIf="mode === 'register'">
-              <input
-                placeholder="Potwierdź hasło"
-                type="password"
-                formControlName="passwordConfirm"
-                class="form-control custom-form-control"
-                (input)="checkPasswordsValidity()"
-              />
-              <div
-                class="form-text mt-3 error text-center"
-                *ngIf="passwordConfirm.touched && !passwordMatches"
-              >
-                Hasła się nie zgadzają
-              </div>
-            </div>
             <button
               type="submit"
               class="btn btn-success w-100"
@@ -90,9 +75,6 @@
               >
               <a routerLink="/login" *ngIf="mode !== 'login'"
                 >Masz już konto?</a
-              >
-              <a routerLink="/register" *ngIf="mode === 'login'"
-                >Nie posiadasz konta?</a
               >
             </div>
           </form>

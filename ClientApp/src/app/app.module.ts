@@ -16,7 +16,6 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideFunctions, getFunctions } from '@angular/fire/functions';
 import { FormComponent } from './components/form/form.component';
-import { RegisterComponent } from './pages/register/register.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { ManageEmployeesComponent } from './pages/manage-employees/manage-employees.component';
 import { NewEmployeeComponent } from './pages/new-employee/new-employee.component';
@@ -33,7 +32,6 @@ import { CreateEmployeeComponent } from './pages/create-employee/create-employee
     HomeComponent,
     LayoutComponent,
     FormComponent,
-    RegisterComponent,
     ResetPasswordComponent,
     ManageEmployeesComponent,
     NewEmployeeComponent,

@@ -26,7 +26,10 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
   ) {}
 
   private empty(text: string) {
-    return text.trim().length === 0;
+    if (text) {
+      return text.trim().length === 0;
+    }
+    return true;
   }
 
   ngOnInit(): void {

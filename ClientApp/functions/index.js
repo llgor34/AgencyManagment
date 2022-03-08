@@ -61,6 +61,7 @@ exports.createUser = functions.https.onCall(async (data, context) => {
       displayName: "",
       email,
       newUser: true,
+      phoneNumber: "",
       roles: {
         admin: false,
         employee: true,
