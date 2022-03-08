@@ -24,6 +24,7 @@ import { GetRolesPipe } from './pipes/get-roles.pipe';
 import { ManageEmployeeComponent } from './pages/Employees/manage-employee/manage-employee.component';
 import { PlusIconComponent } from './components/plus-icon/plus-icon.component';
 import { CreateEmployeeComponent } from './pages/Employees/create-employee/create-employee.component';
+import { ProjectsComponent } from './pages/projectsManagment/projects/projects.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { CreateEmployeeComponent } from './pages/Employees/create-employee/creat
     ManageEmployeeComponent,
     PlusIconComponent,
     CreateEmployeeComponent,
+    ProjectsComponent,
   ],
   imports: [
     BrowserModule,

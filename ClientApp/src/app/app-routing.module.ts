@@ -14,6 +14,7 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { ManageEmployeeGuard } from './auth/manage-employee-guard.service';
 import { CreateEmployeeComponent } from './pages/Employees/create-employee/create-employee.component';
 import { AdminGuard } from './auth/admin-guard.service';
+import { ProjectsComponent } from './pages/projectsManagment/projects/projects.component';
 
 const routes: Routes = [
   // redirect routes
@@ -34,6 +35,7 @@ const routes: Routes = [
         component: HomeComponent,
         canActivate: [NewEmployeeGuard],
       },
+      // Manage employees routes (at the end, they will be outsourced to own module and lazy loaded)
       {
         path: 'manage-employees',
         component: ManageEmployeesComponent,
@@ -53,6 +55,12 @@ const routes: Routes = [
         path: 'new-employee',
         component: NewEmployeeComponent,
         canActivate: [OnlyNewEmployeeGuard],
+      },
+      // Manage projects routes (at the end, they will be outsourced to own module and lazy loaded)
+      {
+        path: 'projects',
+        component: ProjectsComponent,
+        canActivate: [NewEmployeeGuard],
       },
     ],
   },
