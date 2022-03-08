@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FirestoreService } from 'src/app/shared/firestore.service';
-import { UserDoc } from 'src/app/shared/UserDoc.model';
+import { UserDoc } from 'src/app/shared/models/UserDoc.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormArray,

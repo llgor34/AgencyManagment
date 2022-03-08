@@ -3,7 +3,7 @@ import { Auth, User } from '@angular/fire/auth';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FirestoreService } from 'src/app/shared/firestore.service';
-import { UserDoc } from 'src/app/shared/UserDoc.model';
+import { UserDoc } from 'src/app/shared/models/UserDoc.model';
 
 @Component({
   selector: 'app-layout',

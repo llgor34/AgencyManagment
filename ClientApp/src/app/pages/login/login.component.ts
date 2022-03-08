@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ToastService } from 'src/app/shared/toast.service';
-import { UserCredentials } from 'src/app/shared/UserCredientials.model';
+import { UserCredentials } from 'src/app/shared/models/UserCredientials.model';
 
 @Component({
   selector: 'app-login',

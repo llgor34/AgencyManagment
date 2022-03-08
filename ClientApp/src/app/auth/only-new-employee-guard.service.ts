@@ -9,7 +9,7 @@ import {
 import { switchMap, of } from 'rxjs';
 import { FirestoreService } from '../shared/firestore.service';
 import { ToastService } from '../shared/toast.service';
-import { UserDoc } from '../shared/UserDoc.model';
+import { UserDoc } from '../shared/models/UserDoc.model';
 
 @Injectable({
   providedIn: 'root',
