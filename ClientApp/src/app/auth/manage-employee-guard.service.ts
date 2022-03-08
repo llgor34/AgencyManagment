@@ -39,7 +39,7 @@ export class ManageEmployeeGuard implements CanActivate {
   }
 
   private throwError() {
-    this.toastService.error('Niema takiego użytkownika!');
+    this.toastService.error('Nie ma takiego użytkownika!');
     return this.router.createUrlTree(['/home']);
   }
 }
