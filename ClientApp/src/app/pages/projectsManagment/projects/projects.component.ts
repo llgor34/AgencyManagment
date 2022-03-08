@@ -40,28 +40,7 @@ export class ProjectsComponent implements OnInit {
     },
   ];
 
-  getIcon() {
-    const randomNumber = Math.floor(Math.random() * 5);
-    if (randomNumber == 0) {
-      return '🐱';
-    }
-    if (randomNumber == 1) {
-      return '🐱‍👤';
-    }
-    if (randomNumber == 2) {
-      return '🐱‍🚀';
-    }
-    if (randomNumber == 3) {
-      return '🐌';
-    }
-    if (randomNumber == 4) {
-      return '🐸';
-    }
-    if (randomNumber == 5) {
-      return '🛹';
-    }
-    return '';
-  }
+  icons = ['🐱‍👤', '🛹', '🐱‍🚀'];
 
   constructor() {}
 
