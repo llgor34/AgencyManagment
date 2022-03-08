@@ -99,4 +99,6 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
 
     this.router.navigate(['/manage-employee', userUid]);
   }
+
+  onAddUser() {}
 }

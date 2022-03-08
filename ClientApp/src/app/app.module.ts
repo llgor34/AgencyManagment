@@ -23,6 +23,8 @@ import { NewEmployeeComponent } from './pages/new-employee/new-employee.componen
 import { ButtonComponent } from './components/button/button.component';
 import { GetRolesPipe } from './pipes/get-roles.pipe';
 import { ManageEmployeeComponent } from './pages/manage-employee/manage-employee.component';
+import { PlusIconComponent } from './components/plus-icon/plus-icon.component';
+import { CreateEmployeeComponent } from './pages/create-employee/create-employee.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { ManageEmployeeComponent } from './pages/manage-employee/manage-employee
     ButtonComponent,
     GetRolesPipe,
     ManageEmployeeComponent,
+    PlusIconComponent,
+    CreateEmployeeComponent,
   ],
   imports: [
     BrowserModule,
