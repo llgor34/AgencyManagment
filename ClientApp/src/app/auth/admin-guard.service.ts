@@ -37,7 +37,7 @@ export class AdminGuard implements CanActivate {
         }
 
         this.toast.error('Nie posiadasz uprawnień do wyświetlenia tej strony!');
-        return false;
+        return this.router.createUrlTree(['/home']);
       })
     );
   }
