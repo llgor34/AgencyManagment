@@ -11,6 +11,7 @@ import {
   addDoc,
   Timestamp,
 } from '@angular/fire/firestore';
+import { DocumentReference } from 'rxfire/firestore/interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
@@ -43,6 +44,14 @@ export class FirestoreService {
       return Timestamp.fromDate(new Date(date));
     }
     return Timestamp.fromDate(date);
+  }
+
+  getDocReference(col: string, docId: string) {
+    return doc(this.firestore, col, docId);
+  }
+
+  async getDocumentByReferrence(docRef: DocumentReference<any>) {
+    return await (await getDoc(docRef)).data();
   }
 
   collectionSnapshot$(col: string) {

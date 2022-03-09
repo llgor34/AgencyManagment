@@ -39,7 +39,10 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       .collectionSnapshot$('users')
       .subscribe((userDocs) => {
         this.dropdownList = userDocs.map((userDoc) => ({
-          userUid: userDoc['uid'],
+          userRef: this.firestoreService.getDocReference(
+            'users',
+            userDoc['uid']
+          ),
           username: userDoc['displayName'],
         }));
       });
@@ -55,7 +58,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   initializeForm() {
     this.dropdownSettings = {
       singleSelection: false,
-      idField: 'userUid',
+      idField: 'userRef',
       textField: 'username',
       selectAllText: 'Wybierz wszystkich',
       unSelectAllText: 'Odznacz wszystkich',
@@ -67,8 +70,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
 
     this.form = this.fb.group({
       title: ['', Validators.required],
-      description: ['', [Validators.required, Validators.maxLength(100)]],
-      content: ['', Validators.required],
+      description: ['', Validators.required],
       dueDate: ['', Validators.required],
       selectedUsers: [[], this.minOneUser],
     });
@@ -89,10 +91,6 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     return this.form.controls['description'];
   }
 
-  get content() {
-    return this.form.controls['content'];
-  }
-
   get dueDate() {
     return this.form.controls['dueDate'];
   }
@@ -106,10 +104,9 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     const newProject: Project = {
       title: this.title.value,
       description: this.description.value,
-      content: this.content.value,
       dueDate: this.firestoreService.getTimestamp(this.dueDate.value),
       assignedUsers: this.selectedUsers.value.map(
-        (selectedUser: any) => selectedUser['userUid']
+        (selectedUser: any) => selectedUser['userRef']
       ),
       createdBy: this.auth.currentUser!.uid,
       completed: false,
@@ -122,6 +119,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     } catch (error: any) {
       this.toastService.error(error.message);
     }
+
     this.loading = false;
   }
 }

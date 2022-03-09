@@ -34,27 +34,13 @@
         <div class="mb-4">
           <textarea
             class="form-control"
-            placeholder="Krótki opis projektu"
-            rows="2"
-            formControlName="description"
-          ></textarea>
-          <div
-            class="form-text mt-3 error text-center"
-            *ngIf="description.invalid && description.touched"
-          >
-            Proszę wprowadź krótki opis projektu (maksymalnie 100 znaków)
-          </div>
-        </div>
-        <div class="mb-4">
-          <textarea
-            class="form-control"
             placeholder="Opis projektu"
-            formControlName="content"
+            formControlName="description"
             rows="3"
           ></textarea>
           <div
             class="form-text mt-3 error text-center"
-            *ngIf="content.invalid && content.touched"
+            *ngIf="description.invalid && description.touched"
           >
             Proszę wprowadź opis projektu
           </div>
