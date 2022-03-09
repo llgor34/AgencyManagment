@@ -15,6 +15,7 @@ import { ManageEmployeeGuard } from './auth/manage-employee-guard.service';
 import { CreateEmployeeComponent } from './pages/Employees/create-employee/create-employee.component';
 import { AdminGuard } from './auth/admin-guard.service';
 import { ProjectsComponent } from './pages/projectsManagment/projects/projects.component';
+import { ProjectsContainerComponent } from './pages/projectsManagment/projects-container/projects-container.component';
 
 const routes: Routes = [
   // redirect routes
@@ -59,8 +60,15 @@ const routes: Routes = [
       // Manage projects routes (at the end, they will be outsourced to own module and lazy loaded)
       {
         path: 'projects',
-        component: ProjectsComponent,
+        component: ProjectsContainerComponent,
         canActivate: [NewEmployeeGuard],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            component: ProjectsComponent,
+          },
+        ],
       },
     ],
   },

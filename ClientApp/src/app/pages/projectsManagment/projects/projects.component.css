@@ -3,3 +3,25 @@
   grid-template-columns: repeat(auto-fit, 400px);
   justify-content: space-around;
 }
+
+.project-holder {
+  transition: all 0.2s ease;
+}
+
+.project-holder:hover {
+  cursor: pointer;
+  background-color: #f1f0f0;
+  transform: scale(99%);
+}
+
+.project-holder:active {
+  transform: scale(95%);
+}
+
+.add-project {
+  transition: 0.2s ease all;
+}
+
+.add-project:hover {
+  color: #025fc2;
+}

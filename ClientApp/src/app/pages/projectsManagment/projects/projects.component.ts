@@ -9,6 +9,7 @@ import { Project } from 'src/app/shared/models/Projects';
 export class ProjectsComponent implements OnInit {
   projects: Project[] = [
     {
+      uid: '1',
       title: 'Programowanie dla wszystkich',
       description: 'Zrobić filmik o programowaniu',
       content:
@@ -19,6 +20,7 @@ export class ProjectsComponent implements OnInit {
       completed: false,
     },
     {
+      uid: '2',
       title: 'Angular 13',
       description: 'Zrobić prezentację na temat nowej wersji Angulara',
       content:
@@ -29,6 +31,7 @@ export class ProjectsComponent implements OnInit {
       completed: false,
     },
     {
+      uid: '3',
       title: 'Plany na weekend',
       description: 'Wymyśleć jakiś dobry plan na weekend :D',
       content:

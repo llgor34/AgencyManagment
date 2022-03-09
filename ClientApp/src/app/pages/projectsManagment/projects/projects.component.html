@@ -1,8 +1,19 @@
+<div
+  class="d-flex w-100 align-items-center justify-content-center text-primary p-3"
+>
+  <span
+    class="add-project d-flex align-items-center cursor-pointer"
+    style="column-gap: 10px"
+  >
+    <h1 class="fs-4 fw-normal d-block">Stwórz nowy projekt</h1>
+    <app-plus-icon></app-plus-icon>
+  </span>
+</div>
 <div class="wrapper">
-  <div class="border p-3" *ngFor="let project of projects">
+  <div class="border p-3 project-holder" *ngFor="let project of projects">
     <header class="mb-2">
       <h2 class="fs-4 p-0">{{ project.title }}</h2>
-      <span>{{ project.dueDate | date }}</span>
+      <span>{{ project.dueDate | date: "dd.MM.yyyy" }}</span>
     </header>
     <div class="mb-2">
       {{ project.description }}
