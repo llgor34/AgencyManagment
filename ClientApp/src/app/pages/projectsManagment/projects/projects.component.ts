@@ -18,6 +18,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   constructor(private firestoreService: FirestoreService) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.projectsSub = this.firestoreService
       .collectionSnapshot$('projects')
       .subscribe((projectDocs: any) => {
@@ -33,7 +34,10 @@ export class ProjectsComponent implements OnInit, OnDestroy {
               )
             ),
           }))
-        ).then((transformedProjects) => (this.projects = transformedProjects));
+        ).then((transformedProjects) => {
+          this.projects = transformedProjects;
+          this.loading = false;
+        });
       });
   }
 

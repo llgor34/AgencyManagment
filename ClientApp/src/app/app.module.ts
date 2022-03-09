@@ -28,6 +28,7 @@ import { ProjectsComponent } from './pages/projectsManagment/projects/projects.c
 import { ProjectsContainerComponent } from './pages/projectsManagment/projects-container/projects-container.component';
 import { AddProjectComponent } from './pages/projectsManagment/add-project/add-project.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     ProjectsComponent,
     ProjectsContainerComponent,
     AddProjectComponent,
+    LoadingSpinnerComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,12 +1,6 @@
-<div class="d-flex justify-content-center w-100 mt-3" *ngIf="loading">
-  <div
-    class="spinner-border text-primary"
-    role="status"
-    style="width: 2rem; height: 2rem"
-  ></div>
-</div>
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
 
-<div class="container py-3">
+<div class="container py-3" *ngIf="!loading">
   <div class="row">
     <div class="col-6 mx-auto">
       <header class="mt-3">
