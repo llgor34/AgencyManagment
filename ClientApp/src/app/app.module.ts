@@ -26,6 +26,7 @@ import { PlusIconComponent } from './components/plus-icon/plus-icon.component';
 import { CreateEmployeeComponent } from './pages/Employees/create-employee/create-employee.component';
 import { ProjectsComponent } from './pages/projectsManagment/projects/projects.component';
 import { ProjectsContainerComponent } from './pages/projectsManagment/projects-container/projects-container.component';
+import { AddProjectComponent } from './pages/projectsManagment/add-project/add-project.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ProjectsContainerComponent } from './pages/projectsManagment/projects-c
     CreateEmployeeComponent,
     ProjectsComponent,
     ProjectsContainerComponent,
+    AddProjectComponent,
   ],
   imports: [
     BrowserModule,

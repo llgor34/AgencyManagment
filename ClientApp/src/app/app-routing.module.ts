@@ -16,6 +16,7 @@ import { CreateEmployeeComponent } from './pages/Employees/create-employee/creat
 import { AdminGuard } from './auth/admin-guard.service';
 import { ProjectsComponent } from './pages/projectsManagment/projects/projects.component';
 import { ProjectsContainerComponent } from './pages/projectsManagment/projects-container/projects-container.component';
+import { AddProjectComponent } from './pages/projectsManagment/add-project/add-project.component';
 
 const routes: Routes = [
   // redirect routes
@@ -67,6 +68,10 @@ const routes: Routes = [
             path: '',
             pathMatch: 'full',
             component: ProjectsComponent,
+          },
+          {
+            path: 'add-project',
+            component: AddProjectComponent,
           },
         ],
       },
