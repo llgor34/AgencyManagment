@@ -27,6 +27,7 @@ import { CreateEmployeeComponent } from './pages/Employees/create-employee/creat
 import { ProjectsComponent } from './pages/projectsManagment/projects/projects.component';
 import { ProjectsContainerComponent } from './pages/projectsManagment/projects-container/projects-container.component';
 import { AddProjectComponent } from './pages/projectsManagment/add-project/add-project.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { AddProjectComponent } from './pages/projectsManagment/add-project/add-p
     BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
+    NgMultiSelectDropDownModule,
     ToastrModule.forRoot(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
