@@ -15,7 +15,7 @@
   <div class="border p-3 project-holder" *ngFor="let project of projects">
     <header class="mb-2">
       <h2 class="fs-4 p-0">{{ project.title }}</h2>
-      <span>{{ project.dueDate | date: "dd.MM.yyyy" }}</span>
+      <span>{{ project.dueDate.toDate() | date: "dd.MM.yyyy" }}</span>
     </header>
     <div class="mb-2">
       {{ project.description }}

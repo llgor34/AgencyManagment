@@ -1,45 +1,58 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
 import {
   AbstractControl,
   FormBuilder,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { Subscription } from 'rxjs';
 import { FirestoreService } from 'src/app/shared/firestore.service';
+import { Project } from 'src/app/shared/models/Projects';
+import { ToastService } from 'src/app/shared/toast.service';
 
 @Component({
   selector: 'app-add-project',
   templateUrl: './add-project.component.html',
   styleUrls: ['./add-project.component.css'],
 })
-export class AddProjectComponent implements OnInit {
+export class AddProjectComponent implements OnInit, OnDestroy {
+  private usersSub: Subscription;
   loading = false;
   form: FormGroup;
   dropdownList: any[] = [];
-  selectedItems: any[] = [];
   dropdownSettings: IDropdownSettings = {};
 
   constructor(
     private fb: FormBuilder,
-    private firestoreService: FirestoreService
+    private firestoreService: FirestoreService,
+    private auth: Auth,
+    private toastService: ToastService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loading = true;
+    this.usersSub = this.firestoreService
+      .collectionSnapshot$('users')
+      .subscribe((userDocs) => {
+        this.dropdownList = userDocs.map((userDoc) => ({
+          userUid: userDoc['uid'],
+          username: userDoc['displayName'],
+        }));
+      });
+
     this.initializeForm();
     this.loading = false;
   }
 
+  ngOnDestroy(): void {
+    this.usersSub.unsubscribe();
+  }
+
   initializeForm() {
-    this.dropdownList = [
-      { userUid: 'adasdsa', username: 'Mumbai' },
-      { userUid: '2asdas', username: 'Bangaluru' },
-      { userUid: '31safda', username: 'Pune' },
-      { userUid: '41312312asd', username: 'Navsari' },
-      { userUid: 'Adasda', username: 'New Delhi' },
-    ];
-    this.selectedItems = [];
     this.dropdownSettings = {
       singleSelection: false,
       idField: 'userUid',
@@ -88,7 +101,27 @@ export class AddProjectComponent implements OnInit {
     return this.form.controls['selectedUsers'];
   }
 
-  onSubmit() {
-    console.log(this.form);
+  async onSubmit() {
+    this.loading = true;
+    const newProject: Project = {
+      title: this.title.value,
+      description: this.description.value,
+      content: this.content.value,
+      dueDate: this.firestoreService.getTimestamp(this.dueDate.value),
+      assignedUsers: this.selectedUsers.value.map(
+        (selectedUser: any) => selectedUser['userUid']
+      ),
+      createdBy: this.auth.currentUser!.uid,
+      completed: false,
+    };
+
+    try {
+      await this.firestoreService.addDocument('projects', newProject);
+      this.toastService.success('Dodano nowy projekt');
+      this.router.navigate(['/projects']);
+    } catch (error: any) {
+      this.toastService.error(error.message);
+    }
+    this.loading = false;
   }
 }

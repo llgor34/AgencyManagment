@@ -1,9 +1,11 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface Project {
-  uid: string;
+  uid?: string;
   title: string;
   description: string;
   content: string;
-  dueDate: Date;
+  dueDate: Timestamp;
   completed: boolean;
   assignedUsers: string[]; // holds users uid
   createdBy: string; //  holds user uid

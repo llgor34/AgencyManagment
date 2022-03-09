@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FirestoreService } from 'src/app/shared/firestore.service';
 import { Project } from 'src/app/shared/models/Projects';
 
 @Component({
@@ -14,7 +15,7 @@ export class ProjectsComponent implements OnInit {
       description: 'Zrobić filmik o programowaniu',
       content:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum maiores optio obcaecati dignissimos aperiam commodi eligendi. Dolorem molestias tempora iure temporibus laudantium dignissimos exercitationem facere nesciunt corporis, voluptates aut quis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, aspernatur nulla sunt voluptatem suscipit temporibus iste laboriosam eos animi repellat quas voluptas! Reiciendis numquam, maiores itaque ratione quidem asperiores illo.',
-      dueDate: new Date('10.03.2022'),
+      dueDate: this.firestoreService.getTimestamp(new Date('10.03.2022')),
       createdBy: 'UID-IGOR34',
       assignedUsers: ['Igor M', 'Jacek Kowalski', 'Marian Dąbrowski'],
       completed: false,
@@ -25,7 +26,7 @@ export class ProjectsComponent implements OnInit {
       description: 'Zrobić prezentację na temat nowej wersji Angulara',
       content:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum maiores optio obcaecati dignissimos aperiam commodi eligendi. Dolorem molestias tempora iure temporibus laudantium dignissimos exercitationem facere nesciunt corporis, voluptates aut quis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, aspernatur nulla sunt voluptatem suscipit temporibus iste laboriosam eos animi repellat quas voluptas! Reiciendis numquam, maiores itaque ratione quidem asperiores illo.',
-      dueDate: new Date('09.21.2022'),
+      dueDate: this.firestoreService.getTimestamp(new Date('09.21.2022')),
       createdBy: 'UID-ADAM-MALECKI',
       assignedUsers: ['Janek Pszczyński', 'Adam Małecki', 'Daria Krakowska'],
       completed: false,
@@ -36,7 +37,7 @@ export class ProjectsComponent implements OnInit {
       description: 'Wymyśleć jakiś dobry plan na weekend :D',
       content:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum maiores optio obcaecati dignissimos aperiam commodi eligendi. Dolorem molestias tempora iure temporibus laudantium dignissimos exercitationem facere nesciunt corporis, voluptates aut quis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, aspernatur nulla sunt voluptatem suscipit temporibus iste laboriosam eos animi repellat quas voluptas! Reiciendis numquam, maiores itaque ratione quidem asperiores illo.',
-      dueDate: new Date('12.03.2022'),
+      dueDate: this.firestoreService.getTimestamp(new Date('12.03.2022')),
       createdBy: 'UID-NATALIA-TUK',
       assignedUsers: ['Natalia Tuk', 'Marian Kozłowski', 'Natan Bojczygroda'],
       completed: false,
@@ -45,7 +46,7 @@ export class ProjectsComponent implements OnInit {
 
   icons = ['🐱‍👤', '🛹', '🐱‍🚀'];
 
-  constructor() {}
+  constructor(private firestoreService: FirestoreService) {}
 
   ngOnInit(): void {}
 }

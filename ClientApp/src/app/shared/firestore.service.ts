@@ -8,6 +8,8 @@ import {
   collectionData,
   query,
   collection,
+  addDoc,
+  Timestamp,
 } from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
@@ -26,9 +28,21 @@ export class FirestoreService {
     return { uid: fetchedDoc.id, data: fetchedDoc.data() as any };
   }
 
+  async addDocument(col: string, data: any) {
+    const colRef = collection(this.firestore, col);
+    await addDoc(colRef, data);
+  }
+
   async updateDocument(col: string, docName: string, data: any) {
     const docRef = doc(this.firestore, col, docName);
     await updateDoc(docRef, data);
+  }
+
+  getTimestamp(date: Date | string) {
+    if (typeof date === 'string') {
+      return Timestamp.fromDate(new Date(date));
+    }
+    return Timestamp.fromDate(date);
   }
 
   collectionSnapshot$(col: string) {
