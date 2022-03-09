@@ -1,0 +1,70 @@
+<div class="d-flex justify-content-center w-100 mt-3" *ngIf="loading">
+  <div
+    class="spinner-border text-primary"
+    role="status"
+    style="width: 3rem; height: 3rem"
+  ></div>
+</div>
+<h2 class="text-center mt-2">Tworzenie konta pracownika</h2>
+<form
+  class="mt-5 w-50 mx-auto"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  *ngIf="!loading"
+>
+  <div class="mb-5 w-75 mx-auto">
+    <input
+      placeholder="Adres email"
+      type="text"
+      class="form-control custom-form-control"
+      formControlName="email"
+    />
+    <div
+      class="form-text mt-3 error text-center"
+      *ngIf="email.invalid && email.touched"
+    >
+      Proszę wprowadź poprawny adres email
+    </div>
+  </div>
+  <div class="mb-5 w-75 mx-auto">
+    <input
+      placeholder="Hasło"
+      type="password"
+      class="form-control custom-form-control"
+      formControlName="password"
+    />
+    <div
+      class="form-text mt-3 error text-center"
+      *ngIf="passwordEmpty && password.touched"
+    >
+      Proszę wprowadź hasło
+    </div>
+    <div
+      class="form-text mt-3 error text-center"
+      *ngIf="passwordTooShort && password.touched"
+    >
+      Hasło musi mieć przynajmniej 6 znaków
+    </div>
+  </div>
+  <div class="mb-5 w-75 mx-auto">
+    <input
+      placeholder="Potwierdź hasło"
+      type="password"
+      class="form-control custom-form-control"
+      formControlName="passwordConfirm"
+    />
+    <div
+      class="form-text mt-3 error text-center"
+      *ngIf="passwordConfirm.invalid && passwordConfirm.touched"
+    >
+      Hasła się nie zgadzają
+    </div>
+  </div>
+  <button
+    type="submit"
+    class="btn btn-success w-75 mx-auto d-block"
+    [disabled]="form.invalid"
+  >
+    Stwórz
+  </button>
+</form>

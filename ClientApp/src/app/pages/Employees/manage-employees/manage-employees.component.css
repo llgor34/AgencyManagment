@@ -1,0 +1,11 @@
+.cursor-normal {
+  cursor: default;
+}
+
+.add-user {
+  transition: 0.2s ease all;
+}
+
+.add-user:hover {
+  color: #025fc2;
+}

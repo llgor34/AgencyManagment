@@ -1,0 +1,59 @@
+<div class="d-flex justify-content-center w-100 my-2" *ngIf="loading">
+  <div
+    class="spinner-border text-primary"
+    role="status"
+    style="width: 3rem; height: 3rem"
+  ></div>
+</div>
+
+<table class="table table-hover cursor-pointer">
+  <thead>
+    <tr>
+      <td colspan="7" class="text-center fs-4 py-3 text-primary">
+        <span
+          routerLink="/create-employee"
+          class="add-user"
+          (click)="onAddUser()"
+          >Dodaj użytkownika <app-plus-icon></app-plus-icon
+        ></span>
+      </td>
+    </tr>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Imie i Nazwisko</th>
+      <th scope="col">Email</th>
+      <th scope="col">Telefon</th>
+      <th scope="col">Role</th>
+      <th scope="col"><!-- Reset password --></th>
+      <th scope="col"><!-- Delete employee --></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr
+      (click)="onClick($event, employee.uid)"
+      *ngFor="let employee of employees; let i = index"
+    >
+      <td scope="col">{{ i }}</td>
+      <td scope="col">{{ employee.name }}</td>
+      <td scope="col">{{ employee.email }}</td>
+      <td scope="col">{{ employee.phoneNumber }}</td>
+      <td scope="col">{{ employee.roles | getRoles }}</td>
+      <td scope="col">
+        <app-button
+          (submitted)="onPasswordReset(employee.email)"
+          [disabled]="loading"
+          >Resetuj hasło</app-button
+        >
+      </td>
+      <td scope="col">
+        <app-button
+          color="secondary"
+          (submitted)="onEmployeeDelete(employee.uid)"
+          [disabled]="loading"
+          >Usuń</app-button
+        >
+      </td>
+    </tr>
+  </tbody>
+</table>
