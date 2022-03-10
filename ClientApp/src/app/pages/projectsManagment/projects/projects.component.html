@@ -15,7 +15,11 @@
     </span>
   </div>
   <div class="wrapper" *ngIf="projects.length > 0; else noProjects">
-    <div class="border p-3 project-holder" *ngFor="let project of projects">
+    <div
+      class="border p-3 project-holder"
+      *ngFor="let project of projects"
+      (click)="onProjectClick(project.uid!)"
+    >
       <header class="mb-2">
         <h2 class="fs-4 p-0">{{ project.title }}</h2>
         <span>{{ project.dueDate.toDate() | date: "dd.MM.yyyy" }}</span>
