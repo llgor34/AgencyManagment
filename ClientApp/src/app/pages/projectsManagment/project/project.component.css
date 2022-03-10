@@ -1,0 +1,36 @@
+.board {
+  padding-top: 40px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.board ul li {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tasks-holder {
+  justify-content: center;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drop-list-dragging {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.border-radius-0 {
+  border-radius: 0;
+}
+
+.completed ul li {
+  text-decoration: line-through;
+}

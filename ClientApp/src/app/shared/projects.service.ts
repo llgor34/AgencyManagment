@@ -1,16 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { BoardService } from './board.service';
 import { FirestoreService } from './firestore.service';
 import { Project } from './models/Projects';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectsService {
-  constructor(
-    private firestoreService: FirestoreService,
-    private auth: Auth,
-    private boardService: BoardService
-  ) {}
+  constructor(private firestoreService: FirestoreService, private auth: Auth) {}
 
   async createProject(data: {
     title: string;
@@ -26,18 +21,12 @@ export class ProjectsService {
       assignedUsers: data.assignedUsers,
       createdBy: this.auth.currentUser!.uid,
       completed: false,
-      boardUids: [],
+      boards: {
+        assignedTasks: ['Pierwsze zadanie do wykonania'],
+        inProgressTasks: ['Zoorganizować czas'],
+        doneTasks: ['Stworzyć projekt'],
+      },
     };
-
-    // Create first board record for project
-    const boardUid = await this.boardService.createBoard({
-      title: 'New Board',
-      priority: 0,
-    });
-
-    // Update project boards
-    newProject.boardUids.push(boardUid);
-
     // Create project record
     await this.firestoreService.addDocument('projects', newProject);
   }

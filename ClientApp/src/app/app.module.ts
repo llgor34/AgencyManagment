@@ -30,6 +30,7 @@ import { AddProjectComponent } from './pages/projectsManagment/add-project/add-p
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { ProjectComponent } from './pages/projectsManagment/project/project.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { ProjectComponent } from './pages/projectsManagment/project/project.comp
     ReactiveFormsModule,
     FormsModule,
     NgMultiSelectDropDownModule,
+    DragDropModule,
     ToastrModule.forRoot(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
