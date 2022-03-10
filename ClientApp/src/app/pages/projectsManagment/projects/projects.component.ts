@@ -28,9 +28,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
             assignedUsers: await Promise.all(
               projectDoc.assignedUsers.map(
                 async (assignedUser) =>
-                  await this.firestoreService.getDocumentByReferrence(
-                    assignedUser
-                  )
+                  await this.firestoreService.getDocument('users', assignedUser)
               )
             ),
           }))

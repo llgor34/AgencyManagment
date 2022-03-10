@@ -11,6 +11,7 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Subscription } from 'rxjs';
 import { FirestoreService } from 'src/app/shared/firestore.service';
 import { Project } from 'src/app/shared/models/Projects';
+import { ProjectsService } from 'src/app/shared/projects.service';
 import { ToastService } from 'src/app/shared/toast.service';
 
 @Component({
@@ -28,6 +29,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private firestoreService: FirestoreService,
+    private projectsService: ProjectsService,
     private auth: Auth,
     private toastService: ToastService,
     private router: Router
@@ -39,10 +41,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       .collectionSnapshot$('users')
       .subscribe((userDocs) => {
         this.dropdownList = userDocs.map((userDoc) => ({
-          userRef: this.firestoreService.getDocReference(
-            'users',
-            userDoc['uid']
-          ),
+          userUid: userDoc['uid'],
           username: userDoc['displayName'],
         }));
       });
@@ -58,7 +57,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   initializeForm() {
     this.dropdownSettings = {
       singleSelection: false,
-      idField: 'userRef',
+      idField: 'userUid',
       textField: 'username',
       selectAllText: 'Wybierz wszystkich',
       unSelectAllText: 'Odznacz wszystkich',
@@ -101,19 +100,15 @@ export class AddProjectComponent implements OnInit, OnDestroy {
 
   async onSubmit() {
     this.loading = true;
-    const newProject: Project = {
-      title: this.title.value,
-      description: this.description.value,
-      dueDate: this.firestoreService.getTimestamp(this.dueDate.value),
-      assignedUsers: this.selectedUsers.value.map(
-        (selectedUser: any) => selectedUser['userRef']
-      ),
-      createdBy: this.auth.currentUser!.uid,
-      completed: false,
-    };
-
     try {
-      await this.firestoreService.addDocument('projects', newProject);
+      await this.projectsService.createProject({
+        title: this.title.value,
+        description: this.description.value,
+        dueDate: new Date(this.dueDate.value),
+        assignedUsers: this.selectedUsers.value.map(
+          (selectedUser: any) => selectedUser['userUid']
+        ),
+      });
       this.toastService.success('Dodano nowy projekt');
       this.router.navigate(['/projects']);
     } catch (error: any) {

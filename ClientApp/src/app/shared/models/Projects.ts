@@ -1,6 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 import { DocumentReference } from 'rxfire/firestore/interfaces';
-import { UserDocRaw } from './UserDoc.model';
+import { UserDoc } from './UserDoc.model';
 
 export interface Project {
   uid?: string;
@@ -8,8 +8,9 @@ export interface Project {
   description: string;
   dueDate: Timestamp;
   completed: boolean;
-  assignedUsers: DocumentReference<UserDocRaw>[]; // holds refs to user docs
+  assignedUsers: string[]; // holds users uid
   createdBy: string; //  holds user uid
+  boardUids: string[]; // holds project boards
 }
 
 export interface ProjectTransformed {
@@ -18,6 +19,7 @@ export interface ProjectTransformed {
   description: string;
   dueDate: Timestamp;
   completed: boolean;
-  assignedUsers: UserDocRaw[]; // holds users documents
+  assignedUsers: UserDoc[]; // holds users documents
   createdBy: string; //  holds user uid
+  boardUids: string[]; // holds project boards
 }
