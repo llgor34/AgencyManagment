@@ -1,7 +1,9 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BoardService } from 'src/app/shared/board.service';
 import { FirestoreService } from 'src/app/shared/firestore.service';
+import { Board } from 'src/app/shared/models/Board.model';
 
 @Component({
   selector: 'app-project',
@@ -11,7 +13,8 @@ import { FirestoreService } from 'src/app/shared/firestore.service';
 export class ProjectComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
-    private firestoreService: FirestoreService
+    private firestoreService: FirestoreService,
+    private boardService: BoardService
   ) {}
   project: any;
 
@@ -20,5 +23,19 @@ export class ProjectComponent implements OnInit {
     this.firestoreService.getDocument('projects', uid).then((res) => {
       this.project = res;
     });
+  }
+
+  get boards() {
+    return this.project.data.boards as Board;
+  }
+
+  onListDropped(event: CdkDragDrop<string[]>) {
+    transferArrayItem(
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+    this.boardService.updateTasks(this.project.uid, this.boards);
   }
 }

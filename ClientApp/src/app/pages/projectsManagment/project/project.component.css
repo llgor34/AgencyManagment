@@ -11,6 +11,10 @@
   justify-content: center;
 }
 
+.board ul {
+  min-height: 100px;
+}
+
 .tasks-holder {
   justify-content: center;
 }

@@ -1,5 +1,5 @@
 export interface Board {
-  assigned: Task[];
-  inProgress: Task[];
-  done: Task[];
+  assignedTasks: string[];
+  inProgressTasks: string[];
+  doneTasks: string[];
 }

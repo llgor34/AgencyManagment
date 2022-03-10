@@ -15,10 +15,12 @@
         <ul
           class="list-group border-radius-0 mx-auto mt-3 tasks-holder"
           cdkDropList
+          [cdkDropListData]="boards.assignedTasks"
+          (cdkDropListDropped)="onListDropped($event)"
         >
           <li
             class="list-group-item cursor-pointer task"
-            *ngFor="let task of project.data.boards.assignedTasks"
+            *ngFor="let task of boards.assignedTasks"
             cdkDrag
           >
             {{ task }}
@@ -34,10 +36,12 @@
         <ul
           class="list-group border-radius-0 mx-auto mt-3 tasks-holder"
           cdkDropList
+          [cdkDropListData]="boards.inProgressTasks"
+          (cdkDropListDropped)="onListDropped($event)"
         >
           <li
             class="list-group-item cursor-pointer task"
-            *ngFor="let task of project.data.boards.inProgressTasks"
+            *ngFor="let task of boards.inProgressTasks"
             cdkDrag
           >
             {{ task }}
@@ -53,10 +57,12 @@
         <ul
           class="list-group border-radius-0 mx-auto mt-3 tasks-holder"
           cdkDropList
+          [cdkDropListData]="boards.doneTasks"
+          (cdkDropListDropped)="onListDropped($event)"
         >
           <li
             class="list-group-item cursor-pointer task"
-            *ngFor="let task of project.data.boards.doneTasks"
+            *ngFor="let task of boards.doneTasks"
             cdkDrag
           >
             {{ task }}
