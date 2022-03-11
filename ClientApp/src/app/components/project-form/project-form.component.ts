@@ -48,11 +48,11 @@ export class ProjectFormComponent implements OnInit {
           userUid: userDoc['uid'],
           username: userDoc['displayName'],
         }));
-      });
 
-    this.projectUid = this.route.snapshot.params['uid'];
-    this.initializeForm();
-    this.loading = false;
+        this.projectUid = this.route.snapshot.params['uid'];
+        this.initializeForm();
+        this.loading = false;
+      });
   }
 
   ngOnDestroy(): void {
@@ -87,16 +87,24 @@ export class ProjectFormComponent implements OnInit {
             title,
             description,
             dueDate: _dueDate,
-            assignedUsers,
+            assignedUsers: _assignedUsers,
           } = res.data;
 
           const date = _dueDate.toDate();
-
           const dueDate = `${date.getFullYear()}-${
             date.getMonth() + 1 < 10
               ? '0' + (date.getMonth() + 1)
               : date.getMonth() + 1
           }-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`;
+
+          const assignedUsers: any[] = [];
+          for (let user of _assignedUsers) {
+            assignedUsers.push(
+              this.dropdownList.filter(
+                (userList) => userList.userUid === user
+              )[0]
+            );
+          }
 
           this.form.controls['title'].setValue(title);
           this.form.controls['description'].setValue(description);
