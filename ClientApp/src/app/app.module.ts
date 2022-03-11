@@ -34,6 +34,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TaskDialogComponent } from './components/dialogs/task-dialog/task-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { BoardComponent } from './components/board/board.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     LoadingSpinnerComponent,
     ProjectComponent,
     TaskDialogComponent,
+    BoardComponent,
   ],
   imports: [
     BrowserModule,

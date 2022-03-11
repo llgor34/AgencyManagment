@@ -2,112 +2,22 @@
 
 <div class="container p-4 w-100" *ngIf="project">
   <h1 class="py-4 header">{{ project.data.title }}</h1>
-  <div class="row mt-4" cdkDropListGroup>
-    <div class="col-lg-4">
-      <div class="board shadow">
-        <header class="mb-4 d-flex justify-content-evenly">
-          <h2 class="fs-3">
-            <span
-              class="text-info cursor-pointer"
-              (click)="openDialog(boards.assignedTasks)"
-              ><app-plus-icon></app-plus-icon
-            ></span>
-            Przydzielone
-          </h2>
-        </header>
-        <ul
-          class="list-group border-radius-0 mx-auto mt-3 tasks-holder"
-          cdkDropList
-          [cdkDropListData]="boards.assignedTasks"
-          (cdkDropListDropped)="onListDropped($event)"
-        >
-          <li
-            class="list-group-item cursor-pointer task d-flex flex-column align-items-start my-1 py-5"
-            *ngFor="let task of boards.assignedTasks"
-            (click)="openDialog(boards.assignedTasks, task)"
-            cdkDrag
-            [ngClass]="{
-              red: task.label === 'red',
-              yellow: task.label === 'yellow',
-              green: task.label === 'green',
-              blue: task.label === 'blue'
-            }"
-          >
-            <h2 class="fs-5 mb-0">{{ task.title }}</h2>
-            <p>{{ task.description }}</p>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="col-lg-4">
-      <div class="board shadow">
-        <header class="mb-4 d-flex justify-content-evenly">
-          <h2 class="fs-3">
-            <span
-              class="text-info cursor-pointer"
-              (click)="openDialog(boards.inProgressTasks)"
-              ><app-plus-icon></app-plus-icon></span
-            >W trakcie
-          </h2>
-        </header>
-        <ul
-          class="list-group border-radius-0 mx-auto mt-3 tasks-holder"
-          cdkDropList
-          [cdkDropListData]="boards.inProgressTasks"
-          (cdkDropListDropped)="onListDropped($event)"
-        >
-          <li
-            class="list-group-item cursor-pointer task d-flex flex-column align-items-start my-1 py-5"
-            *ngFor="let task of boards.inProgressTasks"
-            (click)="openDialog(boards.inProgressTasks, task)"
-            cdkDrag
-            [ngClass]="{
-              red: task.label === 'red',
-              yellow: task.label === 'yellow',
-              green: task.label === 'green',
-              blue: task.label === 'blue'
-            }"
-          >
-            <h2 class="fs-5 mb-0">{{ task.title }}</h2>
-            <p>{{ task.description }}</p>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="col-lg-4 completed">
-      <div class="board shadow">
-        <header class="mb-4 d-flex justify-content-evenly">
-          <h2 class="fs-3">
-            <span
-              class="text-info cursor-pointer"
-              (click)="openDialog(boards.doneTasks)"
-              ><app-plus-icon></app-plus-icon></span
-            >Wykonane
-          </h2>
-        </header>
-        <ul
-          class="list-group border-radius-0 mx-auto mt-3 tasks-holder"
-          cdkDropList
-          [cdkDropListData]="boards.doneTasks"
-          (cdkDropListDropped)="onListDropped($event)"
-        >
-          <li
-            class="list-group-item cursor-pointer task d-flex flex-column align-items-start my-1 py-5"
-            *ngFor="let task of boards.doneTasks"
-            (click)="openDialog(boards.doneTasks, task)"
-            cdkDrag
-            [ngClass]="{
-              red: task.label === 'red',
-              yellow: task.label === 'yellow',
-              green: task.label === 'green',
-              blue: task.label === 'blue'
-            }"
-          >
-            <h2 class="fs-5 mb-0">{{ task.title }}</h2>
-            <p>{{ task.description }}</p>
-          </li>
-        </ul>
-      </div>
-    </div>
+  <div class="boards-container mt-4" cdkDropListGroup>
+    <app-board
+      [tasks]="boards.assignedTasks"
+      (onDialogOpen)="openDialog($event)"
+      (onListDropped)="onListDropped($event)"
+    ></app-board>
+    <app-board
+      [tasks]="boards.inProgressTasks"
+      (onDialogOpen)="openDialog($event)"
+      (onListDropped)="onListDropped($event)"
+    ></app-board>
+    <app-board
+      [tasks]="boards.doneTasks"
+      (onDialogOpen)="openDialog($event)"
+      (onListDropped)="onListDropped($event)"
+      [completed]="true"
+    ></app-board>
   </div>
 </div>

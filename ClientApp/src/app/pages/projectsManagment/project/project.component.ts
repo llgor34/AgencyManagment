@@ -41,9 +41,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return this.project.data.boards as Board;
   }
 
-  updateTasks() {
+  updateTasks = () => {
     this.boardService.updateTasks(this.project.uid, this.boards);
-  }
+  };
 
   onListDropped(event: CdkDragDrop<Task[]>) {
     transferArrayItem(
@@ -56,27 +56,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.updateTasks();
   }
 
-  openDialog = (tasks: Task[], task: Task | null = null) => {
+  openDialog = (data: { tasks: Task[]; task: Task | null }) => {
     const dialogRef = this.dialog.open(TaskDialogComponent, {
       width: '500px',
-      data: task,
+      data,
     });
 
-    this.dialogSub = dialogRef
-      .afterClosed()
-      .subscribe((result: Task | string) => {
-        if (!result) return;
-
-        if (typeof result !== 'string') {
-          let existingTask = tasks.indexOf(result);
-          if (existingTask === -1) {
-            tasks.push(result);
-          } else {
-            tasks[existingTask] = result;
-          }
-        }
-
-        this.updateTasks();
-      });
+    this.dialogSub = dialogRef.afterClosed().subscribe(this.updateTasks);
   };
 }

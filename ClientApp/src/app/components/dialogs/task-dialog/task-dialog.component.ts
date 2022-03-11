@@ -11,7 +11,8 @@ import { labelColors, Task } from 'src/app/shared/models/Board.model';
 export class TaskDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<TaskDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public task: Task | null
+    @Inject(MAT_DIALOG_DATA)
+    public data: { tasks: Task[]; task: Task | null }
   ) {}
 
   @ViewChild('form') form: NgForm;
@@ -20,23 +21,44 @@ export class TaskDialogComponent implements OnInit {
   editMode = false;
 
   ngOnInit(): void {
-    if (!this.task) {
-      this.task = {
+    if (this.data.task) {
+      this.editMode = true;
+    } else {
+      this.data.task = {
         title: '',
         description: '',
         label: 'red',
       };
-    } else {
-      this.editMode = true;
     }
   }
 
   onNoClick(): void {
-    this.dialogRef.close(this.task);
+    this.dialogRef.close();
+  }
+
+  onSubmit() {
+    if (!this.editMode) {
+      this.data.tasks.push({
+        title: this.titleControl.value,
+        description: this.descriptionControl.value,
+        label: this.labelControl.value,
+      });
+      this.dialogRef.close();
+    } else {
+      this.data.task!.title = this.titleControl.value;
+      this.data.task!.description = this.descriptionControl.value;
+      this.data.task!.label = this.labelControl.value;
+      this.dialogRef.close();
+    }
   }
 
   deleteTask() {
-    this.dialogRef.close('delete');
+    const index = this.data.tasks.indexOf(this.data.task!);
+    this.data.tasks.splice(index, 1);
+    // this.data.tasks = this.data.tasks.filter(
+    //   (task, taskIndex) => taskIndex !== index
+    // );
+    this.dialogRef.close();
   }
 
   get titleControl() {

@@ -4,14 +4,14 @@
     Usuń
   </button>
 </h1>
-<form class="mb-4" #form="ngForm">
+<form class="mb-4" #form="ngForm" (ngSubmit)="onSubmit()">
   <div class="form-group mb-3">
     <input
       type="text"
       class="form-control"
       placeholder="Tytuł zadania"
       name="title"
-      [(ngModel)]="task!.title"
+      [ngModel]="data.task!.title"
       required
     />
     <small
@@ -27,7 +27,7 @@
       class="form-control"
       placeholder="Opis zadania"
       name="description"
-      [(ngModel)]="task!.description"
+      [ngModel]="data.task!.description"
       required
     />
     <small
@@ -44,7 +44,7 @@
       name="label"
       [id]="label"
       [value]="label"
-      [(ngModel)]="task!.label"
+      [ngModel]="data.task!.label"
       required
     />
     <label class="form-check-label" [for]="label">
@@ -55,17 +55,12 @@
     *ngIf="labelControl?.invalid && labelControl?.touched"
     class="form-text"
     style="color: red !important"
-    >Wprowadź opis zadania</small
+    >Wybierz kolor obramowania</small
   >
+  <div class="d-flex" style="gap: 10px">
+    <button class="btn btn-danger" type="button" (click)="onNoClick()">
+      Anuluj
+    </button>
+    <button class="btn btn-primary" [disabled]="form?.invalid">Ok</button>
+  </div>
 </form>
-
-<div class="d-flex" style="gap: 10px">
-  <button class="btn btn-danger" (click)="onNoClick()">Anuluj</button>
-  <button
-    class="btn btn-primary"
-    [mat-dialog-close]="task"
-    [disabled]="form?.invalid"
-  >
-    Ok
-  </button>
-</div>
