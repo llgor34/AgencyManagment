@@ -37,4 +37,32 @@
 
 .completed ul li {
   text-decoration: line-through;
+  filter: brightness(90%);
+}
+
+.header {
+  background-color: aliceblue;
+  width: 100%;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.red {
+  border: 4px solid rgb(252, 36, 36);
+  border-radius: 5px;
+}
+
+.yellow {
+  border: 4px solid rgb(226, 240, 28);
+  border-radius: 5px;
+}
+
+.green {
+  border: 4px solid rgb(37, 255, 92);
+  border-radius: 5px;
+}
+
+.blue {
+  border: 4px solid rgb(0, 176, 230);
+  border-radius: 5px;
 }

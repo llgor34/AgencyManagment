@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { BoardService } from 'src/app/shared/board.service';
 import { FirestoreService } from 'src/app/shared/firestore.service';
 import { Board } from 'src/app/shared/models/Board.model';
+import { Task } from 'src/app/shared/models/Board.model';
+import { Project } from 'src/app/shared/models/Projects';
 
 @Component({
   selector: 'app-project',
@@ -16,11 +18,11 @@ export class ProjectComponent implements OnInit {
     private firestoreService: FirestoreService,
     private boardService: BoardService
   ) {}
-  project: any;
+  project: { uid: string; data: Project };
 
   ngOnInit(): void {
     const { uid } = this.route.snapshot.params;
-    this.firestoreService.getDocument('projects', uid).then((res) => {
+    this.firestoreService.getDocument<Project>('projects', uid).then((res) => {
       this.project = res;
     });
   }
@@ -29,7 +31,7 @@ export class ProjectComponent implements OnInit {
     return this.project.data.boards as Board;
   }
 
-  onListDropped(event: CdkDragDrop<string[]>) {
+  onListDropped(event: CdkDragDrop<Task[]>) {
     transferArrayItem(
       event.previousContainer.data,
       event.container.data,

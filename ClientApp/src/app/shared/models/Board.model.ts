@@ -1,5 +1,11 @@
 export interface Board {
-  assignedTasks: string[];
-  inProgressTasks: string[];
-  doneTasks: string[];
+  assignedTasks: Task[];
+  inProgressTasks: Task[];
+  doneTasks: Task[];
+}
+
+export interface Task {
+  title: string;
+  description: string;
+  label: 'red' | 'yellow' | 'blue' | 'green';
 }

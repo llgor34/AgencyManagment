@@ -1,16 +1,17 @@
 <app-loading-spinner *ngIf="!project"></app-loading-spinner>
 
 <div class="container p-4 w-100" *ngIf="project">
-  <ul class="list-group list-group-flush w-100">
-    <li class="list-group-item list-group-item-info fs-3 w-100">
-      {{ project.data.title }}
-    </li>
-  </ul>
+  <h1 class="py-4 header">{{ project.data.title }}</h1>
   <div class="row mt-4" cdkDropListGroup>
     <div class="col-lg-4">
       <div class="board shadow">
-        <header class="mb-4 d-flex justify-content-evenly header">
-          <h2 class="fs-3">Przydzielone</h2>
+        <header class="mb-4 d-flex justify-content-evenly">
+          <h2 class="fs-3">
+            <span class="text-info cursor-pointer"
+              ><app-plus-icon></app-plus-icon
+            ></span>
+            Przydzielone
+          </h2>
         </header>
         <ul
           class="list-group border-radius-0 mx-auto mt-3 tasks-holder"
@@ -19,19 +20,30 @@
           (cdkDropListDropped)="onListDropped($event)"
         >
           <li
-            class="list-group-item cursor-pointer task"
+            class="list-group-item cursor-pointer task d-flex flex-column align-items-start my-1 py-5"
             *ngFor="let task of boards.assignedTasks"
             cdkDrag
+            [ngClass]="{
+              red: task.label === 'red',
+              yellow: task.label === 'yellow',
+              green: task.label === 'green',
+              blue: task.label === 'blue'
+            }"
           >
-            {{ task }}
+            <h2 class="fs-5 mb-0">{{ task.title }}</h2>
+            <p>{{ task.description }}</p>
           </li>
         </ul>
       </div>
     </div>
     <div class="col-lg-4">
       <div class="board shadow">
-        <header class="mb-4 d-flex justify-content-evenly header">
-          <h2 class="fs-3">W trakcie</h2>
+        <header class="mb-4 d-flex justify-content-evenly">
+          <h2 class="fs-3">
+            <span class="text-info cursor-pointer"
+              ><app-plus-icon></app-plus-icon></span
+            >W trakcie
+          </h2>
         </header>
         <ul
           class="list-group border-radius-0 mx-auto mt-3 tasks-holder"
@@ -40,19 +52,30 @@
           (cdkDropListDropped)="onListDropped($event)"
         >
           <li
-            class="list-group-item cursor-pointer task"
+            class="list-group-item cursor-pointer task d-flex flex-column align-items-start my-1 py-5"
             *ngFor="let task of boards.inProgressTasks"
             cdkDrag
+            [ngClass]="{
+              red: task.label === 'red',
+              yellow: task.label === 'yellow',
+              green: task.label === 'green',
+              blue: task.label === 'blue'
+            }"
           >
-            {{ task }}
+            <h2 class="fs-5 mb-0">{{ task.title }}</h2>
+            <p>{{ task.description }}</p>
           </li>
         </ul>
       </div>
     </div>
     <div class="col-lg-4 completed">
       <div class="board shadow">
-        <header class="mb-4 d-flex justify-content-evenly header">
-          <h2 class="fs-3">Wykonane</h2>
+        <header class="mb-4 d-flex justify-content-evenly">
+          <h2 class="fs-3">
+            <span class="text-info cursor-pointer"
+              ><app-plus-icon></app-plus-icon></span
+            >Wykonane
+          </h2>
         </header>
         <ul
           class="list-group border-radius-0 mx-auto mt-3 tasks-holder"
@@ -61,11 +84,18 @@
           (cdkDropListDropped)="onListDropped($event)"
         >
           <li
-            class="list-group-item cursor-pointer task"
+            class="list-group-item cursor-pointer task d-flex flex-column align-items-start my-1 py-5"
             *ngFor="let task of boards.doneTasks"
             cdkDrag
+            [ngClass]="{
+              red: task.label === 'red',
+              yellow: task.label === 'yellow',
+              green: task.label === 'green',
+              blue: task.label === 'blue'
+            }"
           >
-            {{ task }}
+            <h2 class="fs-5 mb-0">{{ task.title }}</h2>
+            <p>{{ task.description }}</p>
           </li>
         </ul>
       </div>

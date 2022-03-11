@@ -22,9 +22,27 @@ export class ProjectsService {
       createdBy: this.auth.currentUser!.uid,
       completed: false,
       boards: {
-        assignedTasks: ['Pierwsze zadanie do wykonania'],
-        inProgressTasks: ['Zoorganizować czas'],
-        doneTasks: ['Stworzyć projekt'],
+        assignedTasks: [
+          {
+            title: 'Pierwsze zadanie do wykonania',
+            description: 'Stworzyć jakieś zadania',
+            label: 'red',
+          },
+        ],
+        inProgressTasks: [
+          {
+            title: 'Zorganizować czas',
+            description: 'poprostu',
+            label: 'green',
+          },
+        ],
+        doneTasks: [
+          {
+            title: 'Pierwsze ukończone zadanie ',
+            description: 'Zostało wykonane',
+            label: 'blue',
+          },
+        ],
       },
     };
     // Create project record

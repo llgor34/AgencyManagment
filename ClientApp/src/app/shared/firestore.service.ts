@@ -21,11 +21,11 @@ export class FirestoreService {
     return setDoc(docRef, data);
   }
 
-  async getDocument(col: string, docName: string) {
+  async getDocument<T = any>(col: string, docName: string) {
     const docRef = doc(this.firestore, col, docName);
     const fetchedDoc = await getDoc(docRef);
 
-    return { uid: fetchedDoc.id, data: fetchedDoc.data() as any };
+    return { uid: fetchedDoc.id as string, data: fetchedDoc.data() as T };
   }
 
   async addDocument(col: string, data: any) {

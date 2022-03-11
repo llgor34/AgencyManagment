@@ -1,5 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 import { UserDoc } from './UserDoc.model';
+import { Task } from './Board.model';
 
 export interface Project {
   uid?: string;
@@ -10,9 +11,9 @@ export interface Project {
   assignedUsers: string[]; // holds users uid
   createdBy: string; //  holds user uid
   boards: {
-    assignedTasks: string[];
-    inProgressTasks: string[];
-    doneTasks: string[];
+    assignedTasks: Task[];
+    inProgressTasks: Task[];
+    doneTasks: Task[];
   };
 }
 
@@ -25,8 +26,8 @@ export interface ProjectTransformed {
   assignedUsers: UserDoc[]; // holds users documents
   createdBy: string; //  holds user uid
   boards: {
-    assignedTasks: string[];
-    inProgressTasks: string[];
-    doneTasks: string[];
+    assignedTasks: Task[];
+    inProgressTasks: Task[];
+    doneTasks: Task[];
   };
 }
