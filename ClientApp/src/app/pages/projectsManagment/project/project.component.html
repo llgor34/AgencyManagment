@@ -9,7 +9,12 @@
       <app-button color="secondary" (submitted)="onProjectDelete()"
         >Usuń</app-button
       >
-      <button class="btn btn-sm btn-outline-primary">Edytuj</button>
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [routerLink]="['/projects', 'edit-project', project.uid]"
+      >
+        Edytuj
+      </button>
     </div>
   </h1>
 

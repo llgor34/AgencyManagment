@@ -35,6 +35,8 @@ import { TaskDialogComponent } from './components/dialogs/task-dialog/task-dialo
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BoardComponent } from './components/board/board.component';
+import { ProjectFormComponent } from './components/project-form/project-form.component';
+import { EditProjectComponent } from './pages/projectsManagment/edit-project/edit-project.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +60,8 @@ import { BoardComponent } from './components/board/board.component';
     ProjectComponent,
     TaskDialogComponent,
     BoardComponent,
+    ProjectFormComponent,
+    EditProjectComponent,
   ],
   imports: [
     BrowserModule,

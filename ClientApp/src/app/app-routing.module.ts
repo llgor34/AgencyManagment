@@ -18,6 +18,7 @@ import { ProjectsComponent } from './pages/projectsManagment/projects/projects.c
 import { ProjectsContainerComponent } from './pages/projectsManagment/projects-container/projects-container.component';
 import { AddProjectComponent } from './pages/projectsManagment/add-project/add-project.component';
 import { ProjectComponent } from './pages/projectsManagment/project/project.component';
+import { EditProjectComponent } from './pages/projectsManagment/edit-project/edit-project.component';
 
 const routes: Routes = [
   // redirect routes
@@ -75,7 +76,12 @@ const routes: Routes = [
             component: AddProjectComponent,
           },
           {
+            path: 'edit-project/:uid',
+            component: EditProjectComponent,
+          },
+          {
             path: ':uid',
+            pathMatch: 'full',
             component: ProjectComponent,
           },
         ],

@@ -1,8 +1,8 @@
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { take } from 'rxjs';
 import { TaskDialogComponent } from 'src/app/components/dialogs/task-dialog/task-dialog.component';
 import { BoardService } from 'src/app/shared/board.service';
 import { FirestoreService } from 'src/app/shared/firestore.service';
@@ -16,7 +16,7 @@ import { ToastService } from 'src/app/shared/toast.service';
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.css'],
 })
-export class ProjectComponent implements OnInit, OnDestroy {
+export class ProjectComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private firestoreService: FirestoreService,
@@ -26,7 +26,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
-  private dialogSub: Subscription;
   project: { uid: string; data: Project };
 
   ngOnInit(): void {
@@ -34,10 +33,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.firestoreService.getDocument<Project>('projects', uid).then((res) => {
       this.project = res;
     });
-  }
-
-  ngOnDestroy(): void {
-    this.dialogSub.unsubscribe();
   }
 
   get boards() {
@@ -65,14 +60,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data,
     });
 
-    this.dialogSub = dialogRef.afterClosed().subscribe(this.updateTasks);
+    dialogRef.afterClosed().pipe(take(1)).subscribe(this.updateTasks);
   };
 
   async onProjectDelete() {
     try {
       await this.firestoreService.deleteDocument('projects', this.project.uid);
       this.toastService.success('Usunięto projekt!');
-      this.router.navigateByUrl('/home');
+      this.router.navigateByUrl('/projects');
     } catch (error: any) {
       this.toastService.error(error.message);
     }
