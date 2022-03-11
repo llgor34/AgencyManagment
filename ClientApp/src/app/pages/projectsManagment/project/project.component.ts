@@ -9,6 +9,7 @@ import { FirestoreService } from 'src/app/shared/firestore.service';
 import { Board } from 'src/app/shared/models/Board.model';
 import { Task } from 'src/app/shared/models/Board.model';
 import { Project } from 'src/app/shared/models/Projects';
+import { UserDocRaw } from 'src/app/shared/models/UserDoc.model';
 import { ToastService } from 'src/app/shared/toast.service';
 
 @Component({
@@ -27,9 +28,11 @@ export class ProjectComponent implements OnInit {
   ) {}
 
   project: { uid: string; data: Project };
+  userDoc: UserDocRaw;
 
   ngOnInit(): void {
     const { uid } = this.route.snapshot.params;
+    this.userDoc = JSON.parse(localStorage.getItem('userDoc')!);
     this.firestoreService.getDocument<Project>('projects', uid).then((res) => {
       this.project = res;
     });
@@ -64,6 +67,11 @@ export class ProjectComponent implements OnInit {
   };
 
   async onProjectDelete() {
+    if (!this.isAdmin) {
+      this.toastService.error('Nie posiadasz uprawnień!');
+      return;
+    }
+
     try {
       await this.firestoreService.deleteDocument('projects', this.project.uid);
       this.toastService.success('Usunięto projekt!');
@@ -71,5 +79,9 @@ export class ProjectComponent implements OnInit {
     } catch (error: any) {
       this.toastService.error(error.message);
     }
+  }
+
+  get isAdmin() {
+    return this.userDoc.roles['admin'];
   }
 }

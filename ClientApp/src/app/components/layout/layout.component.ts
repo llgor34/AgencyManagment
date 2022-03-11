@@ -33,4 +33,8 @@ export class LayoutComponent implements OnInit {
     this.toastService.success('Pomyślnie wylogowano');
     this.router.navigate(['/login']);
   }
+
+  get isAdmin() {
+    return this.userDoc.roles['admin'];
+  }
 }

@@ -5,7 +5,7 @@
     <div>
       {{ project.data.title }}
     </div>
-    <div class="d-flex" style="gap: 10px">
+    <div class="d-flex" style="gap: 10px" *ngIf="isAdmin">
       <app-button color="secondary" (submitted)="onProjectDelete()"
         >Usuń</app-button
       >

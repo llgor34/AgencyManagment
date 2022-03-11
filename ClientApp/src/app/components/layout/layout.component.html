@@ -34,20 +34,23 @@
         <li routerLinkActive="active" routerLink="/home">
           🏠<span class="shrink"> Start</span>
         </li>
-        <li routerLinkActive="active" routerLink="/manage-employees">
+        <li
+          routerLinkActive="active"
+          routerLink="/manage-employees"
+          *ngIf="isAdmin"
+        >
           🔐<span class="shrink"> Zarządzanie pracownikami</span>
         </li>
         <li routerLinkActive="active" routerLink="/projects">
           💾<span class="shrink"> Projekty</span>
         </li>
         <li>📅<span class="shrink"> Kalendarz</span></li>
-        <span class="line-break"></span>
-        <li>⚙<span class="shrink"> Administracja</span></li>
-        <li>✉<span class="shrink"> Chat - stajenni</span></li>
-        <li>✉<span class="shrink"> Chat - klienci</span></li>
-        <span class="line-break"></span>
 
+        <span class="line-break" *ngIf="isAdmin"></span>
+
+        <li *ngIf="isAdmin">⚙<span class="shrink"> Administracja</span></li>
         <li>📖<span class="shrink"> Instrukcja</span></li>
+        <span class="line-break"></span>
       </ul>
     </nav>
 
