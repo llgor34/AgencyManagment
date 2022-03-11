@@ -19,6 +19,7 @@ import { ProjectsContainerComponent } from './pages/projectsManagment/projects-c
 import { AddProjectComponent } from './pages/projectsManagment/add-project/add-project.component';
 import { ProjectComponent } from './pages/projectsManagment/project/project.component';
 import { EditProjectComponent } from './pages/projectsManagment/edit-project/edit-project.component';
+import { IsAssignedToProjectGuard } from './auth/is-assigned-to-project-guard.service';
 
 const routes: Routes = [
   // redirect routes
@@ -74,15 +75,18 @@ const routes: Routes = [
           {
             path: 'add-project',
             component: AddProjectComponent,
+            canActivate: [AdminGuard],
           },
           {
             path: 'edit-project/:uid',
             component: EditProjectComponent,
+            canActivate: [AdminGuard],
           },
           {
             path: ':uid',
             pathMatch: 'full',
             component: ProjectComponent,
+            canActivate: [IsAssignedToProjectGuard],
           },
         ],
       },
