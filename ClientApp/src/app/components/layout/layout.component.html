@@ -18,7 +18,7 @@
         />
         <h2 class="username mb-2">{{ user.email }}</h2>
         <h3 class="roles mb-3" *ngIf="userDoc">
-          {{ userDoc.data.roles | getRoles }}
+          {{ userDoc.roles | getRoles }}
           <button
             class="btn btn-primary btn-sm d-block mx-auto mt-2"
             (click)="logout()"

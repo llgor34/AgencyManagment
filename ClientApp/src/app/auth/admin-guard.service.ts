@@ -25,6 +25,7 @@ export class AdminGuard implements CanActivate {
     return authState(this.auth).pipe(
       switchMap(async (user) => {
         if (!user) {
+          localStorage.removeItem("userDoc")
           return false;
         }
         const userDoc = await this.firestoreService.getDocument(

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import {
   Auth,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   updateProfile,
 } from '@angular/fire/auth';
 import { FirestoreService } from '../shared/firestore.service';
 import { Functions, httpsCallable } from '@angular/fire/functions';
+import { UserDocRaw } from '../shared/models/UserDoc.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -17,8 +17,19 @@ export class AuthService {
     private functions: Functions
   ) {}
 
-  login(email: string, password: string) {
-    return signInWithEmailAndPassword(this.auth, email, password);
+  async login(email: string, password: string) {
+    const res = await signInWithEmailAndPassword(this.auth, email, password);
+    const userDoc = await this.firestoreService.getDocument<UserDocRaw>(
+      'users',
+      res.user.uid
+    );
+
+    localStorage.setItem('userDoc', JSON.stringify(userDoc.data));
+  }
+
+  async logout() {
+    localStorage.removeItem('userDoc');
+    return await this.auth.signOut();
   }
 
   async createUser(email: string, password: string) {

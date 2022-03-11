@@ -24,15 +24,12 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
-    this.firestoreService
-      .getDocument<UserDocRaw>('users', this.auth.currentUser!.uid)
-      .then((res) => {
-        if (res.data.roles['admin']) {
-          this.getAllProjects();
-        } else {
-          this.getUserProjects();
-        }
-      });
+    const userDoc: UserDocRaw = JSON.parse(localStorage.getItem('userDoc')!);
+    if (userDoc.roles['admin']) {
+      this.getAllProjects();
+    } else {
+      this.getUserProjects();
+    }
   }
 
   getAllProjects() {

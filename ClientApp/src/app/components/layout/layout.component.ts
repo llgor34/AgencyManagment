@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
 import { FirestoreService } from 'src/app/shared/firestore.service';
-import { UserDoc } from 'src/app/shared/models/UserDoc.model';
+import { UserDocRaw } from 'src/app/shared/models/UserDoc.model';
 import { ToastService } from 'src/app/shared/toast.service';
 
 @Component({
@@ -12,27 +13,23 @@ import { ToastService } from 'src/app/shared/toast.service';
 })
 export class LayoutComponent implements OnInit {
   user: User;
-  userDoc: UserDoc;
+  userDoc: UserDocRaw;
 
   constructor(
     private auth: Auth,
     private firestoreService: FirestoreService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    // At this moment, there always will be user
     this.user = this.auth.currentUser!;
-    this.firestoreService
-      .getDocument('users', this.user.uid)
-      .then((doc: UserDoc) => {
-        this.userDoc = doc;
-      });
+    this.userDoc = JSON.parse(localStorage.getItem('userDoc')!);
   }
 
   async logout() {
-    await this.auth.signOut();
+    await this.authService.logout();
     this.toastService.success('Pomyślnie wylogowano');
     this.router.navigate(['/login']);
   }
