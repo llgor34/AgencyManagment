@@ -10,6 +10,7 @@ import {
   collection,
   addDoc,
   Timestamp,
+  deleteDoc,
 } from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
@@ -26,6 +27,10 @@ export class FirestoreService {
     const fetchedDoc = await getDoc(docRef);
 
     return { uid: fetchedDoc.id as string, data: fetchedDoc.data() as T };
+  }
+
+  async deleteDocument(col: string, docName: string) {
+    await deleteDoc(doc(this.firestore, col, docName));
   }
 
   async addDocument(col: string, data: any) {

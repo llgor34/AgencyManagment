@@ -1,7 +1,15 @@
 <app-loading-spinner *ngIf="!project"></app-loading-spinner>
 
-<div class="container p-4 w-100" *ngIf="project">
-  <h1 class="py-4 header">{{ project.data.title }}</h1>
+<div class="container p-4 w-100" style="position: relative" *ngIf="project">
+  <h1 class="py-4 header d-flex justify-content-around">
+    <div>
+      {{ project.data.title }}
+    </div>
+    <app-button color="secondary" (submitted)="onProjectDelete()"
+      >Usuń</app-button
+    >
+  </h1>
+
   <div class="boards-container mt-4" cdkDropListGroup>
     <app-board
       [tasks]="boards.assignedTasks"

@@ -1,7 +1,7 @@
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TaskDialogComponent } from 'src/app/components/dialogs/task-dialog/task-dialog.component';
 import { BoardService } from 'src/app/shared/board.service';
@@ -9,6 +9,7 @@ import { FirestoreService } from 'src/app/shared/firestore.service';
 import { Board } from 'src/app/shared/models/Board.model';
 import { Task } from 'src/app/shared/models/Board.model';
 import { Project } from 'src/app/shared/models/Projects';
+import { ToastService } from 'src/app/shared/toast.service';
 
 @Component({
   selector: 'app-project',
@@ -20,7 +21,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private firestoreService: FirestoreService,
     private boardService: BoardService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toastService: ToastService,
+    private router: Router
   ) {}
 
   private dialogSub: Subscription;
@@ -64,4 +67,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     this.dialogSub = dialogRef.afterClosed().subscribe(this.updateTasks);
   };
+
+  async onProjectDelete() {
+    try {
+      await this.firestoreService.deleteDocument('projects', this.project.uid);
+      this.toastService.success('Usunięto projekt!');
+      this.router.navigateByUrl('/projects/');
+    } catch (error: any) {
+      this.toastService.error(error.message);
+    }
+  }
 }
