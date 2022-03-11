@@ -11,7 +11,9 @@ import {
   addDoc,
   Timestamp,
   deleteDoc,
+  where,
 } from '@angular/fire/firestore';
+import { WhereFilterOp } from 'firebase/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
@@ -53,6 +55,13 @@ export class FirestoreService {
   collectionSnapshot$(col: string) {
     const colRef = collection(this.firestore, col);
     const q = query(colRef);
+
+    return collectionData(q, { idField: 'uid' });
+  }
+
+  collectionQuery$(col: string, whereQ: [string, WhereFilterOp, string]) {
+    const colRef = collection(this.firestore, col);
+    const q = query(colRef, where(...whereQ));
 
     return collectionData(q, { idField: 'uid' });
   }

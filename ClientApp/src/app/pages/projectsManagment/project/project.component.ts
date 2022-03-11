@@ -72,7 +72,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     try {
       await this.firestoreService.deleteDocument('projects', this.project.uid);
       this.toastService.success('Usunięto projekt!');
-      this.router.navigateByUrl('/projects/');
+      this.router.navigateByUrl('/home');
     } catch (error: any) {
       this.toastService.error(error.message);
     }
