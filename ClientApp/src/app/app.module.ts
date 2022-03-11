@@ -31,6 +31,9 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { ProjectComponent } from './pages/projectsManagment/project/project.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { TaskDialogComponent } from './components/dialogs/task-dialog/task-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -52,6 +55,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     AddProjectComponent,
     LoadingSpinnerComponent,
     ProjectComponent,
+    TaskDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,6 +65,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     FormsModule,
     NgMultiSelectDropDownModule,
     DragDropModule,
+    MatDialogModule,
+    MatFormFieldModule,
     ToastrModule.forRoot(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),

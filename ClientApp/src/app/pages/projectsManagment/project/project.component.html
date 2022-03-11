@@ -7,7 +7,9 @@
       <div class="board shadow">
         <header class="mb-4 d-flex justify-content-evenly">
           <h2 class="fs-3">
-            <span class="text-info cursor-pointer"
+            <span
+              class="text-info cursor-pointer"
+              (click)="openDialog(boards.assignedTasks)"
               ><app-plus-icon></app-plus-icon
             ></span>
             Przydzielone
@@ -22,6 +24,7 @@
           <li
             class="list-group-item cursor-pointer task d-flex flex-column align-items-start my-1 py-5"
             *ngFor="let task of boards.assignedTasks"
+            (click)="openDialog(boards.assignedTasks, task)"
             cdkDrag
             [ngClass]="{
               red: task.label === 'red',
@@ -40,7 +43,9 @@
       <div class="board shadow">
         <header class="mb-4 d-flex justify-content-evenly">
           <h2 class="fs-3">
-            <span class="text-info cursor-pointer"
+            <span
+              class="text-info cursor-pointer"
+              (click)="openDialog(boards.inProgressTasks)"
               ><app-plus-icon></app-plus-icon></span
             >W trakcie
           </h2>
@@ -54,6 +59,7 @@
           <li
             class="list-group-item cursor-pointer task d-flex flex-column align-items-start my-1 py-5"
             *ngFor="let task of boards.inProgressTasks"
+            (click)="openDialog(boards.inProgressTasks, task)"
             cdkDrag
             [ngClass]="{
               red: task.label === 'red',
@@ -72,7 +78,9 @@
       <div class="board shadow">
         <header class="mb-4 d-flex justify-content-evenly">
           <h2 class="fs-3">
-            <span class="text-info cursor-pointer"
+            <span
+              class="text-info cursor-pointer"
+              (click)="openDialog(boards.doneTasks)"
               ><app-plus-icon></app-plus-icon></span
             >Wykonane
           </h2>
@@ -86,6 +94,7 @@
           <li
             class="list-group-item cursor-pointer task d-flex flex-column align-items-start my-1 py-5"
             *ngFor="let task of boards.doneTasks"
+            (click)="openDialog(boards.doneTasks, task)"
             cdkDrag
             [ngClass]="{
               red: task.label === 'red',
