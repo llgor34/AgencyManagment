@@ -17,8 +17,6 @@ export class AuthService {
     private functions: Functions
   ) {}
 
-  userDoc: UserDocRaw = JSON.parse(localStorage.getItem('userDoc')!);
-
   async login(email: string, password: string) {
     const res = await signInWithEmailAndPassword(this.auth, email, password);
     const userDoc = await this.firestoreService.getDocument<UserDocRaw>(
@@ -61,6 +59,6 @@ export class AuthService {
   }
 
   isAdmin() {
-    return this.userDoc.roles['admin'];
+    return JSON.parse(localStorage.getItem('userDoc')!).roles['admin'];
   }
 }
