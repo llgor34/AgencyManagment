@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './auth/auth-guard.service';
-import { LoggedUserGuard } from './auth/loggedUser-guard.service';
-import { NewEmployeeGuard } from './auth/new-employee.service';
-import { OnlyNewEmployeeGuard } from './auth/only-new-employee-guard.service';
+import { AuthGuard } from './guards/auth-guard.service';
+import { LoggedUserGuard } from './guards/loggedUser-guard.service';
+import { NewEmployeeGuard } from './guards/new-employee.service';
+import { OnlyNewEmployeeGuard } from './guards/only-new-employee-guard.service';
 import { LayoutComponent } from './components/layout/layout.component';
 import { ManageEmployeeComponent } from './pages/Employees/manage-employee/manage-employee.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -11,15 +11,15 @@ import { LoginComponent } from './pages/login/login.component';
 import { ManageEmployeesComponent } from './pages/Employees/manage-employees/manage-employees.component';
 import { NewEmployeeComponent } from './pages/Employees/new-employee/new-employee.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
-import { ManageEmployeeGuard } from './auth/manage-employee-guard.service';
+import { ManageEmployeeGuard } from './guards/manage-employee-guard.service';
 import { CreateEmployeeComponent } from './pages/Employees/create-employee/create-employee.component';
-import { AdminGuard } from './auth/admin-guard.service';
+import { AdminGuard } from './guards/admin-guard.service';
 import { ProjectsComponent } from './pages/projectsManagment/projects/projects.component';
 import { ProjectsContainerComponent } from './pages/projectsManagment/projects-container/projects-container.component';
 import { AddProjectComponent } from './pages/projectsManagment/add-project/add-project.component';
 import { ProjectComponent } from './pages/projectsManagment/project/project.component';
 import { EditProjectComponent } from './pages/projectsManagment/edit-project/edit-project.component';
-import { IsAssignedToProjectGuard } from './auth/is-assigned-to-project-guard.service';
+import { IsAssignedToProjectGuard } from './guards/is-assigned-to-project-guard.service';
 
 const routes: Routes = [
   // redirect routes

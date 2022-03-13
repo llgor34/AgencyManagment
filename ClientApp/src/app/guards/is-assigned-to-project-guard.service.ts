@@ -7,10 +7,10 @@ import {
 } from '@angular/router';
 import { authState } from 'rxfire/auth';
 import { switchMap } from 'rxjs';
-import { FirestoreService } from '../shared/firestore.service';
+import { FirestoreService } from '../services/firestore.service';
 import { Project } from '../models/Projects';
 import { UserDocRaw } from '../models/UserDoc.model';
-import { ToastService } from '../shared/toast.service';
+import { ToastService } from '../services/toast.service';
 
 @Injectable({
   providedIn: 'root',

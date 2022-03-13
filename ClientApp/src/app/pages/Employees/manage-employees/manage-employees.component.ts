@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { Employee } from 'src/app/models/Employee.model';
-import { FirestoreService } from 'src/app/shared/firestore.service';
-import { ToastService } from 'src/app/shared/toast.service';
+import { FirestoreService } from 'src/app/services/firestore.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 

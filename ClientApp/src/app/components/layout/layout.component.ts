@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth.service';
-import { FirestoreService } from 'src/app/shared/firestore.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { FirestoreService } from 'src/app/services/firestore.service';
 import { UserDocRaw } from 'src/app/models/UserDoc.model';
-import { ToastService } from 'src/app/shared/toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-layout',

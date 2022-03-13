@@ -3,14 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { TaskDialogComponent } from 'src/app/components/dialogs/task-dialog/task-dialog.component';
-import { BoardService } from 'src/app/shared/board.service';
-import { FirestoreService } from 'src/app/shared/firestore.service';
+import { BoardService } from 'src/app/services/board.service';
+import { FirestoreService } from 'src/app/services/firestore.service';
 import { Board } from 'src/app/models/Board.model';
 import { Task } from 'src/app/models/Board.model';
 import { Project } from 'src/app/models/Projects';
-import { ProjectsService } from 'src/app/shared/projects.service';
+import { ProjectsService } from 'src/app/services/projects.service';
 
 @Component({
   selector: 'app-project',

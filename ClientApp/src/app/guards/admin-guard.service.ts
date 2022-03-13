@@ -7,8 +7,8 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { FirestoreService } from '../shared/firestore.service';
-import { ToastService } from '../shared/toast.service';
+import { FirestoreService } from '../services/firestore.service';
+import { ToastService } from '../services/toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,7 @@ export class AdminGuard implements CanActivate {
     return authState(this.auth).pipe(
       switchMap(async (user) => {
         if (!user) {
-          localStorage.removeItem("userDoc")
+          localStorage.removeItem('userDoc');
           return false;
         }
         const userDoc = await this.firestoreService.getDocument(

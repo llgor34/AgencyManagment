@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from './auth.service';
 import { FirestoreService } from './firestore.service';
 import { Project } from '../models/Projects';
 import { ToastService } from './toast.service';

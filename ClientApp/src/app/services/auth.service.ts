@@ -5,7 +5,7 @@ import {
   sendPasswordResetEmail,
   updateProfile,
 } from '@angular/fire/auth';
-import { FirestoreService } from '../shared/firestore.service';
+import { FirestoreService } from './firestore.service';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { UserDocRaw } from '../models/UserDoc.model';
 

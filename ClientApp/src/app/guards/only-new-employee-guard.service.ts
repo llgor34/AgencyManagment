@@ -7,8 +7,8 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { switchMap, of } from 'rxjs';
-import { FirestoreService } from '../shared/firestore.service';
-import { ToastService } from '../shared/toast.service';
+import { FirestoreService } from '../services/firestore.service';
+import { ToastService } from '../services/toast.service';
 import { UserDoc } from '../models/UserDoc.model';
 
 @Injectable({
