@@ -100,8 +100,6 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
   onClick(event: any, userUid: string) {
     if (event.target.nodeName !== 'TD') return;
 
-    this.router.navigate(['/manage-employee', userUid]);
+    this.router.navigate(['/manage-employees', userUid]);
   }
-
-  onAddUser() {}
 }

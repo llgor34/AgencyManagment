@@ -47,19 +47,19 @@ const routes: Routes = [
         canActivate: [NewEmployeeGuard, AdminGuard],
       },
       {
-        path: 'manage-employee/:uid',
-        component: ManageEmployeeComponent,
-        canActivate: [ManageEmployeeGuard, AdminGuard, NewEmployeeGuard],
-      },
-      {
-        path: 'create-employee',
+        path: 'manage-employees/create-employee',
         component: CreateEmployeeComponent,
         canActivate: [NewEmployeeGuard, AdminGuard],
       },
       {
-        path: 'new-employee',
+        path: 'manage-employees/new-employee',
         component: NewEmployeeComponent,
         canActivate: [OnlyNewEmployeeGuard],
+      },
+      {
+        path: 'manage-employees/:uid',
+        component: ManageEmployeeComponent,
+        canActivate: [ManageEmployeeGuard, AdminGuard, NewEmployeeGuard],
       },
       // Manage projects routes (at the end, they will be outsourced to own module and lazy loaded)
       {

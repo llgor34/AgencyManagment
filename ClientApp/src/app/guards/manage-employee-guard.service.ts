@@ -4,7 +4,6 @@ import {
   CanActivate,
   Router,
   RouterStateSnapshot,
-  UrlTree,
 } from '@angular/router';
 import { FirestoreService } from '../services/firestore.service';
 import { ToastService } from '../services/toast.service';

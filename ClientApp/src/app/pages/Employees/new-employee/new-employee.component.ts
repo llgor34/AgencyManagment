@@ -31,7 +31,7 @@ export class NewEmployeeComponent implements OnInit {
       );
 
       this.toastService.success('Dane zostały zaktualizowane!');
-      this.router.navigate(['/home']);
+      this.router.navigate(['/employees']);
     } catch (error: any) {
       this.toastService.error(error.message);
     }
