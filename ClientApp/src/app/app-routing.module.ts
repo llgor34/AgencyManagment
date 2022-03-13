@@ -43,23 +43,10 @@ const routes: Routes = [
       // Manage employees routes (at the end, they will be outsourced to own module and lazy loaded)
       {
         path: 'manage-employees',
-        component: ManageEmployeesComponent,
-        canActivate: [NewEmployeeGuard, AdminGuard],
-      },
-      {
-        path: 'manage-employees/create-employee',
-        component: CreateEmployeeComponent,
-        canActivate: [NewEmployeeGuard, AdminGuard],
-      },
-      {
-        path: 'manage-employees/new-employee',
-        component: NewEmployeeComponent,
-        canActivate: [OnlyNewEmployeeGuard],
-      },
-      {
-        path: 'manage-employees/:uid',
-        component: ManageEmployeeComponent,
-        canActivate: [ManageEmployeeGuard, AdminGuard, NewEmployeeGuard],
+        loadChildren: () =>
+          import('./pages/Employees/employee.module').then(
+            (m) => m.EmployeeModule
+          ),
       },
       // Manage projects routes (at the end, they will be outsourced to own module and lazy loaded)
       {
