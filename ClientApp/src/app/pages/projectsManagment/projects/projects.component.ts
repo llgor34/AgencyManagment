@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FirestoreService } from 'src/app/shared/firestore.service';
-import { Project, ProjectTransformed } from 'src/app/shared/models/Projects';
+import { Project, ProjectTransformed } from 'src/app/models/Projects';
 import { ProjectsService } from 'src/app/shared/projects.service';
 
 @Component({

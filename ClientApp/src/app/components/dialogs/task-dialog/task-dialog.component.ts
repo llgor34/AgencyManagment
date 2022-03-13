@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { labelColors, Task } from 'src/app/shared/models/Board.model';
+import { labelColors, Task } from 'src/app/models/Board.model';
 
 @Component({
   selector: 'app-task-dialog',

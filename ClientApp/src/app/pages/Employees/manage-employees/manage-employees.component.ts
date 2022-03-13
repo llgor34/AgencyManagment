@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Employee } from 'src/app/shared/models/Employee.model';
+import { Employee } from 'src/app/models/Employee.model';
 import { FirestoreService } from 'src/app/shared/firestore.service';
 import { ToastService } from 'src/app/shared/toast.service';
 import { Auth } from '@angular/fire/auth';

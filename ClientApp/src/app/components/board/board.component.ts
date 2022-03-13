@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { Task } from 'src/app/shared/models/Board.model';
+import { Task } from 'src/app/models/Board.model';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({

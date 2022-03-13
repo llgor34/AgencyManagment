@@ -7,9 +7,9 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { TaskDialogComponent } from 'src/app/components/dialogs/task-dialog/task-dialog.component';
 import { BoardService } from 'src/app/shared/board.service';
 import { FirestoreService } from 'src/app/shared/firestore.service';
-import { Board } from 'src/app/shared/models/Board.model';
-import { Task } from 'src/app/shared/models/Board.model';
-import { Project } from 'src/app/shared/models/Projects';
+import { Board } from 'src/app/models/Board.model';
+import { Task } from 'src/app/models/Board.model';
+import { Project } from 'src/app/models/Projects';
 import { ProjectsService } from 'src/app/shared/projects.service';
 
 @Component({

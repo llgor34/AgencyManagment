@@ -8,8 +8,8 @@ import {
 import { authState } from 'rxfire/auth';
 import { switchMap } from 'rxjs';
 import { FirestoreService } from '../shared/firestore.service';
-import { Project } from '../shared/models/Projects';
-import { UserDocRaw } from '../shared/models/UserDoc.model';
+import { Project } from '../models/Projects';
+import { UserDocRaw } from '../models/UserDoc.model';
 import { ToastService } from '../shared/toast.service';
 
 @Injectable({

@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Subscription } from 'rxjs';
 import { FirestoreService } from 'src/app/shared/firestore.service';
-import { Project } from 'src/app/shared/models/Projects';
+import { Project } from 'src/app/models/Projects';
 import { ProjectsService } from 'src/app/shared/projects.service';
 import { ToastService } from 'src/app/shared/toast.service';
 

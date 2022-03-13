@@ -7,7 +7,7 @@ import {
 } from '@angular/fire/auth';
 import { FirestoreService } from '../shared/firestore.service';
 import { Functions, httpsCallable } from '@angular/fire/functions';
-import { UserDocRaw } from '../shared/models/UserDoc.model';
+import { UserDocRaw } from '../models/UserDoc.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

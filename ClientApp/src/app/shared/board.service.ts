@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
-import { Board } from './models/Board.model';
+import { Board } from '../models/Board.model';
 
 @Injectable({
   providedIn: 'root',
