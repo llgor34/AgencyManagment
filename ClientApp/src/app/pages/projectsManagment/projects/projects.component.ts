@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 import { FirestoreService } from 'src/app/shared/firestore.service';
 import { Project, ProjectTransformed } from 'src/app/shared/models/Projects';
-import { UserDocRaw } from 'src/app/shared/models/UserDoc.model';
+import { ProjectsService } from 'src/app/shared/projects.service';
 
 @Component({
   selector: 'app-projects',
@@ -20,19 +20,15 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   constructor(
     private firestoreService: FirestoreService,
-    private rotuer: Router,
-    private auth: Auth
+    private projectsService: ProjectsService,
+    private authService: AuthService,
+    private rotuer: Router
   ) {}
 
   ngOnInit(): void {
     this.loading = true;
-    const userDoc: UserDocRaw = JSON.parse(localStorage.getItem('userDoc')!);
-    if (userDoc.roles['admin']) {
-      this.getAllProjects();
-      this.isAdmin = true;
-    } else {
-      this.getUserProjects();
-    }
+    this.isAdmin = this.authService.isAdmin();
+    this.getProjects();
   }
 
   get projects() {
@@ -48,34 +44,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     });
   }
 
-  getAllProjects() {
-    this.projectsSub = this.firestoreService
-      .collectionSnapshot$('projects')
-      .subscribe((projectDocs: any) => {
-        Promise.all(
-          projectDocs.map(async (projectDoc: Project) => ({
-            ...projectDoc,
-            assignedUsers: await Promise.all(
-              projectDoc.assignedUsers.map(
-                async (assignedUser) =>
-                  await this.firestoreService.getDocument('users', assignedUser)
-              )
-            ),
-          }))
-        ).then((transformedProjects) => {
-          this._projects = transformedProjects;
-          this.loading = false;
-        });
-      });
-  }
-
-  getUserProjects() {
-    this.projectsSub = this.firestoreService
-      .collectionQuery$('projects', [
-        'assignedUsers',
-        'array-contains',
-        this.auth.currentUser!.uid,
-      ])
+  getProjects() {
+    this.projectsSub = this.projectsService
+      .getProjects$()
       .subscribe((projectDocs: any) => {
         Promise.all(
           projectDocs.map(async (projectDoc: Project) => ({

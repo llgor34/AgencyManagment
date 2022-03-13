@@ -89,4 +89,16 @@ export class ProjectsService {
       this.toastService.error(error.message);
     }
   }
+
+  getProjects$() {
+    if (this.authService.isAdmin()) {
+      return this.firestoreService.collectionSnapshot$('projects');
+    }
+
+    return this.firestoreService.collectionQuery$('projects', [
+      'assignedUsers',
+      'array-contains',
+      this.auth.currentUser!.uid,
+    ]);
+  }
 }
