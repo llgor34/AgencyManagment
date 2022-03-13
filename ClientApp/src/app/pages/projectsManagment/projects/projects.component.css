@@ -34,3 +34,8 @@
 .add-project:hover {
   color: #025fc2;
 }
+
+.completed,
+.completed ul li {
+  background-color: #ebe8e8;
+}

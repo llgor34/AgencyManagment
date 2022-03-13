@@ -2,9 +2,10 @@
 
 <div *ngIf="!loading">
   <div
-    class="d-flex w-100 align-items-center justify-content-center text-primary p-3"
+    class="d-flex w-100 align-items-center justify-content-center text-primary p-3 mb-0"
   >
-    <span
+    <div
+      *ngIf="isAdmin"
       class="add-project d-flex align-items-center cursor-pointer"
       style="column-gap: 10px"
     >
@@ -12,11 +13,40 @@
         Stwórz nowy projekt
         <app-plus-icon></app-plus-icon>
       </h1>
-    </span>
+    </div>
+  </div>
+  <div class="d-flex w-100 justify-content-center mb-4" *ngIf="isAdmin">
+    <div
+      class="btn-group"
+      role="group"
+      aria-label="Basic radio toggle button group"
+    >
+      <input
+        type="radio"
+        class="btn-check"
+        name="btnradio"
+        id="btnradio1"
+        autocomplete="off"
+        checked
+        (click)="filter = 'all'"
+      />
+      <label class="btn btn-outline-primary" for="btnradio1">Wszystkie</label>
+
+      <input
+        type="radio"
+        class="btn-check"
+        name="btnradio"
+        id="btnradio2"
+        autocomplete="off"
+        (click)="filter = 'completed'"
+      />
+      <label class="btn btn-outline-primary" for="btnradio2">Ukończone</label>
+    </div>
   </div>
   <div class="wrapper" *ngIf="projects.length > 0; else noProjects">
     <div
       class="border p-3 project-holder"
+      [ngClass]="{ completed: project.completed }"
       *ngFor="let project of projects"
       (click)="onProjectClick(project.uid!)"
     >

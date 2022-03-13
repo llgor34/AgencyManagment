@@ -12,9 +12,11 @@ import { UserDocRaw } from 'src/app/shared/models/UserDoc.model';
   styleUrls: ['./projects.component.css'],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
+  _projects: ProjectTransformed[] = [];
   projectsSub: Subscription;
+  isAdmin = false;
   loading = false;
-  projects: ProjectTransformed[] = [];
+  filter: 'all' | 'completed' = 'all';
 
   constructor(
     private firestoreService: FirestoreService,
@@ -27,9 +29,23 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     const userDoc: UserDocRaw = JSON.parse(localStorage.getItem('userDoc')!);
     if (userDoc.roles['admin']) {
       this.getAllProjects();
+      this.isAdmin = true;
     } else {
       this.getUserProjects();
     }
+  }
+
+  get projects() {
+    return this._projects.filter((project) => {
+      switch (this.filter) {
+        case 'all':
+          return !project.completed;
+        case 'completed':
+          return project.completed;
+        default:
+          return true;
+      }
+    });
   }
 
   getAllProjects() {
@@ -47,7 +63,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
             ),
           }))
         ).then((transformedProjects) => {
-          this.projects = transformedProjects;
+          this._projects = transformedProjects;
           this.loading = false;
         });
       });
@@ -72,7 +88,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
             ),
           }))
         ).then((transformedProjects) => {
-          this.projects = transformedProjects;
+          this._projects = transformedProjects;
           this.loading = false;
         });
       });
