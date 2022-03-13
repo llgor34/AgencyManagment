@@ -15,6 +15,16 @@
       >
         Edytuj
       </button>
+      <button
+        class="btn btn-sm btn-outline-success"
+        (click)="toggleProjectCompleteStatus()"
+      >
+        {{
+          project.data.completed
+            ? "Oznacz jako niewykonany"
+            : "Oznacz jako wykonany"
+        }}
+      </button>
     </div>
   </h1>
 

@@ -1,16 +1,16 @@
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 import { TaskDialogComponent } from 'src/app/components/dialogs/task-dialog/task-dialog.component';
 import { BoardService } from 'src/app/shared/board.service';
 import { FirestoreService } from 'src/app/shared/firestore.service';
 import { Board } from 'src/app/shared/models/Board.model';
 import { Task } from 'src/app/shared/models/Board.model';
 import { Project } from 'src/app/shared/models/Projects';
-import { UserDocRaw } from 'src/app/shared/models/UserDoc.model';
-import { ToastService } from 'src/app/shared/toast.service';
+import { ProjectsService } from 'src/app/shared/projects.service';
 
 @Component({
   selector: 'app-project',
@@ -23,16 +23,14 @@ export class ProjectComponent implements OnInit {
     private firestoreService: FirestoreService,
     private boardService: BoardService,
     private dialog: MatDialog,
-    private toastService: ToastService,
-    private router: Router
+    private projectsService: ProjectsService,
+    private authService: AuthService
   ) {}
 
   project: { uid: string; data: Project };
-  userDoc: UserDocRaw;
 
   ngOnInit(): void {
     const { uid } = this.route.snapshot.params;
-    this.userDoc = JSON.parse(localStorage.getItem('userDoc')!);
     this.firestoreService.getDocument<Project>('projects', uid).then((res) => {
       this.project = res;
     });
@@ -45,6 +43,10 @@ export class ProjectComponent implements OnInit {
   updateTasks = () => {
     this.boardService.updateTasks(this.project.uid, this.boards);
   };
+
+  async toggleProjectCompleteStatus() {
+    await this.projectsService.toggleProjectCompleteStatus(this.project);
+  }
 
   onListDropped(event: CdkDragDrop<Task[]>) {
     transferArrayItem(
@@ -67,21 +69,10 @@ export class ProjectComponent implements OnInit {
   };
 
   async onProjectDelete() {
-    if (!this.isAdmin) {
-      this.toastService.error('Nie posiadasz uprawnień!');
-      return;
-    }
-
-    try {
-      await this.firestoreService.deleteDocument('projects', this.project.uid);
-      this.toastService.success('Usunięto projekt!');
-      this.router.navigateByUrl('/projects');
-    } catch (error: any) {
-      this.toastService.error(error.message);
-    }
+    await this.projectsService.deleteProject(this.project.uid);
   }
 
   get isAdmin() {
-    return this.userDoc.roles['admin'];
+    return this.authService.isAdmin();
   }
 }
