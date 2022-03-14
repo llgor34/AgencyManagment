@@ -170,7 +170,8 @@ export class ProjectFormComponent implements OnInit {
         ),
         boards: {
           assignedTasks:
-            this.mode === 'add'
+            this.mode === 'add' &&
+            this.form.controls['template'].value !== 'none'
               ? this.projectTemplates.filter(
                   (projectTemplate) =>
                     projectTemplate.uid === this.form.controls['template'].value
