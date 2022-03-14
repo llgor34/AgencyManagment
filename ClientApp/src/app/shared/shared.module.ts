@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { RouterModule } from '@angular/router';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ButtonComponent } from '../components/button/button.component';
 import { FormComponent } from '../components/form/form.component';
@@ -32,7 +33,7 @@ const modules = [
 ];
 
 @NgModule({
-  imports: [...modules],
+  imports: [...modules, RouterModule],
   declarations: [...declarations],
   exports: [...declarations, ...modules],
 })
