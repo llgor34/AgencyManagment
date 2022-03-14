@@ -11,6 +11,10 @@ service cloud.firestore {
    		allow read, update: if isAssignedToUser() || isAdmin();
       allow write: if isOwner() || isAdmin();
    }
+
+   match /projectsTemplates/{projectTemplateId} {
+     allow read, write: if isAdmin();
+   }
     
     
     function isLoggedIn() {

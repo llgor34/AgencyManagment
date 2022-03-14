@@ -14,4 +14,8 @@ export class BoardService {
       boards: tasks,
     });
   }
+
+  async createNewBoardTemplate(board: Board) {
+    await this.firestoreService.addDocument('projectsTemplates', board);
+  }
 }

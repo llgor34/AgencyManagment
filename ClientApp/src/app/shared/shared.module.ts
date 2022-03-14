@@ -1,4 +1,5 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +13,7 @@ import { LoadingSpinnerComponent } from '../components/loading-spinner/loading-s
 import { PlusIconComponent } from '../components/plus-icon/plus-icon.component';
 import { ResetPasswordComponent } from '../pages/reset-password/reset-password.component';
 import { GetRolesPipe } from '../pipes/get-roles.pipe';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const declarations = [
   LoadingSpinnerComponent,
@@ -30,6 +32,8 @@ const modules = [
   DragDropModule,
   MatDialogModule,
   MatFormFieldModule,
+  MatTabsModule,
+  MatExpansionModule,
 ];
 
 @NgModule({
