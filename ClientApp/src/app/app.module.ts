@@ -14,16 +14,9 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LayoutComponent } from './components/layout/layout.component';
-import { FormComponent } from './components/form/form.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    HomeComponent,
-    LayoutComponent,
-    FormComponent,
-  ],
+  declarations: [AppComponent, LoginComponent, HomeComponent, LayoutComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

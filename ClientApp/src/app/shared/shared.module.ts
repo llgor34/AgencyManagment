@@ -6,6 +6,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ButtonComponent } from '../components/button/button.component';
+import { FormComponent } from '../components/form/form.component';
 import { LoadingSpinnerComponent } from '../components/loading-spinner/loading-spinner.component';
 import { PlusIconComponent } from '../components/plus-icon/plus-icon.component';
 import { ResetPasswordComponent } from '../pages/reset-password/reset-password.component';
@@ -17,6 +18,7 @@ const declarations = [
   PlusIconComponent,
   ButtonComponent,
   ResetPasswordComponent,
+  FormComponent,
 ];
 
 const modules = [
