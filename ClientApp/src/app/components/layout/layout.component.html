@@ -48,7 +48,13 @@
 
         <span class="line-break" *ngIf="isAdmin"></span>
 
-        <li *ngIf="isAdmin">⚙<span class="shrink"> Administracja</span></li>
+        <li
+          *ngIf="isAdmin"
+          routerLink="admin-settings"
+          routerLinkActive="active"
+        >
+          ⚙<span class="shrink"> Administracja</span>
+        </li>
         <li>📖<span class="shrink"> Instrukcja</span></li>
         <span class="line-break"></span>
       </ul>
