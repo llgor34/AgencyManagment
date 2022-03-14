@@ -14,6 +14,8 @@ import { PlusIconComponent } from '../components/plus-icon/plus-icon.component';
 import { ResetPasswordComponent } from '../pages/reset-password/reset-password.component';
 import { GetRolesPipe } from '../pipes/get-roles.pipe';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { ManageProjectTemplateFormComponent } from '../components/manage-project-template-form/manage-project-template-form.component';
+import { MatIconModule } from '@angular/material/icon';
 
 const declarations = [
   LoadingSpinnerComponent,
@@ -22,6 +24,7 @@ const declarations = [
   ButtonComponent,
   ResetPasswordComponent,
   FormComponent,
+  ManageProjectTemplateFormComponent,
 ];
 
 const modules = [
@@ -34,6 +37,7 @@ const modules = [
   MatFormFieldModule,
   MatTabsModule,
   MatExpansionModule,
+  MatIconModule,
 ];
 
 @NgModule({

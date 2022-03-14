@@ -1,0 +1,70 @@
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+<form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+  <div class="mb-3">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Nazwa templatki"
+      formControlName="title"
+    />
+    <div
+      class="form-text fs-6 mt-3 error text-center"
+      *ngIf="title.touched && title.invalid"
+    >
+      Wprowadź nazwę templatki
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label w-100">Przydzielone zadania</label>
+    <ng-container formArrayName="tasks">
+      <div
+        class="row"
+        *ngFor="let task of tasksControlArray.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <div class="mb-3 col-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Nazwa zadania"
+            formControlName="title"
+          />
+        </div>
+
+        <div class="mb-3 col-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Opis zadania"
+            formControlName="description"
+          />
+        </div>
+        <div class="mb-3 col-3">
+          <select class="form-select" formControlName="label">
+            <option value="" disabled selected>Kolor obramowania</option>
+            <option value="red">Czerwone</option>
+            <option value="yellow">Żółte</option>
+            <option value="blue">Niebieskie</option>
+            <option value="green">Zielone</option>
+          </select>
+        </div>
+        <div class="col-2 d-flex justify-content-center">
+          <app-button color="secondary" (submitted)="onTaskDelete(i)"
+            ><mat-icon>delete_icon</mat-icon></app-button
+          >
+        </div>
+      </div>
+    </ng-container>
+    <span class="text-primary" (click)="onAddTask()">
+      <app-plus-icon class="cursor-pointer"></app-plus-icon>
+    </span>
+  </div>
+  <button
+    type="submit"
+    class="btn btn-outline-primary mt-4"
+    [disabled]="form.invalid"
+  >
+    Utwórz
+  </button>
+</form>

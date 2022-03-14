@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
 import { Board } from '../models/Board.model';
+import { ProjectTemplate } from '../models/ProjectTemplate.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,10 @@ export class BoardService {
     });
   }
 
-  async createNewBoardTemplate(board: Board) {
-    await this.firestoreService.addDocument('projectsTemplates', board);
+  async createNewBoardTemplate(projectTemplate: ProjectTemplate) {
+    await this.firestoreService.addDocument(
+      'projectsTemplates',
+      projectTemplate
+    );
   }
 }
