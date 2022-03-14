@@ -43,6 +43,14 @@ const routes: Routes = [
           ),
         canActivate: [NewEmployeeGuard],
       },
+      {
+        path: 'admin-settings',
+        loadChildren: () =>
+          import('./pages/admin-settings/admin-settings.module').then(
+            (m) => m.AdminSettingsModule
+          ),
+        canActivate: [NewEmployeeGuard],
+      },
     ],
   },
 
