@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { FirestoreService } from './firestore.service';
 import { Project } from '../models/Projects';
 import { ToastService } from './toast.service';
+import { Board } from '../models/Board.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectsService {
@@ -21,6 +22,7 @@ export class ProjectsService {
     description: string;
     dueDate: Date;
     assignedUsers: string[];
+    boards: Board;
   }) {
     // Prepare info about project
     const newProject: Project = {
@@ -30,29 +32,7 @@ export class ProjectsService {
       assignedUsers: data.assignedUsers,
       createdBy: this.auth.currentUser!.uid,
       completed: false,
-      boards: {
-        assignedTasks: [
-          {
-            title: 'Pierwsze zadanie do wykonania',
-            description: 'Stworzyć jakieś zadania',
-            label: 'red',
-          },
-        ],
-        inProgressTasks: [
-          {
-            title: 'Zorganizować czas',
-            description: 'poprostu',
-            label: 'green',
-          },
-        ],
-        doneTasks: [
-          {
-            title: 'Pierwsze ukończone zadanie ',
-            description: 'Zostało wykonane',
-            label: 'blue',
-          },
-        ],
-      },
+      boards: data.boards,
     };
     // Create project record
     await this.firestoreService.addDocument('projects', newProject);

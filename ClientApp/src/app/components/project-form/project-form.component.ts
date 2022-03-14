@@ -13,6 +13,7 @@ import { FirestoreService } from 'src/app/services/firestore.service';
 import { Project } from 'src/app/models/Projects';
 import { ProjectsService } from 'src/app/services/projects.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { ProjectTemplate } from 'src/app/models/ProjectTemplate.model';
 
 @Component({
   selector: 'app-project-form',
@@ -22,12 +23,13 @@ import { ToastService } from 'src/app/services/toast.service';
 export class ProjectFormComponent implements OnInit {
   @Input('mode') mode: 'add' | 'edit';
 
-  private usersSub: Subscription;
+  private subs: Subscription[] = [];
   loading = false;
   form: FormGroup;
   dropdownList: any[] = [];
   dropdownSettings: IDropdownSettings = {};
   projectUid: string | null = null;
+  projectTemplates: ProjectTemplate[];
 
   constructor(
     private fb: FormBuilder,
@@ -41,7 +43,7 @@ export class ProjectFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    this.usersSub = this.firestoreService
+    const userSub = this.firestoreService
       .collectionSnapshot$('users')
       .subscribe((userDocs) => {
         this.dropdownList = userDocs.map((userDoc) => ({
@@ -53,10 +55,22 @@ export class ProjectFormComponent implements OnInit {
         this.initializeForm();
         this.loading = false;
       });
+    this.subs.push(userSub);
+
+    if (this.mode === 'add') {
+      const projectTemplateSub = this.firestoreService
+        .collectionSnapshot$('projectsTemplates')
+        .subscribe((projectTemplates: any) => {
+          this.projectTemplates = projectTemplates;
+        });
+      this.subs.push(projectTemplateSub);
+    }
   }
 
   ngOnDestroy(): void {
-    this.usersSub.unsubscribe();
+    for (let sub of this.subs) {
+      sub.unsubscribe();
+    }
   }
 
   initializeForm() {
@@ -72,11 +86,18 @@ export class ProjectFormComponent implements OnInit {
       noDataAvailablePlaceholderText: 'brak użytkowników!',
     };
 
+    const templateValidators = [];
+
+    if (this.mode === 'add') {
+      templateValidators.push(Validators.required);
+    }
+
     this.form = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
       dueDate: ['', Validators.required],
       selectedUsers: [[], this.minOneUser],
+      template: ['', ...templateValidators],
     });
 
     if (this.mode === 'edit') {
@@ -147,6 +168,17 @@ export class ProjectFormComponent implements OnInit {
         assignedUsers: this.selectedUsers.value.map(
           (selectedUser: any) => selectedUser['userUid']
         ),
+        boards: {
+          assignedTasks:
+            this.mode === 'add'
+              ? this.projectTemplates.filter(
+                  (projectTemplate) =>
+                    projectTemplate.uid === this.form.controls['template'].value
+                )[0].board.assignedTasks
+              : [],
+          inProgressTasks: [],
+          doneTasks: [],
+        },
       });
       this.toastService.success('Dodano nowy projekt');
       this.router.navigate(['/projects']);
