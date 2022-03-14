@@ -78,9 +78,15 @@
   </div>
   <button
     type="submit"
-    class="btn btn-outline-primary mt-4"
+    class="btn btn-outline-primary mt-4 mb-3"
     [disabled]="form.invalid"
   >
     {{ editMode ? "Edytuj" : "Utwórz" }}
   </button>
+  <app-button
+    (submitted)="onProjectTemplateDelete()"
+    color="secondary"
+    *ngIf="editMode && templateName.valid"
+    >Usuń</app-button
+  >
 </form>

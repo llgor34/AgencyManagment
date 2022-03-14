@@ -29,8 +29,6 @@ export class BoardService {
   }
 
   getBoardsTemplates$() {
-    return this.firestoreService
-      .collectionSnapshot$('projectsTemplates')
-      .pipe(take(1));
+    return this.firestoreService.collectionSnapshot$('projectsTemplates');
   }
 }

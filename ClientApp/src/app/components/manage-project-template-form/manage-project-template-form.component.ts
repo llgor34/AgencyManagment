@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -6,8 +6,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { ProjectTemplate } from 'src/app/models/ProjectTemplate.model';
 import { BoardService } from 'src/app/services/board.service';
+import { FirestoreService } from 'src/app/services/firestore.service';
 import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
@@ -15,8 +17,9 @@ import { ToastService } from 'src/app/services/toast.service';
   templateUrl: './manage-project-template-form.component.html',
   styleUrls: ['./manage-project-template-form.component.css'],
 })
-export class ManageProjectTemplateFormComponent implements OnInit {
+export class ManageProjectTemplateFormComponent implements OnInit, OnDestroy {
   @Input() editMode = false;
+  private subs: Subscription[] = [];
   loading = false;
   form: FormGroup;
   templates: ProjectTemplate[];
@@ -25,18 +28,28 @@ export class ManageProjectTemplateFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private boardService: BoardService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private firestoreService: FirestoreService
   ) {}
 
   ngOnInit(): void {
     this.loading = true;
     this.initializeForm();
     if (this.editMode) {
-      this.boardService.getBoardsTemplates$().subscribe((temps: any) => {
-        this.templates = temps;
-      });
+      const sub = this.boardService
+        .getBoardsTemplates$()
+        .subscribe((temps: any) => {
+          this.templates = temps;
+        });
+      this.subs.push(sub);
     }
     this.loading = false;
+  }
+
+  ngOnDestroy(): void {
+    for (let sub of this.subs) {
+      sub.unsubscribe();
+    }
   }
 
   updateForm(e: any) {
@@ -49,8 +62,20 @@ export class ManageProjectTemplateFormComponent implements OnInit {
     }
   }
 
-  onChange(e: any) {
-    console.log(e.target.value);
+  async onProjectTemplateDelete() {
+    this.loading = true;
+    const templateUid = this.templateName.value;
+    try {
+      await this.firestoreService.deleteDocument(
+        'projectsTemplates',
+        templateUid
+      );
+      this.toastService.success('Usunięto template!');
+      this.resetForm();
+    } catch (error: any) {
+      this.toastService.error(error.message);
+    }
+    this.loading = false;
   }
 
   initializeForm() {
