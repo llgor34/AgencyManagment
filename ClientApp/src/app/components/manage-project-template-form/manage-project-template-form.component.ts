@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -16,8 +16,11 @@ import { ToastService } from 'src/app/services/toast.service';
   styleUrls: ['./manage-project-template-form.component.css'],
 })
 export class ManageProjectTemplateFormComponent implements OnInit {
+  @Input() editMode = false;
   loading = false;
   form: FormGroup;
+  templates: ProjectTemplate[];
+  selectedProjectTemplate: ProjectTemplate;
 
   constructor(
     private fb: FormBuilder,
@@ -28,12 +31,38 @@ export class ManageProjectTemplateFormComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.initializeForm();
+    if (this.editMode) {
+      this.boardService.getBoardsTemplates$().subscribe((temps: any) => {
+        this.templates = temps;
+      });
+    }
     this.loading = false;
   }
 
+  updateForm(e: any) {
+    this.selectedProjectTemplate = this.templates.filter(
+      (template) => template.uid === e.target.value
+    )[0];
+    this.form.controls['title'].setValue(this.selectedProjectTemplate.title);
+    for (let task of this.selectedProjectTemplate.board.assignedTasks) {
+      this.onAddTask(task.title, task.description, task.label);
+    }
+  }
+
+  onChange(e: any) {
+    console.log(e.target.value);
+  }
+
   initializeForm() {
+    const validators = [];
+
+    if (this.editMode) {
+      validators.push(Validators.required);
+    }
+
     this.form = this.fb.group({
       title: ['', Validators.required],
+      templateName: ['', validators],
       tasks: this.fb.array([], this.minArrayLength1),
     });
   }
@@ -56,11 +85,15 @@ export class ManageProjectTemplateFormComponent implements OnInit {
     return this.form.controls['title'];
   }
 
-  onAddTask() {
+  get templateName() {
+    return this.form.controls['templateName'];
+  }
+
+  onAddTask(title: string = '', description: string = '', label: string = '') {
     const taskControl = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      label: ['', Validators.required],
+      title: [title, Validators.required],
+      description: [description, Validators.required],
+      label: [label, Validators.required],
     });
 
     this.tasksControlArray.push(taskControl);
@@ -92,8 +125,16 @@ export class ManageProjectTemplateFormComponent implements OnInit {
     };
 
     try {
-      await this.boardService.createNewBoardTemplate(projectTemplate);
-      this.toastService.success('Dodano nową templatkę!');
+      if (this.editMode) {
+        await this.boardService.updateBoardTemplate(
+          this.selectedProjectTemplate.uid!,
+          projectTemplate
+        );
+        this.toastService.success('Zaktualizowano templatkę!');
+      } else {
+        await this.boardService.createNewBoardTemplate(projectTemplate);
+        this.toastService.success('Dodano nową templatkę!');
+      }
     } catch (error: any) {
       this.toastService.error(error.message);
     }

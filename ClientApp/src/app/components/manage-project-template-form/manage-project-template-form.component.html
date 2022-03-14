@@ -1,7 +1,19 @@
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
 
 <form [formGroup]="form" (ngSubmit)="onFormSubmit()">
-  <div class="mb-3">
+  <div class="mb-3" *ngIf="editMode">
+    <select
+      class="form-select"
+      formControlName="templateName"
+      (change)="updateForm($event)"
+    >
+      <option value="" disabled selected>Wybierz templatkę do edycji</option>
+      <option [value]="template.uid" *ngFor="let template of templates">
+        {{ template.title }}
+      </option>
+    </select>
+  </div>
+  <div class="mb-3" *ngIf="!editMode || templateName.valid">
     <input
       type="text"
       class="form-control"
@@ -56,7 +68,11 @@
         </div>
       </div>
     </ng-container>
-    <span class="text-primary" (click)="onAddTask()">
+    <span
+      class="text-primary"
+      (click)="onAddTask()"
+      *ngIf="!editMode || templateName.valid"
+    >
       <app-plus-icon class="cursor-pointer"></app-plus-icon>
     </span>
   </div>
@@ -65,6 +81,6 @@
     class="btn btn-outline-primary mt-4"
     [disabled]="form.invalid"
   >
-    Utwórz
+    {{ editMode ? "Edytuj" : "Utwórz" }}
   </button>
 </form>
