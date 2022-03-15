@@ -155,10 +155,10 @@ export class ManageProjectTemplateFormComponent implements OnInit, OnDestroy {
           this.selectedProjectTemplate.uid!,
           projectTemplate
         );
-        this.toastService.success('Zaktualizowano templatkę!');
+        this.toastService.success('Zaktualizowano template!');
       } else {
         await this.boardService.createNewBoardTemplate(projectTemplate);
-        this.toastService.success('Dodano nową templatkę!');
+        this.toastService.success('Dodano nowy template!');
       }
     } catch (error: any) {
       this.toastService.error(error.message);

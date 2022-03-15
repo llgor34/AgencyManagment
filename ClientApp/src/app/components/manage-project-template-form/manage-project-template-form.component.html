@@ -7,7 +7,7 @@
       formControlName="templateName"
       (change)="updateForm($event)"
     >
-      <option value="" disabled selected>Wybierz templatkę do edycji</option>
+      <option value="" disabled selected>Wybierz template do edycji</option>
       <option [value]="template.uid" *ngFor="let template of templates">
         {{ template.title }}
       </option>
@@ -17,14 +17,14 @@
     <input
       type="text"
       class="form-control"
-      placeholder="Nazwa templatki"
+      placeholder="Nazwa template'u"
       formControlName="title"
     />
     <div
       class="form-text fs-6 mt-3 error text-center"
       *ngIf="title.touched && title.invalid"
     >
-      Wprowadź nazwę templatki
+      Wprowadź nazwę template'u
     </div>
   </div>
   <div class="mb-3">
