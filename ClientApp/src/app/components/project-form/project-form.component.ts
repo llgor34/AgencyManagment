@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { firstValueFrom, Subscription, tap } from 'rxjs';
+import { first, firstValueFrom, tap } from 'rxjs';
 import { FirestoreService } from 'src/app/services/firestore.service';
 import { Project } from 'src/app/models/Projects';
 import { ProjectsService } from 'src/app/services/projects.service';
@@ -32,7 +32,6 @@ interface ProjectToAdd {
 export class ProjectFormComponent implements OnInit {
   @Input('mode') mode: 'add' | 'edit';
 
-  private subs: Subscription[] = [];
   loading = false;
   form: FormGroup;
   dropdownList: any[] = [];
@@ -60,12 +59,6 @@ export class ProjectFormComponent implements OnInit {
       }
       this.loading = false;
     });
-  }
-
-  ngOnDestroy(): void {
-    for (let sub of this.subs) {
-      sub.unsubscribe();
-    }
   }
 
   initializeForm() {
@@ -172,6 +165,7 @@ export class ProjectFormComponent implements OnInit {
 
   fetchAllUsers() {
     return this.firestoreService.collectionSnapshot$('users').pipe(
+      first(),
       tap((userDocs) => {
         this.dropdownList = userDocs.map((userDoc) => ({
           userUid: userDoc['uid'],
@@ -183,6 +177,7 @@ export class ProjectFormComponent implements OnInit {
 
   fetchProjectsTemplates() {
     return this.firestoreService.collectionSnapshot$('projectsTemplates').pipe(
+      first(),
       tap((projectTemplates: any) => {
         this.projectTemplates = projectTemplates;
       })
