@@ -33,7 +33,9 @@ export class NewEmployeeGuard implements CanActivate {
                 this.toast.error(
                   'Aby korzystać z tej strony, wypełnij poniższe informacje!'
                 );
-                return this.router.createUrlTree(['/new-employee']);
+                return this.router.createUrlTree([
+                  '/manage-employees/new-employee',
+                ]);
               }
               return true;
             });
