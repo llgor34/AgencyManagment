@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { Employee } from 'src/app/models/Employee.model';
 import { FirestoreService } from 'src/app/services/firestore.service';
@@ -16,6 +16,7 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
   collectionSub: Subscription;
   employees: Employee[];
   loading = false;
+  firstCheck = true;
 
   constructor(
     private firestoreService: FirestoreService,
@@ -34,30 +35,40 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
-    this.collectionSub = this.firestoreService
-      .collectionSnapshot$('users')
-      .subscribe((documents) => {
-        this.employees = documents.map(
-          (document) =>
-            new Employee(
-              this.empty(document['displayName'])
-                ? 'Nie ustawiono'
-                : document['displayName'],
-              document['email'],
-              this.empty(document['phoneNumber'])
-                ? 'Nie ustawiono'
-                : `+48${document['phoneNumber']}`,
-              document['roles'],
-              document['uid']
-            )
-        );
-      });
-
-    this.loading = false;
+    this.fetchUsers();
   }
 
   ngOnDestroy(): void {
     this.collectionSub.unsubscribe();
+  }
+
+  fetchUsers() {
+    this.collectionSub = this.firestoreService
+      .collectionSnapshot$('users')
+      .pipe(
+        map((documents) => {
+          return documents.map(
+            (document) =>
+              new Employee(
+                this.empty(document['displayName'])
+                  ? 'Nie ustawiono'
+                  : document['displayName'],
+                document['email'],
+                this.empty(document['phoneNumber'])
+                  ? 'Nie ustawiono'
+                  : `+48${document['phoneNumber']}`,
+                document['roles'],
+                document['uid']
+              )
+          );
+        })
+      )
+      .subscribe((employees) => {
+        this.employees = employees;
+        if (this.firstCheck) {
+          this.loading = false;
+        }
+      });
   }
 
   async onPasswordReset(email: string) {
@@ -73,27 +84,42 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
     this.loading = false;
   }
 
+  userTriesToDeleteHisAccount(userUid: string) {
+    return userUid === this.auth.currentUser?.uid;
+  }
+
+  async deleteUser(userUid: string) {
+    const res: any = await this.authService.deleteUser(userUid);
+    return res.data.data as string;
+  }
+
   async onEmployeeDelete(userUid: string) {
     this.loading = true;
 
-    if (userUid === this.auth.currentUser?.uid) {
+    if (this.userTriesToDeleteHisAccount(userUid)) {
       this.toastService.error('Nie możesz usunąć swojego konta!');
       this.loading = false;
       return;
     }
 
     try {
-      const res: any = await this.authService.deleteUser(userUid);
-      if (res.data.data === 'Not enough permissions!') {
-        this.toastService.error('Nie posiadasz uprawnień!');
-      }
-      if (res.data.data === 'User successfully deleted!') {
-        this.toastService.success('Usunięto użytkownika!');
+      const status = await this.deleteUser(userUid);
+
+      switch (status) {
+        case 'Not enough permissions!':
+          this.toastService.error('Nie posiadasz uprawnień!');
+          break;
+
+        case 'User successfully deleted!':
+          this.toastService.success('Usunięto użytkownika!');
+          break;
+
+        default:
+          break;
       }
     } catch (error: any) {
       this.toastService.error(error.message);
     }
-
     this.loading = false;
   }
 
