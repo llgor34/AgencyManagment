@@ -40,13 +40,21 @@ export class ProjectComponent implements OnInit {
     return this.project.data.boards as Board;
   }
 
-  updateTasks = () => {
-    this.boardService.updateTasks(this.project.uid, this.boards);
-  };
+  get isAdmin() {
+    return this.authService.isAdmin();
+  }
+
+  async onProjectDelete() {
+    await this.projectsService.deleteProject(this.project.uid);
+  }
 
   async toggleProjectCompleteStatus() {
     await this.projectsService.toggleProjectCompleteStatus(this.project);
   }
+
+  updateTasks = () => {
+    this.boardService.updateTasks(this.project.uid, this.boards);
+  };
 
   onListDropped(event: CdkDragDrop<Task[]>) {
     transferArrayItem(
@@ -67,12 +75,4 @@ export class ProjectComponent implements OnInit {
 
     dialogRef.afterClosed().pipe(take(1)).subscribe(this.updateTasks);
   };
-
-  async onProjectDelete() {
-    await this.projectsService.deleteProject(this.project.uid);
-  }
-
-  get isAdmin() {
-    return this.authService.isAdmin();
-  }
 }
