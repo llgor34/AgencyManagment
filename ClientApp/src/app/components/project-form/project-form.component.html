@@ -10,9 +10,7 @@
       </header>
       <form
         class="mt-4 w-75 mx-auto"
-        (ngSubmit)="
-          mode === 'add' ? onSubmitNewProject() : onSubmitExistingProject()
-        "
+        (ngSubmit)="onSubmit()"
         [formGroup]="form"
       >
         <div class="mb-4">
@@ -78,6 +76,7 @@
             formControlName="template"
             *ngIf="mode === 'add'"
           >
+            <option value="" selected disabled>Wybierz template</option>
             <option value="none" selected>Brak template'u</option>
             <option
               [value]="projectTemplate.uid"

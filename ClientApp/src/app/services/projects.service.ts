@@ -6,6 +6,15 @@ import { FirestoreService } from './firestore.service';
 import { Project } from '../models/Projects';
 import { ToastService } from './toast.service';
 import { Board } from '../models/Board.model';
+import { Timestamp } from 'firebase/firestore';
+
+interface projectData {
+  title: string;
+  description: string;
+  dueDate: Date | Timestamp;
+  assignedUsers: string[];
+  boards: Board;
+}
 
 @Injectable({ providedIn: 'root' })
 export class ProjectsService {
@@ -17,56 +26,62 @@ export class ProjectsService {
     private router: Router
   ) {}
 
-  async createProject(data: {
-    title: string;
-    description: string;
-    dueDate: Date;
-    assignedUsers: string[];
-    boards: Board;
-  }) {
-    // Prepare info about project
+  private doesntHaveEnoughPermissions() {
+    if (!this.authService.isAdmin()) {
+      this.toastService.error('Nie posiadasz uprawnień!');
+      return true;
+    }
+    return false;
+  }
+
+  private handleSuccess(message: string) {
+    this.toastService.success(message);
+    this.router.navigate(['/projects']);
+  }
+
+  private handleError(error: any) {
+    this.toastService.error(error.message);
+  }
+
+  async createProject(data: projectData) {
     const newProject: Project = {
       title: data.title,
       description: data.description,
-      dueDate: this.firestoreService.getTimestamp(data.dueDate),
+      dueDate:
+        data.dueDate instanceof Date
+          ? this.firestoreService.getTimestamp(data.dueDate)
+          : data.dueDate,
       assignedUsers: data.assignedUsers,
       createdBy: this.auth.currentUser!.uid,
       completed: false,
       boards: data.boards,
     };
-    // Create project record
+
     await this.firestoreService.addDocument('projects', newProject);
   }
 
   async toggleProjectCompleteStatus(project: { uid: string; data: Project }) {
-    if (!this.authService.isAdmin()) {
-      this.toastService.error('Nie posiadasz uprawnień!');
-      return;
-    }
+    if (this.doesntHaveEnoughPermissions()) return;
+
     try {
       await this.firestoreService.updateDocument('projects', project.uid, {
         completed: !project.data.completed,
       });
 
-      this.toastService.success('Status projektu został zmieniony!');
-      this.router.navigate(['/projects']);
+      this.handleSuccess('Status projektu został zmieniony!');
     } catch (error: any) {
-      this.toastService.error(error.message);
+      this.handleError(error);
     }
   }
 
   async deleteProject(uid: string) {
-    if (!this.authService.isAdmin()) {
-      this.toastService.error('Nie posiadasz uprawnień!');
-      return;
-    }
+    if (this.doesntHaveEnoughPermissions()) return;
 
     try {
       await this.firestoreService.deleteDocument('projects', uid);
-      this.toastService.success('Usunięto projekt!');
-      this.router.navigateByUrl('/projects');
+      this.handleSuccess('Usunięto projekt!');
     } catch (error: any) {
-      this.toastService.error(error.message);
+      this.handleError(error);
     }
   }
 

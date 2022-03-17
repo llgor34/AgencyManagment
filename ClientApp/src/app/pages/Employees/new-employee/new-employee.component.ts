@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -10,6 +10,7 @@ import { ToastService } from 'src/app/services/toast.service';
   styleUrls: ['./new-employee.component.css'],
 })
 export class NewEmployeeComponent implements OnInit {
+  @ViewChild('form') form: NgForm;
   loading = false;
 
   constructor(
@@ -20,21 +21,30 @@ export class NewEmployeeComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  async onSubmit(form: NgForm) {
+  async updateNewUser() {
+    const { phoneNumber, displayName } = this.form.controls;
+    await this.authService.updateNewUser(phoneNumber.value, displayName.value);
+  }
+
+  handleSuccess() {
+    this.toastService.success('Dane zostały zaktualizowane!');
+    this.router.navigate(['/home']);
+  }
+
+  handleError(error: any) {
+    this.toastService.error(error.message);
+  }
+
+  async onSubmit() {
     this.loading = true;
-    const { phoneNumber, displayName } = form.form.controls;
 
     try {
-      await this.authService.updateNewUser(
-        phoneNumber.value,
-        displayName.value
-      );
-
-      this.toastService.success('Dane zostały zaktualizowane!');
-      this.router.navigate(['/employees']);
-    } catch (error: any) {
-      this.toastService.error(error.message);
+      await this.updateNewUser();
+      this.handleSuccess();
+    } catch (error) {
+      this.handleError(error);
     }
+
     this.loading = false;
   }
 }

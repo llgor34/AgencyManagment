@@ -6,7 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { first, firstValueFrom, Subscription, tap } from 'rxjs';
 import { ProjectTemplate } from 'src/app/models/ProjectTemplate.model';
 import { BoardService } from 'src/app/services/board.service';
 import { FirestoreService } from 'src/app/services/firestore.service';
@@ -36,12 +36,7 @@ export class ManageProjectTemplateFormComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.initializeForm();
     if (this.editMode) {
-      const sub = this.boardService
-        .getBoardsTemplates$()
-        .subscribe((temps: any) => {
-          this.templates = temps;
-        });
-      this.subs.push(sub);
+      this.getTemplatesAsync();
     }
     this.loading = false;
   }
@@ -52,11 +47,34 @@ export class ManageProjectTemplateFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateForm(e: any) {
-    this.selectedProjectTemplate = this.templates.filter(
+  getTemplatesAsync() {
+    const templateSub = this.boardService
+      .getBoardsTemplates$()
+      .subscribe((templates: any) => {
+        this.templates = templates;
+      });
+    this.subs.push(templateSub);
+  }
+
+  getCurrentTemplate(e: any) {
+    return this.templates.filter(
       (template) => template.uid === e.target.value
     )[0];
+  }
+
+  handleDeleteSuccess() {
+    this.toastService.success('Usunięto template!');
+    this.resetForm();
+  }
+
+  handleError(error: any) {
+    this.toastService.error(error.message);
+  }
+
+  updateForm(e: any) {
+    this.selectedProjectTemplate = this.getCurrentTemplate(e);
     this.form.controls['title'].setValue(this.selectedProjectTemplate.title);
+
     for (let task of this.selectedProjectTemplate.board.assignedTasks) {
       this.onAddTask(task.title, task.description, task.label);
     }
@@ -70,10 +88,9 @@ export class ManageProjectTemplateFormComponent implements OnInit, OnDestroy {
         'projectsTemplates',
         templateUid
       );
-      this.toastService.success('Usunięto template!');
-      this.resetForm();
-    } catch (error: any) {
-      this.toastService.error(error.message);
+      this.handleDeleteSuccess();
+    } catch (error) {
+      this.handleError(error);
     }
     this.loading = false;
   }
@@ -131,6 +148,26 @@ export class ManageProjectTemplateFormComponent implements OnInit, OnDestroy {
   resetForm() {
     this.tasksControlArray.clear();
     this.form.reset();
+    this.form.controls['templateName'].setValue('');
+  }
+
+  getAssignedTasks() {
+    return this.tasksControlArray.controls.map((control: any) => ({
+      title: control.controls.title.value,
+      description: control.controls.description.value,
+      label: control.controls.label.value,
+    }));
+  }
+
+  async updateBoardTemplate(projectTemplate: ProjectTemplate) {
+    await this.boardService.updateBoardTemplate(
+      this.selectedProjectTemplate.uid!,
+      projectTemplate
+    );
+  }
+
+  async postBoardTemplate(projectTemplate: ProjectTemplate) {
+    await this.boardService.createNewBoardTemplate(projectTemplate);
   }
 
   async onFormSubmit() {
@@ -139,11 +176,7 @@ export class ManageProjectTemplateFormComponent implements OnInit, OnDestroy {
     const projectTemplate: ProjectTemplate = {
       title: this.title.value,
       board: {
-        assignedTasks: this.tasksControlArray.controls.map((control: any) => ({
-          title: control.controls.title.value,
-          description: control.controls.description.value,
-          label: control.controls.label.value,
-        })),
+        assignedTasks: this.getAssignedTasks(),
         inProgressTasks: [],
         doneTasks: [],
       },
@@ -151,13 +184,10 @@ export class ManageProjectTemplateFormComponent implements OnInit, OnDestroy {
 
     try {
       if (this.editMode) {
-        await this.boardService.updateBoardTemplate(
-          this.selectedProjectTemplate.uid!,
-          projectTemplate
-        );
+        await this.updateBoardTemplate(projectTemplate);
         this.toastService.success('Zaktualizowano template!');
       } else {
-        await this.boardService.createNewBoardTemplate(projectTemplate);
+        await this.postBoardTemplate(projectTemplate);
         this.toastService.success('Dodano nowy template!');
       }
     } catch (error: any) {

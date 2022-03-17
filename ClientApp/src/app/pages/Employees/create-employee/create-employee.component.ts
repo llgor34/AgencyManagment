@@ -22,12 +22,16 @@ export class CreateEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
+    this.initializeForm();
+    this.loading = false;
+  }
+
+  initializeForm() {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       passwordConfirm: ['', [Validators.required, this.checkPasswordsValidity]],
     });
-    this.loading = false;
   }
 
   get password() {
@@ -60,23 +64,42 @@ export class CreateEmployeeComponent implements OnInit {
     return null;
   };
 
+  async createUser() {
+    const res: any = await this.authService.createUser(
+      this.email.value,
+      this.password.value
+    );
+
+    return res.data.data as string;
+  }
+
+  handleSuccess() {
+    this.form.reset();
+    this.toastService.success('Utworzono nowego użytkownika!');
+    this.router.navigate(['/manage-employees']);
+  }
+
+  handleError() {
+    this.toastService.error('Nie posiadasz wystarczających uprawnień!');
+    this.form.reset();
+  }
+
   async onSubmit() {
     this.loading = true;
     try {
-      const res: any = await this.authService.createUser(
-        this.email.value,
-        this.password.value
-      );
+      const status = await this.createUser();
 
-      if (res.data.data === 'User successfully created!') {
-        this.form.reset();
-        this.toastService.success('Utworzono nowego użytkownika!');
-        this.router.navigate(['/manage-employees']);
-      }
+      switch (status) {
+        case 'User successfully created!':
+          this.handleSuccess();
+          break;
 
-      if (res.data.data === 'Not enough permissions!') {
-        this.toastService.error('Nie posiadasz wystarczających uprawnień!');
-        this.form.reset();
+        case 'Not enough permissions!':
+          this.handleError();
+          break;
+
+        default:
+          break;
       }
     } catch (error: any) {
       this.toastService.error(error);

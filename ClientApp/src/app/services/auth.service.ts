@@ -37,8 +37,9 @@ export class AuthService {
     return await createUsr({ email, password });
   }
 
-  resetPassword(email: string) {
-    return sendPasswordResetEmail(this.auth, email);
+  async deleteUser(userUid: string) {
+    const delUser = httpsCallable(this.functions, 'deleteUser');
+    return await delUser({ userUid });
   }
 
   async updateNewUser(phoneNumber: string, displayName: string) {
@@ -53,9 +54,8 @@ export class AuthService {
     );
   }
 
-  async deleteUser(userUid: string) {
-    const delUser = httpsCallable(this.functions, 'deleteUser');
-    return await delUser({ userUid });
+  resetPassword(email: string) {
+    return sendPasswordResetEmail(this.auth, email);
   }
 
   isAdmin() {

@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,12 +7,22 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { Subscription } from 'rxjs';
+import { first, firstValueFrom, tap } from 'rxjs';
 import { FirestoreService } from 'src/app/services/firestore.service';
 import { Project } from 'src/app/models/Projects';
 import { ProjectsService } from 'src/app/services/projects.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { ProjectTemplate } from 'src/app/models/ProjectTemplate.model';
+import { Timestamp } from 'firebase/firestore';
+import { Board } from 'src/app/models/Board.model';
+
+interface ProjectToAdd {
+  title: string;
+  description: string;
+  dueDate: Timestamp;
+  assignedUsers: string[];
+  boards?: Board;
+}
 
 @Component({
   selector: 'app-project-form',
@@ -23,7 +32,6 @@ import { ProjectTemplate } from 'src/app/models/ProjectTemplate.model';
 export class ProjectFormComponent implements OnInit {
   @Input('mode') mode: 'add' | 'edit';
 
-  private subs: Subscription[] = [];
   loading = false;
   form: FormGroup;
   dropdownList: any[] = [];
@@ -35,7 +43,6 @@ export class ProjectFormComponent implements OnInit {
     private fb: FormBuilder,
     private firestoreService: FirestoreService,
     private projectsService: ProjectsService,
-    private auth: Auth,
     private toastService: ToastService,
     private router: Router,
     private route: ActivatedRoute
@@ -43,95 +50,23 @@ export class ProjectFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    const userSub = this.firestoreService
-      .collectionSnapshot$('users')
-      .subscribe((userDocs) => {
-        this.dropdownList = userDocs.map((userDoc) => ({
-          userUid: userDoc['uid'],
-          username: userDoc['displayName'],
-        }));
+    this.projectUid = this.route.snapshot.params['uid'];
 
-        this.projectUid = this.route.snapshot.params['uid'];
-        this.initializeForm();
-        this.loading = false;
-      });
-    this.subs.push(userSub);
-
-    if (this.mode === 'add') {
-      const projectTemplateSub = this.firestoreService
-        .collectionSnapshot$('projectsTemplates')
-        .subscribe((projectTemplates: any) => {
-          this.projectTemplates = projectTemplates;
-        });
-      this.subs.push(projectTemplateSub);
-    }
-  }
-
-  ngOnDestroy(): void {
-    for (let sub of this.subs) {
-      sub.unsubscribe();
-    }
+    firstValueFrom(this.fetchAllUsers()).then(async () => {
+      this.initializeForm();
+      if (this.mode === 'add') {
+        await firstValueFrom(this.fetchProjectsTemplates());
+      }
+      this.loading = false;
+    });
   }
 
   initializeForm() {
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'userUid',
-      textField: 'username',
-      selectAllText: 'Wybierz wszystkich',
-      unSelectAllText: 'Odznacz wszystkich',
-      itemsShowLimit: 3,
-      allowSearchFilter: true,
-      searchPlaceholderText: 'Szukaj...',
-      noDataAvailablePlaceholderText: 'brak użytkowników!',
-    };
-
-    const templateValidators = [];
-
-    if (this.mode === 'add') {
-      templateValidators.push(Validators.required);
-    }
-
-    this.form = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      dueDate: ['', Validators.required],
-      selectedUsers: [[], this.minOneUser],
-      template: ['', ...templateValidators],
-    });
+    this.createForm();
+    this.createDropdownSettings();
 
     if (this.mode === 'edit') {
-      this.firestoreService
-        .getDocument<Project>('projects', this.projectUid!)
-        .then((res) => {
-          const {
-            title,
-            description,
-            dueDate: _dueDate,
-            assignedUsers: _assignedUsers,
-          } = res.data;
-
-          const date = _dueDate.toDate();
-          const dueDate = `${date.getFullYear()}-${
-            date.getMonth() + 1 < 10
-              ? '0' + (date.getMonth() + 1)
-              : date.getMonth() + 1
-          }-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`;
-
-          const assignedUsers: any[] = [];
-          for (let user of _assignedUsers) {
-            assignedUsers.push(
-              this.dropdownList.filter(
-                (userList) => userList.userUid === user
-              )[0]
-            );
-          }
-
-          this.form.controls['title'].setValue(title);
-          this.form.controls['description'].setValue(description);
-          this.form.controls['dueDate'].setValue(dueDate);
-          this.form.controls['selectedUsers'].setValue(assignedUsers);
-        });
+      this.fetchCurrentProject();
     }
   }
 
@@ -158,57 +93,164 @@ export class ProjectFormComponent implements OnInit {
     return this.form.controls['selectedUsers'];
   }
 
-  async onSubmitNewProject() {
-    this.loading = true;
-    try {
-      await this.projectsService.createProject({
-        title: this.title.value,
-        description: this.description.value,
-        dueDate: new Date(this.dueDate.value),
-        assignedUsers: this.selectedUsers.value.map(
-          (selectedUser: any) => selectedUser['userUid']
-        ),
-        boards: {
-          assignedTasks:
-            this.mode === 'add' &&
-            this.form.controls['template'].value !== 'none'
-              ? this.projectTemplates.filter(
-                  (projectTemplate) =>
-                    projectTemplate.uid === this.form.controls['template'].value
-                )[0].board.assignedTasks
-              : [],
-          inProgressTasks: [],
-          doneTasks: [],
-        },
-      });
-      this.toastService.success('Dodano nowy projekt');
-      this.router.navigate(['/projects']);
-    } catch (error: any) {
-      this.toastService.error(error.message);
+  createForm() {
+    const templateValidators = [];
+
+    if (this.mode === 'add') {
+      templateValidators.push(Validators.required);
     }
 
-    this.loading = false;
+    this.form = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      dueDate: ['', Validators.required],
+      selectedUsers: [[], this.minOneUser],
+      template: ['', ...templateValidators],
+    });
   }
 
-  async onSubmitExistingProject() {
+  createDropdownSettings() {
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'userUid',
+      textField: 'username',
+      selectAllText: 'Wybierz wszystkich',
+      unSelectAllText: 'Odznacz wszystkich',
+      itemsShowLimit: 3,
+      allowSearchFilter: true,
+      searchPlaceholderText: 'Szukaj...',
+      noDataAvailablePlaceholderText: 'brak użytkowników!',
+    };
+  }
+
+  getFormatedDueDate(date: Date) {
+    return `${date.getFullYear()}-${
+      date.getMonth() + 1 < 10
+        ? '0' + (date.getMonth() + 1)
+        : date.getMonth() + 1
+    }-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`;
+  }
+
+  getAssignedUsers(usersUid: any[]) {
+    const assignedUsers: any[] = [];
+    for (let userUid of usersUid) {
+      assignedUsers.push(
+        this.dropdownList.filter((userList) => userList.userUid === userUid)[0]
+      );
+    }
+    return assignedUsers;
+  }
+
+  getAssignedUsersUid(users: { userUid: string; username: string }[]) {
+    return users.map((selectedUser) => selectedUser['userUid']);
+  }
+
+  getSelectedProjectTemplate() {
+    return this.projectTemplates.filter(
+      (projectTemplate) =>
+        projectTemplate.uid === this.form.controls['template'].value
+    )[0].board.assignedTasks;
+  }
+
+  getBoards() {
+    return {
+      assignedTasks:
+        this.mode === 'add' && this.form.controls['template'].value !== 'none'
+          ? this.getSelectedProjectTemplate()
+          : [],
+      inProgressTasks: [],
+      doneTasks: [],
+    };
+  }
+
+  fetchAllUsers() {
+    return this.firestoreService.collectionSnapshot$('users').pipe(
+      first(),
+      tap((userDocs) => {
+        this.dropdownList = userDocs.map((userDoc) => ({
+          userUid: userDoc['uid'],
+          username: userDoc['displayName'],
+        }));
+      })
+    );
+  }
+
+  fetchProjectsTemplates() {
+    return this.firestoreService.collectionSnapshot$('projectsTemplates').pipe(
+      first(),
+      tap((projectTemplates: any) => {
+        this.projectTemplates = projectTemplates;
+      })
+    );
+  }
+
+  fetchCurrentProject() {
+    this.firestoreService
+      .getDocument<Project>('projects', this.projectUid!)
+      .then((project) => {
+        const {
+          title,
+          description,
+          dueDate: _dueDate,
+          assignedUsers: usersUid,
+        } = project.data;
+
+        const notFormatedDueDate = _dueDate.toDate();
+        const formatedDueDate = this.getFormatedDueDate(notFormatedDueDate);
+        const assignedUsers = this.getAssignedUsers(usersUid);
+
+        this.form.controls['title'].setValue(title);
+        this.form.controls['description'].setValue(description);
+        this.form.controls['dueDate'].setValue(formatedDueDate);
+        this.form.controls['selectedUsers'].setValue(assignedUsers);
+      });
+  }
+
+  handleSuccess() {
+    this.toastService.success('Dodano nowy projekt');
+    this.router.navigate(['/projects']);
+  }
+
+  handleError(error: any) {
+    this.toastService.error(error.message);
+  }
+
+  async postProject(project: any) {
+    project.boards = this.getBoards();
+    await this.projectsService.createProject(project);
+  }
+
+  async updateProject(project: any) {
+    await this.firestoreService.updateDocument(
+      'projects',
+      this.projectUid!,
+      project
+    );
+  }
+
+  async onSubmit() {
     this.loading = true;
 
-    try {
-      await this.firestoreService.updateDocument('projects', this.projectUid!, {
-        title: this.title.value,
-        description: this.description.value,
-        dueDate: this.firestoreService.getTimestamp(
-          new Date(this.dueDate.value)
-        ),
-        assignedUsers: this.selectedUsers.value.map(
-          (selectedUser: any) => selectedUser['userUid']
-        ),
-      });
+    const project: ProjectToAdd = {
+      title: this.title.value,
+      description: this.description.value,
+      dueDate: this.firestoreService.getTimestamp(new Date(this.dueDate.value)),
+      assignedUsers: this.getAssignedUsersUid(this.selectedUsers.value),
+    };
 
-      this.toastService.success('Zaktualizowano projekt!');
-      this.router.navigate(['/projects']);
-    } catch (error: any) {
-      this.toastService.error(error.message);
+    try {
+      switch (this.mode) {
+        case 'add':
+          await this.postProject(project);
+          break;
+
+        case 'edit':
+          await this.updateProject(project);
+          break;
+      }
+      this.handleSuccess();
+    } catch (error) {
+      this.handleError(error);
     }
 
     this.loading = false;

@@ -31,6 +31,12 @@ export class ManageEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
+
+    this.initializeForm();
+    this.fetchUser().then(() => (this.loading = false));
+  }
+
+  initializeForm() {
     this.form = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -40,22 +46,17 @@ export class ManageEmployeeComponent implements OnInit {
       ],
       roles: this.fb.array([]),
     });
+  }
 
-    this.firestoreService
-      .getDocument('users', this.route.snapshot.params['uid'])
-      .then((res: UserDoc) => {
-        this.userDoc = res;
+  updateForm() {
+    const userData = this.userDoc.data;
+    for (const key in userData.roles) {
+      this.rolesControl.push(new FormControl(userData.roles[key]));
+    }
 
-        for (const key in res.data.roles) {
-          this.rolesControl.push(new FormControl(res.data.roles[key]));
-        }
-
-        this.form.controls['username'].setValue(res.data.displayName);
-        this.form.controls['email'].setValue(res.data.email);
-        this.form.controls['phoneNumber'].setValue(res.data.phoneNumber);
-
-        this.loading = false;
-      });
+    this.form.controls['username'].setValue(userData.displayName);
+    this.form.controls['email'].setValue(userData.email);
+    this.form.controls['phoneNumber'].setValue(userData.phoneNumber);
   }
 
   get rolesControl() {
@@ -78,10 +79,8 @@ export class ManageEmployeeComponent implements OnInit {
     return Object.keys(this.userDoc.data.roles)[idx];
   }
 
-  async onSubmit() {
-    this.loading = true;
-
-    const obj: any = {
+  getUserDoc() {
+    const userDoc: any = {
       displayName: this.usernameControl.value,
       email: this.emailControl.value,
       phoneNumber: this.phoneNumberControl.value,
@@ -89,20 +88,43 @@ export class ManageEmployeeComponent implements OnInit {
     };
 
     this.rolesControl.controls.forEach((control, index) => {
-      obj.roles[this.getRole(index)] = control.value;
+      userDoc.roles[this.getRole(index)] = control.value;
     });
 
+    return userDoc;
+  }
+
+  handleSuccess() {
+    this.toastService.success('Zaktualizowano dane!');
+    this.router.navigate(['/manage-employees']);
+  }
+
+  handleError(error: any) {
+    this.toastService.error(error.message);
+    this.form.reset();
+  }
+
+  async fetchUser() {
+    this.userDoc = await this.firestoreService.getDocument(
+      'users',
+      this.route.snapshot.params['uid']
+    );
+
+    this.updateForm();
+  }
+
+  async onSubmit() {
+    this.loading = true;
+    const updatedUserDoc = this.getUserDoc();
     try {
       await this.firestoreService.updateDocument(
         'users',
         this.userDoc.uid,
-        obj
+        updatedUserDoc
       );
-      this.toastService.success('Zaktualizowano dane!');
-      this.router.navigate(['/manage-employees']);
-    } catch (error: any) {
-      this.toastService.error(error.message);
-      this.form.reset();
+      this.handleSuccess();
+    } catch (error) {
+      this.handleError(error);
     }
     this.loading = false;
   }
