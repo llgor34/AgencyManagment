@@ -1,0 +1,22 @@
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Dodaj nowy template</mat-panel-title>
+      <mat-panel-description>
+        Umożliwia dodanie nowego template'u
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <app-manage-project-template-form></app-manage-project-template-form>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Edytuj template</mat-panel-title>
+      <mat-panel-description>
+        Umożliwia edycję wybranego template'u
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <app-manage-project-template-form
+      [editMode]="true"
+    ></app-manage-project-template-form>
+  </mat-expansion-panel>
+</mat-accordion>

@@ -72,6 +72,27 @@
             Proszę przydziel użytkowników
           </div>
         </div>
+        <div class="mb-4">
+          <select
+            class="form-select"
+            formControlName="template"
+            *ngIf="mode === 'add'"
+          >
+            <option value="none" selected>Brak template'u</option>
+            <option
+              [value]="projectTemplate.uid"
+              *ngFor="let projectTemplate of projectTemplates"
+            >
+              {{ projectTemplate.title }}
+            </option>
+          </select>
+          <div
+            class="form-text mt-3 error text-center"
+            *ngIf="selectedUsers.invalid && selectedUsers.touched"
+          >
+            Proszę przydziel użytkowników
+          </div>
+        </div>
         <button
           type="submit"
           class="btn btn-success w-100"
