@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription, tap } from 'rxjs';
 import { FirestoreService } from 'src/app/services/firestore.service';
 import { Project } from 'src/app/models/Projects';
 import { ProjectsService } from 'src/app/services/projects.service';
@@ -41,33 +41,29 @@ export class ProjectFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    const userSub = this.firestoreService
-      .collectionSnapshot$('users')
-      .subscribe((userDocs) => {
-        this.dropdownList = userDocs.map((userDoc) => ({
-          userUid: userDoc['uid'],
-          username: userDoc['displayName'],
-        }));
+    this.projectUid = this.route.snapshot.params['uid'];
 
-        this.projectUid = this.route.snapshot.params['uid'];
-        this.initializeForm();
-        this.loading = false;
-      });
-    this.subs.push(userSub);
-
-    if (this.mode === 'add') {
-      const projectTemplateSub = this.firestoreService
-        .collectionSnapshot$('projectsTemplates')
-        .subscribe((projectTemplates: any) => {
-          this.projectTemplates = projectTemplates;
-        });
-      this.subs.push(projectTemplateSub);
-    }
+    firstValueFrom(this.fetchAllUsers()).then(async () => {
+      this.initializeForm();
+      if (this.mode === 'add') {
+        await firstValueFrom(this.fetchProjectsTemplates());
+      }
+      this.loading = false;
+    });
   }
 
   ngOnDestroy(): void {
     for (let sub of this.subs) {
       sub.unsubscribe();
+    }
+  }
+
+  initializeForm() {
+    this.createForm();
+    this.createDropdownSettings();
+
+    if (this.mode === 'edit') {
+      this.fetchCurrentProject();
     }
   }
 
@@ -119,6 +115,25 @@ export class ProjectFormComponent implements OnInit {
     return assignedUsers;
   }
 
+  fetchAllUsers() {
+    return this.firestoreService.collectionSnapshot$('users').pipe(
+      tap((userDocs) => {
+        this.dropdownList = userDocs.map((userDoc) => ({
+          userUid: userDoc['uid'],
+          username: userDoc['displayName'],
+        }));
+      })
+    );
+  }
+
+  fetchProjectsTemplates() {
+    return this.firestoreService.collectionSnapshot$('projectsTemplates').pipe(
+      tap((projectTemplates: any) => {
+        this.projectTemplates = projectTemplates;
+      })
+    );
+  }
+
   fetchCurrentProject() {
     this.firestoreService
       .getDocument<Project>('projects', this.projectUid!)
@@ -139,15 +154,6 @@ export class ProjectFormComponent implements OnInit {
         this.form.controls['dueDate'].setValue(formatedDueDate);
         this.form.controls['selectedUsers'].setValue(assignedUsers);
       });
-  }
-
-  initializeForm() {
-    this.createForm();
-    this.createDropdownSettings();
-
-    if (this.mode === 'edit') {
-      this.fetchCurrentProject();
-    }
   }
 
   minOneUser = (control: AbstractControl) => {
