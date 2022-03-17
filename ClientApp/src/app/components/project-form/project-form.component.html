@@ -10,9 +10,7 @@
       </header>
       <form
         class="mt-4 w-75 mx-auto"
-        (ngSubmit)="
-          mode === 'add' ? onSubmitNewProject() : onSubmitExistingProject()
-        "
+        (ngSubmit)="onSubmit()"
         [formGroup]="form"
       >
         <div class="mb-4">

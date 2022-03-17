@@ -6,6 +6,7 @@ import { FirestoreService } from './firestore.service';
 import { Project } from '../models/Projects';
 import { ToastService } from './toast.service';
 import { Board } from '../models/Board.model';
+import { Timestamp } from 'firebase/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectsService {
@@ -20,7 +21,7 @@ export class ProjectsService {
   async createProject(data: {
     title: string;
     description: string;
-    dueDate: Date;
+    dueDate: Date | Timestamp;
     assignedUsers: string[];
     boards: Board;
   }) {
@@ -28,7 +29,10 @@ export class ProjectsService {
     const newProject: Project = {
       title: data.title,
       description: data.description,
-      dueDate: this.firestoreService.getTimestamp(data.dueDate),
+      dueDate:
+        data.dueDate instanceof Date
+          ? this.firestoreService.getTimestamp(data.dueDate)
+          : data.dueDate,
       assignedUsers: data.assignedUsers,
       createdBy: this.auth.currentUser!.uid,
       completed: false,

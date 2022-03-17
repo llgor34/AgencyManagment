@@ -13,6 +13,16 @@ import { Project } from 'src/app/models/Projects';
 import { ProjectsService } from 'src/app/services/projects.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { ProjectTemplate } from 'src/app/models/ProjectTemplate.model';
+import { Timestamp } from 'firebase/firestore';
+import { Board } from 'src/app/models/Board.model';
+
+interface ProjectToAdd {
+  title: string;
+  description: string;
+  dueDate: Timestamp;
+  assignedUsers: string[];
+  boards?: Board;
+}
 
 @Component({
   selector: 'app-project-form',
@@ -67,6 +77,29 @@ export class ProjectFormComponent implements OnInit {
     }
   }
 
+  minOneUser = (control: AbstractControl) => {
+    if (control.value.length < 1) {
+      return { noUserselected: true };
+    }
+    return null;
+  };
+
+  get title() {
+    return this.form.controls['title'];
+  }
+
+  get description() {
+    return this.form.controls['description'];
+  }
+
+  get dueDate() {
+    return this.form.controls['dueDate'];
+  }
+
+  get selectedUsers() {
+    return this.form.controls['selectedUsers'];
+  }
+
   createForm() {
     const templateValidators = [];
 
@@ -115,6 +148,28 @@ export class ProjectFormComponent implements OnInit {
     return assignedUsers;
   }
 
+  getAssignedUsersUid(users: { userUid: string; username: string }[]) {
+    return users.map((selectedUser) => selectedUser['userUid']);
+  }
+
+  getSelectedProjectTemplate() {
+    return this.projectTemplates.filter(
+      (projectTemplate) =>
+        projectTemplate.uid === this.form.controls['template'].value
+    )[0].board.assignedTasks;
+  }
+
+  getBoards() {
+    return {
+      assignedTasks:
+        this.mode === 'add' && this.form.controls['template'].value !== 'none'
+          ? this.getSelectedProjectTemplate()
+          : [],
+      inProgressTasks: [],
+      doneTasks: [],
+    };
+  }
+
   fetchAllUsers() {
     return this.firestoreService.collectionSnapshot$('users').pipe(
       tap((userDocs) => {
@@ -156,80 +211,51 @@ export class ProjectFormComponent implements OnInit {
       });
   }
 
-  minOneUser = (control: AbstractControl) => {
-    if (control.value.length < 1) {
-      return { noUserselected: true };
-    }
-    return null;
-  };
-
-  get title() {
-    return this.form.controls['title'];
+  handleSuccess() {
+    this.toastService.success('Dodano nowy projekt');
+    this.router.navigate(['/projects']);
   }
 
-  get description() {
-    return this.form.controls['description'];
+  handleError(error: any) {
+    this.toastService.error(error.message);
   }
 
-  get dueDate() {
-    return this.form.controls['dueDate'];
+  async postProject(project: any) {
+    project.boards = this.getBoards();
+    await this.projectsService.createProject(project);
   }
 
-  get selectedUsers() {
-    return this.form.controls['selectedUsers'];
+  async updateProject(project: any) {
+    await this.firestoreService.updateDocument(
+      'projects',
+      this.projectUid!,
+      project
+    );
   }
 
-  async onSubmitNewProject() {
-    this.loading = true;
-    try {
-      await this.projectsService.createProject({
-        title: this.title.value,
-        description: this.description.value,
-        dueDate: new Date(this.dueDate.value),
-        assignedUsers: this.selectedUsers.value.map(
-          (selectedUser: any) => selectedUser['userUid']
-        ),
-        boards: {
-          assignedTasks:
-            this.mode === 'add' &&
-            this.form.controls['template'].value !== 'none'
-              ? this.projectTemplates.filter(
-                  (projectTemplate) =>
-                    projectTemplate.uid === this.form.controls['template'].value
-                )[0].board.assignedTasks
-              : [],
-          inProgressTasks: [],
-          doneTasks: [],
-        },
-      });
-      this.toastService.success('Dodano nowy projekt');
-      this.router.navigate(['/projects']);
-    } catch (error: any) {
-      this.toastService.error(error.message);
-    }
-
-    this.loading = false;
-  }
-
-  async onSubmitExistingProject() {
+  async onSubmit() {
     this.loading = true;
 
-    try {
-      await this.firestoreService.updateDocument('projects', this.projectUid!, {
-        title: this.title.value,
-        description: this.description.value,
-        dueDate: this.firestoreService.getTimestamp(
-          new Date(this.dueDate.value)
-        ),
-        assignedUsers: this.selectedUsers.value.map(
-          (selectedUser: any) => selectedUser['userUid']
-        ),
-      });
+    const project: ProjectToAdd = {
+      title: this.title.value,
+      description: this.description.value,
+      dueDate: this.firestoreService.getTimestamp(new Date(this.dueDate.value)),
+      assignedUsers: this.getAssignedUsersUid(this.selectedUsers.value),
+    };
 
-      this.toastService.success('Zaktualizowano projekt!');
-      this.router.navigate(['/projects']);
-    } catch (error: any) {
-      this.toastService.error(error.message);
+    try {
+      switch (this.mode) {
+        case 'add':
+          await this.postProject(project);
+          break;
+
+        case 'edit':
+          await this.updateProject(project);
+          break;
+      }
+      this.handleSuccess();
+    } catch (error) {
+      this.handleError(error);
     }
 
     this.loading = false;
