@@ -1,76 +1,72 @@
-<div class="d-flex justify-content-center w-100 mt-3" *ngIf="loading">
-  <div
-    class="spinner-border text-primary"
-    role="status"
-    style="width: 2rem; height: 2rem"
-  ></div>
-</div>
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
 
-<form
-  class="mt-5 w-50 mx-auto"
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
-  *ngIf="!loading"
->
-  <h3 class="text-center mb-4">
-    Zarządzanie użytkownikiem <i>{{ userDoc.data.displayName }}</i>
-  </h3>
-  <div class="mb-4">
-    <input
-      placeholder="Imię i Nazwisko"
-      type="text"
-      class="form-control custom-form-control w-75 mx-auto"
-      formControlName="username"
-    />
-    <div
-      class="form-text mt-3 error text-center"
-      *ngIf="usernameControl.invalid && usernameControl.touched"
-    >
-      Proszę wprowadź Imię i Nazwisko
-    </div>
-  </div>
-  <div class="mb-4">
-    <input
-      placeholder="Email"
-      type="text"
-      class="form-control custom-form-control w-75 mx-auto"
-      formControlName="email"
-    />
-    <div
-      class="form-text mt-3 error text-center"
-      *ngIf="emailControl.invalid && emailControl.touched"
-    >
-      Proszę wprowadź poprawny adres email
-    </div>
-  </div>
-  <div class="mb-4">
-    <input
-      placeholder="Nr telefonu"
-      type="text"
-      class="form-control custom-form-control w-75 mx-auto"
-      formControlName="phoneNumber"
-    />
-    <div
-      class="form-text mt-3 error text-center"
-      *ngIf="phoneNumberControl.invalid && phoneNumberControl.touched"
-    >
-      Proszę wprowadź poprawny numer telefonu
-    </div>
-  </div>
-  <div class="mb-4" formArrayName="roles">
-    <div
-      class="form-check w-75 mx-auto"
-      *ngFor="let role of rolesControl.controls; let i = index"
-    >
-      <input class="form-check-input" type="checkbox" [formControlName]="i" />
-      <label class="form-check-label"> {{ getRole(i) }} </label>
-    </div>
-  </div>
-  <button
-    type="submit"
-    class="btn btn-success w-75 d-block mx-auto"
-    [disabled]="form.invalid"
+<div *ngIf="!loading">
+  <form
+    class="mt-5 w-50 mx-auto"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    *ngIf="!loading"
   >
-    Potwierdź
-  </button>
-</form>
+    <h3 class="text-center mb-4">
+      Zarządzanie użytkownikiem <i>{{ userDoc.data.displayName }}</i>
+    </h3>
+    <div class="mb-4">
+      <input
+        placeholder="Imię i Nazwisko"
+        type="text"
+        class="form-control custom-form-control w-75 mx-auto"
+        formControlName="username"
+      />
+      <div
+        class="form-text mt-3 error text-center"
+        *ngIf="usernameControl.invalid && usernameControl.touched"
+      >
+        Proszę wprowadź Imię i Nazwisko
+      </div>
+    </div>
+    <div class="mb-4">
+      <input
+        placeholder="Email"
+        type="text"
+        class="form-control custom-form-control w-75 mx-auto"
+        formControlName="email"
+      />
+      <div
+        class="form-text mt-3 error text-center"
+        *ngIf="emailControl.invalid && emailControl.touched"
+      >
+        Proszę wprowadź poprawny adres email
+      </div>
+    </div>
+    <div class="mb-4">
+      <input
+        placeholder="Nr telefonu"
+        type="text"
+        class="form-control custom-form-control w-75 mx-auto"
+        formControlName="phoneNumber"
+      />
+      <div
+        class="form-text mt-3 error text-center"
+        *ngIf="phoneNumberControl.invalid && phoneNumberControl.touched"
+      >
+        Proszę wprowadź poprawny numer telefonu
+      </div>
+    </div>
+    <div class="mb-4" formArrayName="roles">
+      <div
+        class="form-check w-75 mx-auto"
+        *ngFor="let role of rolesControl.controls; let i = index"
+      >
+        <input class="form-check-input" type="checkbox" [formControlName]="i" />
+        <label class="form-check-label"> {{ getRole(i) }} </label>
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="btn btn-success w-75 d-block mx-auto"
+      [disabled]="form.invalid"
+    >
+      Potwierdź
+    </button>
+  </form>
+</div>

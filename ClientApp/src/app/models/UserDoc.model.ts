@@ -10,3 +10,12 @@ export interface UserDoc {
     };
   };
 }
+
+export interface UserDocRaw {
+  displayName: string;
+  email: string;
+  newUser: boolean;
+  phoneNumber: string;
+  roles: { [role: string]: boolean };
+  uid: string;
+}

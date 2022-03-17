@@ -1,19 +1,10 @@
-<div class="d-flex justify-content-center w-100 my-2" *ngIf="loading">
-  <div
-    class="spinner-border text-primary"
-    role="status"
-    style="width: 3rem; height: 3rem"
-  ></div>
-</div>
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
 
-<table class="table table-hover cursor-pointer">
+<table class="table table-hover cursor-pointer" *ngIf="!loading">
   <thead>
     <tr>
       <td colspan="7" class="text-center fs-4 py-3 text-primary">
-        <span
-          routerLink="/create-employee"
-          class="add-user"
-          (click)="onAddUser()"
+        <span routerLink="/manage-employees/create-employee" class="add-user"
           >Dodaj użytkownika <app-plus-icon></app-plus-icon
         ></span>
       </td>

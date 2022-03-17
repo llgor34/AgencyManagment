@@ -1,0 +1,77 @@
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+<div *ngIf="!loading">
+  <div
+    class="d-flex w-100 align-items-center justify-content-center text-primary p-3 mb-0"
+  >
+    <div
+      *ngIf="isAdmin"
+      class="add-project d-flex align-items-center cursor-pointer"
+      style="column-gap: 10px"
+    >
+      <h1 class="fs-4 fw-normal d-block" routerLink="/projects/add-project">
+        Stwórz nowy projekt
+        <app-plus-icon></app-plus-icon>
+      </h1>
+    </div>
+  </div>
+  <div class="d-flex w-100 justify-content-center mb-4" *ngIf="isAdmin">
+    <div
+      class="btn-group"
+      role="group"
+      aria-label="Basic radio toggle button group"
+    >
+      <input
+        type="radio"
+        class="btn-check"
+        name="btnradio"
+        id="btnradio1"
+        autocomplete="off"
+        checked
+        (click)="filter = 'all'"
+      />
+      <label class="btn btn-outline-primary" for="btnradio1">Wszystkie</label>
+
+      <input
+        type="radio"
+        class="btn-check"
+        name="btnradio"
+        id="btnradio2"
+        autocomplete="off"
+        (click)="filter = 'completed'"
+      />
+      <label class="btn btn-outline-primary" for="btnradio2">Ukończone</label>
+    </div>
+  </div>
+  <div class="wrapper" *ngIf="projects.length > 0; else noProjects">
+    <div
+      class="border p-3 project-holder"
+      [ngClass]="{ completed: project.completed }"
+      *ngFor="let project of projects"
+      (click)="onProjectClick(project.uid!)"
+    >
+      <header class="mb-2">
+        <h2 class="fs-4 p-0">{{ project.title }}</h2>
+        <span>{{ project.dueDate.toDate() | date: "dd.MM.yyyy" }}</span>
+      </header>
+      <div class="mb-2">
+        {{ project.description }}
+      </div>
+      <footer>
+        <h3 class="fs-5 mt-3">Przydzielony do:</h3>
+
+        <ul class="list-group">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let assignedUser of project.assignedUsers; let i = index"
+          >
+            {{ assignedUser.data.displayName }}
+          </li>
+        </ul>
+      </footer>
+    </div>
+  </div>
+  <ng-template #noProjects>
+    <div class="text-center">Brak projektów!</div>
+  </ng-template>
+</div>

@@ -7,14 +7,14 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { switchMap, of } from 'rxjs';
-import { FirestoreService } from '../shared/firestore.service';
-import { ToastService } from '../shared/toast.service';
-import { UserDoc } from '../shared/UserDoc.model';
+import { FirestoreService } from '../services/firestore.service';
+import { ToastService } from '../services/toast.service';
+import { UserDoc } from '../models/UserDoc.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class OnlyNewEmployeeGuard implements CanActivate {
+export class NewEmployeeGuard implements CanActivate {
   constructor(
     private auth: Auth,
     private router: Router,
@@ -30,11 +30,12 @@ export class OnlyNewEmployeeGuard implements CanActivate {
             .getDocument('users', user.uid)
             .then((doc: UserDoc) => {
               if (doc.data.newUser) {
-                return true;
-              } else {
-                this.toast.error('Dane zostały już wypełnione!');
-                return this.router.createUrlTree(['/home']);
+                this.toast.error(
+                  'Aby korzystać z tej strony, wypełnij poniższe informacje!'
+                );
+                return this.router.createUrlTree(['/new-employee']);
               }
+              return true;
             });
         } else {
           return of(false);

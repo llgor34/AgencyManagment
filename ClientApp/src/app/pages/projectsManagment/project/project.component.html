@@ -1,0 +1,49 @@
+<app-loading-spinner *ngIf="!project"></app-loading-spinner>
+
+<div class="container p-4 w-100" *ngIf="project">
+  <h1 class="py-4 header d-flex justify-content-around">
+    <div>
+      {{ project.data.title }}
+    </div>
+    <div class="d-flex" style="gap: 10px" *ngIf="isAdmin">
+      <app-button color="secondary" (submitted)="onProjectDelete()"
+        >Usuń</app-button
+      >
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [routerLink]="['/projects', 'edit-project', project.uid]"
+      >
+        Edytuj
+      </button>
+      <button
+        class="btn btn-sm btn-outline-success"
+        (click)="toggleProjectCompleteStatus()"
+      >
+        {{
+          project.data.completed
+            ? "Oznacz jako niewykonany"
+            : "Oznacz jako wykonany"
+        }}
+      </button>
+    </div>
+  </h1>
+
+  <div class="boards-container mt-4" cdkDropListGroup>
+    <app-board
+      [tasks]="boards.assignedTasks"
+      (onDialogOpen)="openDialog($event)"
+      (onListDropped)="onListDropped($event)"
+    ></app-board>
+    <app-board
+      [tasks]="boards.inProgressTasks"
+      (onDialogOpen)="openDialog($event)"
+      (onListDropped)="onListDropped($event)"
+    ></app-board>
+    <app-board
+      [tasks]="boards.doneTasks"
+      (onDialogOpen)="openDialog($event)"
+      (onListDropped)="onListDropped($event)"
+      [completed]="true"
+    ></app-board>
+  </div>
+</div>

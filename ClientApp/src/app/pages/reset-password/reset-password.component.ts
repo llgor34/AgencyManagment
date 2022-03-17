@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/auth/auth.service';
-import { ToastService } from 'src/app/shared/toast.service';
-import { UserCredentials } from 'src/app/shared/UserCredientials.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { ToastService } from 'src/app/services/toast.service';
+import { UserCredentials } from 'src/app/models/UserCredientials.model';
 
 @Component({
   selector: 'app-reset-password',

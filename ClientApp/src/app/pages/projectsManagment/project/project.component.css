@@ -1,0 +1,12 @@
+.header {
+  background-color: aliceblue;
+  width: 100%;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.boards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 25px;
+}

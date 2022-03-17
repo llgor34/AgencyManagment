@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserCredentials } from 'src/app/shared/UserCredientials.model';
+import { UserCredentials } from 'src/app/models/UserCredientials.model';
 
 @Component({
   selector: 'app-form',

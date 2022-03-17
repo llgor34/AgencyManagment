@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FirestoreService } from 'src/app/shared/firestore.service';
-import { UserDoc } from 'src/app/shared/UserDoc.model';
+import { FirestoreService } from 'src/app/services/firestore.service';
+import { UserDoc } from 'src/app/models/UserDoc.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormArray,
@@ -9,7 +9,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ToastService } from 'src/app/shared/toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-manage-employee',

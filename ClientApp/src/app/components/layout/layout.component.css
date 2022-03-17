@@ -40,7 +40,7 @@ ul {
 }
 
 ul li {
-  padding: 10px;
+  padding: 20px;
   border-radius: 5px;
   transition: 0.3s;
 }
@@ -55,4 +55,30 @@ a {
   font-size: inherit;
   color: inherit;
   text-decoration: inherit;
+}
+
+.text-left li {
+  text-align: left !important;
+}
+
+@media only screen and (max-width: 1100px) {
+  .shrink {
+    font-size: 0.6em;
+  }
+}
+
+@media only screen and (max-width: 847px) {
+  .shrink {
+    font-size: 0.5em;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .shrink {
+    display: none;
+  }
+
+  ul li {
+    text-align: center;
+  }
 }

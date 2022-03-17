@@ -4,7 +4,7 @@
   </div>
 </nav>
 
-<div class="container mx-3 mt-3" style="min-width: 98vw; height: 85vh">
+<div class="container mx-3 mt-3" style="min-width: 98vw; height: 86vh">
   <div class="row w-100 h-100">
     <nav
       class="sidenav col-2 rounded-3 py-3 h-100 d-flex flex-column align-items-center"
@@ -18,27 +18,43 @@
         />
         <h2 class="username mb-2">{{ user.email }}</h2>
         <h3 class="roles mb-3" *ngIf="userDoc">
-          {{ userDoc.data.roles | getRoles }}
+          {{ userDoc.roles | getRoles }}
+          <button
+            class="btn btn-primary btn-sm d-block mx-auto mt-2"
+            (click)="logout()"
+          >
+            Wyloguj się
+          </button>
         </h3>
       </div>
 
-      <ul class="flex-grow-1 d-flex flex-column justify-content-evenly w-100">
-        <li routerLinkActive="active" routerLink="/home">🏠 Start</li>
-        <li routerLinkActive="active" routerLink="/manage-employees">
-          🔐 Zarządzanie pracownikami
+      <ul
+        class="flex-grow-1 d-flex flex-column justify-content-evenly w-100 text-left"
+      >
+        <li routerLinkActive="active" routerLink="/home">
+          🏠<span class="shrink"> Start</span>
         </li>
-        <li>💾 Projekty</li>
-        <li>📅 Kalendarz</li>
+        <li
+          routerLinkActive="active"
+          routerLink="/manage-employees"
+          *ngIf="isAdmin"
+        >
+          🔐<span class="shrink"> Zarządzanie pracownikami</span>
+        </li>
+        <li routerLinkActive="active" routerLink="/projects">
+          💾<span class="shrink"> Projekty</span>
+        </li>
+        <li>📅<span class="shrink"> Kalendarz</span></li>
+
+        <span class="line-break" *ngIf="isAdmin"></span>
+
+        <li *ngIf="isAdmin">⚙<span class="shrink"> Administracja</span></li>
+        <li>📖<span class="shrink"> Instrukcja</span></li>
         <span class="line-break"></span>
-        <li>⚙ Administracja</li>
-        <li>✉ Chat - stajenni</li>
-        <li>✉ Chat - klienci</li>
-        <span class="line-break"></span>
-        <li>📖 Instrukcja</li>
       </ul>
     </nav>
 
-    <main class="shadow-lg col-10">
+    <main class="shadow-lg col-10 mh-100 overflow-auto">
       <router-outlet></router-outlet>
     </main>
   </div>

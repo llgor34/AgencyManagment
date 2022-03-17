@@ -8,7 +8,12 @@ import {
   collectionData,
   query,
   collection,
+  addDoc,
+  Timestamp,
+  deleteDoc,
+  where,
 } from '@angular/fire/firestore';
+import { WhereFilterOp } from 'firebase/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
@@ -19,11 +24,20 @@ export class FirestoreService {
     return setDoc(docRef, data);
   }
 
-  async getDocument(col: string, docName: string) {
+  async getDocument<T = any>(col: string, docName: string) {
     const docRef = doc(this.firestore, col, docName);
     const fetchedDoc = await getDoc(docRef);
 
-    return { uid: fetchedDoc.id, data: fetchedDoc.data() as any };
+    return { uid: fetchedDoc.id as string, data: fetchedDoc.data() as T };
+  }
+
+  async deleteDocument(col: string, docName: string) {
+    await deleteDoc(doc(this.firestore, col, docName));
+  }
+
+  async addDocument(col: string, data: any) {
+    const colRef = collection(this.firestore, col);
+    await addDoc(colRef, data);
   }
 
   async updateDocument(col: string, docName: string, data: any) {
@@ -31,9 +45,23 @@ export class FirestoreService {
     await updateDoc(docRef, data);
   }
 
+  getTimestamp(date: Date | string) {
+    if (typeof date === 'string') {
+      return Timestamp.fromDate(new Date(date));
+    }
+    return Timestamp.fromDate(date);
+  }
+
   collectionSnapshot$(col: string) {
     const colRef = collection(this.firestore, col);
     const q = query(colRef);
+
+    return collectionData(q, { idField: 'uid' });
+  }
+
+  collectionQuery$(col: string, whereQ: [string, WhereFilterOp, string]) {
+    const colRef = collection(this.firestore, col);
+    const q = query(colRef, where(...whereQ));
 
     return collectionData(q, { idField: 'uid' });
   }

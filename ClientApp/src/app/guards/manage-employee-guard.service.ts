@@ -4,10 +4,9 @@ import {
   CanActivate,
   Router,
   RouterStateSnapshot,
-  UrlTree,
 } from '@angular/router';
-import { FirestoreService } from '../shared/firestore.service';
-import { ToastService } from '../shared/toast.service';
+import { FirestoreService } from '../services/firestore.service';
+import { ToastService } from '../services/toast.service';
 
 @Injectable({
   providedIn: 'root',
