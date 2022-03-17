@@ -18,18 +18,36 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  handleSuccess() {
+    this.toastService.success('Wiadomość z instrukcją została wysłana!');
+  }
+
+  handleError(error: any) {
+    switch (error.message) {
+      case 'Firebase: Error (auth/user-not-found).':
+        this.toastService.error('Konto z takim adresem email nie istnieje!');
+        break;
+
+      default:
+        this.toastService.error(error.message);
+        break;
+    }
+  }
+
+  async resetPassword(data: UserCredentials) {
+    await this.authService.resetPassword(data.email);
+  }
+
   async onSubmit(data: UserCredentials) {
     this.loading = true;
+
     try {
-      await this.authService.resetPassword(data.email);
-      this.toastService.success('Wiadomość z instrukcją została wysłana!');
+      await this.resetPassword(data);
+      this.handleSuccess();
     } catch (error: any) {
-      if (error.message === 'Firebase: Error (auth/user-not-found).') {
-        this.toastService.error('Konto z takim adresem email nie istnieje!');
-      } else {
-        this.toastService.error(error.message);
-      }
+      this.handleError(error);
     }
+
     this.loading = false;
   }
 }
