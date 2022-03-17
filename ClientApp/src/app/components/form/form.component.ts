@@ -21,8 +21,6 @@ export class FormComponent implements OnInit {
 
   private initializeForm() {
     const passwordValidators = [];
-    const passwordConfirmValidators = [];
-
     if (this.mode === 'login') {
       passwordValidators.push(Validators.required);
       passwordValidators.push(Validators.minLength(6));
