@@ -119,30 +119,34 @@ export class ProjectFormComponent implements OnInit {
     return assignedUsers;
   }
 
+  fetchCurrentProject() {
+    this.firestoreService
+      .getDocument<Project>('projects', this.projectUid!)
+      .then((project) => {
+        const {
+          title,
+          description,
+          dueDate: _dueDate,
+          assignedUsers: usersUid,
+        } = project.data;
+
+        const notFormatedDueDate = _dueDate.toDate();
+        const formatedDueDate = this.getFormatedDueDate(notFormatedDueDate);
+        const assignedUsers = this.getAssignedUsers(usersUid);
+
+        this.form.controls['title'].setValue(title);
+        this.form.controls['description'].setValue(description);
+        this.form.controls['dueDate'].setValue(formatedDueDate);
+        this.form.controls['selectedUsers'].setValue(assignedUsers);
+      });
+  }
+
   initializeForm() {
     this.createForm();
     this.createDropdownSettings();
 
     if (this.mode === 'edit') {
-      this.firestoreService
-        .getDocument<Project>('projects', this.projectUid!)
-        .then((project) => {
-          const {
-            title,
-            description,
-            dueDate: _dueDate,
-            assignedUsers: usersUid,
-          } = project.data;
-
-          const notFormatedDueDate = _dueDate.toDate();
-          const formatedDueDate = this.getFormatedDueDate(notFormatedDueDate);
-          const assignedUsers = this.getAssignedUsers(usersUid);
-
-          this.form.controls['title'].setValue(title);
-          this.form.controls['description'].setValue(description);
-          this.form.controls['dueDate'].setValue(formatedDueDate);
-          this.form.controls['selectedUsers'].setValue(assignedUsers);
-        });
+      this.fetchCurrentProject();
     }
   }
 
