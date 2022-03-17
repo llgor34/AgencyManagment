@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
 import {
   AbstractControl,
   FormBuilder,
@@ -35,7 +34,6 @@ export class ProjectFormComponent implements OnInit {
     private fb: FormBuilder,
     private firestoreService: FirestoreService,
     private projectsService: ProjectsService,
-    private auth: Auth,
     private toastService: ToastService,
     private router: Router,
     private route: ActivatedRoute
@@ -73,19 +71,7 @@ export class ProjectFormComponent implements OnInit {
     }
   }
 
-  initializeForm() {
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'userUid',
-      textField: 'username',
-      selectAllText: 'Wybierz wszystkich',
-      unSelectAllText: 'Odznacz wszystkich',
-      itemsShowLimit: 3,
-      allowSearchFilter: true,
-      searchPlaceholderText: 'Szukaj...',
-      noDataAvailablePlaceholderText: 'brak użytkowników!',
-    };
-
+  createForm() {
     const templateValidators = [];
 
     if (this.mode === 'add') {
@@ -99,37 +85,62 @@ export class ProjectFormComponent implements OnInit {
       selectedUsers: [[], this.minOneUser],
       template: ['', ...templateValidators],
     });
+  }
+
+  createDropdownSettings() {
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'userUid',
+      textField: 'username',
+      selectAllText: 'Wybierz wszystkich',
+      unSelectAllText: 'Odznacz wszystkich',
+      itemsShowLimit: 3,
+      allowSearchFilter: true,
+      searchPlaceholderText: 'Szukaj...',
+      noDataAvailablePlaceholderText: 'brak użytkowników!',
+    };
+  }
+
+  getFormatedDueDate(date: Date) {
+    return `${date.getFullYear()}-${
+      date.getMonth() + 1 < 10
+        ? '0' + (date.getMonth() + 1)
+        : date.getMonth() + 1
+    }-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`;
+  }
+
+  getAssignedUsers(usersUid: any[]) {
+    const assignedUsers: any[] = [];
+    for (let userUid of usersUid) {
+      assignedUsers.push(
+        this.dropdownList.filter((userList) => userList.userUid === userUid)[0]
+      );
+    }
+    return assignedUsers;
+  }
+
+  initializeForm() {
+    this.createForm();
+    this.createDropdownSettings();
 
     if (this.mode === 'edit') {
       this.firestoreService
         .getDocument<Project>('projects', this.projectUid!)
-        .then((res) => {
+        .then((project) => {
           const {
             title,
             description,
             dueDate: _dueDate,
-            assignedUsers: _assignedUsers,
-          } = res.data;
+            assignedUsers: usersUid,
+          } = project.data;
 
-          const date = _dueDate.toDate();
-          const dueDate = `${date.getFullYear()}-${
-            date.getMonth() + 1 < 10
-              ? '0' + (date.getMonth() + 1)
-              : date.getMonth() + 1
-          }-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`;
-
-          const assignedUsers: any[] = [];
-          for (let user of _assignedUsers) {
-            assignedUsers.push(
-              this.dropdownList.filter(
-                (userList) => userList.userUid === user
-              )[0]
-            );
-          }
+          const notFormatedDueDate = _dueDate.toDate();
+          const formatedDueDate = this.getFormatedDueDate(notFormatedDueDate);
+          const assignedUsers = this.getAssignedUsers(usersUid);
 
           this.form.controls['title'].setValue(title);
           this.form.controls['description'].setValue(description);
-          this.form.controls['dueDate'].setValue(dueDate);
+          this.form.controls['dueDate'].setValue(formatedDueDate);
           this.form.controls['selectedUsers'].setValue(assignedUsers);
         });
     }

@@ -78,6 +78,7 @@
             formControlName="template"
             *ngIf="mode === 'add'"
           >
+            <option value="" selected disabled>Wybierz template</option>
             <option value="none" selected>Brak template'u</option>
             <option
               [value]="projectTemplate.uid"
