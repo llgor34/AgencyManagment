@@ -32,35 +32,6 @@ export class TaskDialogComponent implements OnInit {
     }
   }
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-  onSubmit() {
-    if (!this.editMode) {
-      this.data.tasks.push({
-        title: this.titleControl.value,
-        description: this.descriptionControl.value,
-        label: this.labelControl.value,
-      });
-      this.dialogRef.close();
-    } else {
-      this.data.task!.title = this.titleControl.value;
-      this.data.task!.description = this.descriptionControl.value;
-      this.data.task!.label = this.labelControl.value;
-      this.dialogRef.close();
-    }
-  }
-
-  deleteTask() {
-    const index = this.data.tasks.indexOf(this.data.task!);
-    this.data.tasks.splice(index, 1);
-    // this.data.tasks = this.data.tasks.filter(
-    //   (task, taskIndex) => taskIndex !== index
-    // );
-    this.dialogRef.close();
-  }
-
   get titleControl() {
     return this.form?.controls['title'];
   }
@@ -71,5 +42,38 @@ export class TaskDialogComponent implements OnInit {
 
   get labelControl() {
     return this.form?.controls['label'];
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  addNewTask() {
+    this.data.tasks.push({
+      title: this.titleControl.value,
+      description: this.descriptionControl.value,
+      label: this.labelControl.value,
+    });
+  }
+
+  updateCurrentTask() {
+    this.data.task!.title = this.titleControl.value;
+    this.data.task!.description = this.descriptionControl.value;
+    this.data.task!.label = this.labelControl.value;
+  }
+
+  deleteTask() {
+    const index = this.data.tasks.indexOf(this.data.task!);
+    this.data.tasks.splice(index, 1);
+    this.dialogRef.close();
+  }
+
+  onSubmit() {
+    if (this.editMode) {
+      this.updateCurrentTask();
+    } else {
+      this.addNewTask();
+    }
+    this.dialogRef.close();
   }
 }
