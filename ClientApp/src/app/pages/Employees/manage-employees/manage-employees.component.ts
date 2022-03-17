@@ -26,13 +26,6 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
-  private empty(text: string) {
-    if (text) {
-      return text.trim().length === 0;
-    }
-    return true;
-  }
-
   ngOnInit(): void {
     this.loading = true;
     this.fetchUsers();
@@ -40,6 +33,13 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.collectionSub.unsubscribe();
+  }
+
+  private empty(text: string) {
+    if (text) {
+      return text.trim().length === 0;
+    }
+    return true;
   }
 
   fetchUsers() {
@@ -71,6 +71,15 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
       });
   }
 
+  userTriesToDeleteHisAccount(userUid: string) {
+    return userUid === this.auth.currentUser?.uid;
+  }
+
+  async deleteEmployee(userUid: string) {
+    const res: any = await this.authService.deleteUser(userUid);
+    return res.data.data as string;
+  }
+
   async onPasswordReset(email: string) {
     this.loading = true;
     try {
@@ -84,15 +93,6 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
     this.loading = false;
   }
 
-  userTriesToDeleteHisAccount(userUid: string) {
-    return userUid === this.auth.currentUser?.uid;
-  }
-
-  async deleteUser(userUid: string) {
-    const res: any = await this.authService.deleteUser(userUid);
-    return res.data.data as string;
-  }
-
   async onEmployeeDelete(userUid: string) {
     this.loading = true;
 
@@ -103,7 +103,7 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
     }
 
     try {
-      const status = await this.deleteUser(userUid);
+      const status = await this.deleteEmployee(userUid);
 
       switch (status) {
         case 'Not enough permissions!':
