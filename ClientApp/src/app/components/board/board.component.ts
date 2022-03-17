@@ -8,6 +8,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
   styleUrls: ['./board.component.css'],
 })
 export class BoardComponent implements OnInit {
+  @Input('label') label: string | null;
   @Input('tasks') tasks: Task[];
   @Output('onDialogOpen') dialogOpen = new EventEmitter<{
     tasks: Task[];

@@ -33,17 +33,20 @@
       [tasks]="boards.assignedTasks"
       (onDialogOpen)="openDialog($event)"
       (onListDropped)="onListDropped($event)"
+      label="Przydzielone"
     ></app-board>
     <app-board
       [tasks]="boards.inProgressTasks"
       (onDialogOpen)="openDialog($event)"
       (onListDropped)="onListDropped($event)"
+      label="W trakcie"
     ></app-board>
     <app-board
       [tasks]="boards.doneTasks"
       (onDialogOpen)="openDialog($event)"
       (onListDropped)="onListDropped($event)"
       [completed]="true"
+      label="Ukończone"
     ></app-board>
   </div>
 </div>
