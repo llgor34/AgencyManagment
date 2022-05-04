@@ -10,7 +10,7 @@
 # How to run
 To start project, run `npm start`
 
-#🎇 Main Features
+# 🎇 Main Features
 🔐 Auth
   - 🔒 Login Panel
   - ❔ Remind password Panel
