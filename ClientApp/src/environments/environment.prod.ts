@@ -1,12 +1,11 @@
 export const environment = {
   firebase: {
-    projectId: 'agency-managment',
-    appId: '1:214757078925:web:e95c69211a78ab8d526fc4',
-    storageBucket: 'agency-managment.appspot.com',
-    locationId: 'europe-west',
-    apiKey: 'AIzaSyAM_maJ-7SxM71_XbI_r19KB91vk_1JvcY',
-    authDomain: 'agency-managment.firebaseapp.com',
-    messagingSenderId: '214757078925',
+    apiKey: 'AIzaSyCjbNFWfcZc8opd8sinndfsBAv8CmkOETA',
+    authDomain: 'agencymanagment-90e3c.firebaseapp.com',
+    projectId: 'agencymanagment-90e3c',
+    storageBucket: 'agencymanagment-90e3c.appspot.com',
+    messagingSenderId: '958987075282',
+    appId: '1:958987075282:web:0f68a46c448e52a51ab70b',
   },
   production: true,
 };
