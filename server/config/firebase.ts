@@ -1,10 +1,12 @@
-import { initializeApp, credential } from 'firebase-admin';
+import admin from 'firebase-admin';
+import firebaseAccountCredentials from './service-account-token.json';
 import 'firebase-admin/firestore';
 import 'firebase-admin/auth';
 
-const serviceAccount = require('./service-account-token.json');
-export const app = initializeApp({
-  credential: credential.cert(serviceAccount),
+const serviceAccount = firebaseAccountCredentials as admin.ServiceAccount;
+
+export const app = admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
 });
 
 export const projectFirestore = app.firestore();
