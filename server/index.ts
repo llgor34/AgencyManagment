@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from 'express';
+import express from 'express';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (req, res) => {
   res.send('Express + TypeScript Server');
 });
 
