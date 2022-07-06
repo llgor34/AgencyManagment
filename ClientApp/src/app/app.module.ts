@@ -8,6 +8,7 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideFunctions, getFunctions } from '@angular/fire/functions';
 import { SharedModule } from './shared/shared.module';
+import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
@@ -22,6 +23,7 @@ import { LayoutComponent } from './components/layout/layout.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
+    HttpClientModule,
     ToastrModule.forRoot(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
