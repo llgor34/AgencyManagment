@@ -8,13 +8,15 @@ import {
 import { FirestoreService } from './firestore.service';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { UserDocRaw } from '../models/UserDoc.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   constructor(
     private auth: Auth,
     private firestoreService: FirestoreService,
-    private functions: Functions
+    private functions: Functions,
+    private http: HttpClient
   ) {}
 
   async login(email: string, password: string) {
@@ -32,14 +34,23 @@ export class AuthService {
     return await this.auth.signOut();
   }
 
-  async createUser(email: string, password: string) {
-    const createUsr = httpsCallable(this.functions, 'createUser');
-    return await createUsr({ email, password });
+  createUser(email: string, password: string) {
+    // const createUsr = httpsCallable(this.functions, 'createUser');
+    // return await createUsr({ email, password });
+    return this.http.post('/api/functions/createUser', {
+      email,
+      password,
+      userUid: this.auth.currentUser!.uid,
+    });
   }
 
-  async deleteUser(userUid: string) {
-    const delUser = httpsCallable(this.functions, 'deleteUser');
-    return await delUser({ userUid });
+  deleteUser(userToDeleteUid: string) {
+    // const delUser = httpsCallable(this.functions, 'deleteUser');
+    // return await delUser({ userUid });
+    return this.http.post('/api/functions/deleteUser', {
+      userToDeleteUid,
+      userUid: this.auth.currentUser!.uid,
+    });
   }
 
   async updateNewUser(phoneNumber: string, displayName: string) {

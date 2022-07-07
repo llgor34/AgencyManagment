@@ -75,9 +75,15 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
     return userUid === this.auth.currentUser?.uid;
   }
 
-  async deleteEmployee(userUid: string) {
-    const res: any = await this.authService.deleteUser(userUid);
-    return res.data.data as string;
+  deleteEmployee(userUid: string) {
+    this.authService.deleteUser(userUid).subscribe((res: any) => {
+      this.loading = false;
+      if (res.status === 'success') {
+        this.toastService.success('Usunięto użytkownika!');
+        return;
+      }
+      this.toastService.error('Nie posiadasz uprawnień!');
+    });
   }
 
   async onPasswordReset(email: string) {
@@ -93,7 +99,7 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
     this.loading = false;
   }
 
-  async onEmployeeDelete(userUid: string) {
+  onEmployeeDelete(userUid: string) {
     this.loading = true;
 
     if (this.userTriesToDeleteHisAccount(userUid)) {
@@ -102,25 +108,7 @@ export class ManageEmployeesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    try {
-      const status = await this.deleteEmployee(userUid);
-
-      switch (status) {
-        case 'Not enough permissions!':
-          this.toastService.error('Nie posiadasz uprawnień!');
-          break;
-
-        case 'User successfully deleted!':
-          this.toastService.success('Usunięto użytkownika!');
-          break;
-
-        default:
-          break;
-      }
-    } catch (error: any) {
-      this.toastService.error(error.message);
-    }
-    this.loading = false;
+    this.deleteEmployee(userUid);
   }
 
   onClick(event: any, userUid: string) {
