@@ -64,13 +64,19 @@ export class CreateEmployeeComponent implements OnInit {
     return null;
   };
 
-  async createUser() {
-    const res: any = await this.authService.createUser(
-      this.email.value,
-      this.password.value
-    );
+  createUser() {
+    this.loading = true;
+    this.authService
+      .createUser(this.email.value, this.password.value)
+      .subscribe((res: any) => {
+        this.loading = false;
 
-    return res.data.data as string;
+        if (res.status === 'success') {
+          this.handleSuccess();
+          return;
+        }
+        this.handleError();
+      });
   }
 
   handleSuccess() {
@@ -85,25 +91,6 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
   async onSubmit() {
-    this.loading = true;
-    try {
-      const status = await this.createUser();
-
-      switch (status) {
-        case 'User successfully created!':
-          this.handleSuccess();
-          break;
-
-        case 'Not enough permissions!':
-          this.handleError();
-          break;
-
-        default:
-          break;
-      }
-    } catch (error: any) {
-      this.toastService.error(error);
-    }
-    this.loading = false;
+    this.createUser();
   }
 }
